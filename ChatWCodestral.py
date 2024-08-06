@@ -2,7 +2,7 @@ from llama_index.core import SimpleDirectoryReader
 from utils import setup_index_and_chat_engine, load_models
 import os
 
-DIRECTORY_PATH = "/data"
+DIRECTORY_PATH = "data/a9aabfd1c4cad78e28fdc7bbe937b5536d48db9f"
 
 
 def has_multiple_files(directory):
@@ -23,15 +23,17 @@ def load_docs():
     return documents
 
 
-def main() -> None:
+def main(send_input=input, input_print=input) -> None:
     embed_model, llm = load_models()
     documents = load_docs()
-    # Setting up chat engine
     chat_engine = setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model)
-    # Looping chat until user is done chatting
-    while (query := input("Enter your coding question(e to exit): ")) != "e":
+
+    while True:
+        query = send_input()
+        if query.lower() == 'e':
+            break
         response = chat_engine.chat(query)
-        print(str(response))
+        input_print(str(response))
 
 
 if __name__ == "__main__":

@@ -16,7 +16,8 @@ def set_device(gpu: int = None) -> str:
 
 
 def set_embedding_model():
-    embedding_model = HuggingFaceEmbedding(model_name="dunzhang/stella_en_400M_v5", device=set_device(0))
+    embedding_model = HuggingFaceEmbedding(model_name="dunzhang/stella_en_400M_v5", device=set_device(0),
+                                           trust_remote_code=True)
     return embedding_model
 
 
@@ -42,9 +43,10 @@ def setup_index_and_chat_engine(docs, embed_model, llm):
         "best practices. When answering questions please follow these guidelines. 1. Provide clear, concise, and\n"
         "accurate code snippets when appropriate. 2. Explain your code and reasoning step by step. 3. Offer\n"
         "suggestions for best practices and potential optimizations. 4. If the user's question is unclear,\n"
-        "ask for clarification. 5. When referencing external libraries or frameworks, briefly explain their purpose.\n"
-        "6. If the question involves multiple possible approaches, outline the pros and cons of each.\n"
-        "Reponse:"
+        "ask for clarification dont assume or guess the answer to any question. 5. When referencing external \n"
+        "libraries or frameworks, briefly explain their purpose. 6. If the question involves multiple possible\n"
+        "approaches, outline the pros and cons of each.\n"
+        "Response:"
     )
 
     system_message = ChatMessage(role="system", content=chat_prompt)
