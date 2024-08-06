@@ -1,8 +1,9 @@
 from llama_index.core import SimpleDirectoryReader
 from utils import setup_index_and_chat_engine, load_models
 import os
+import glob
 
-DIRECTORY_PATH = "data/a9aabfd1c4cad78e28fdc7bbe937b5536d48db9f"
+DIRECTORY_PATH = "data"
 
 
 def has_multiple_files(directory):
@@ -11,15 +12,17 @@ def has_multiple_files(directory):
 
 
 def load_docs():
-    directory_path = DIRECTORY_PATH
-    if has_multiple_files(directory_path):
-        reader = SimpleDirectoryReader(input_dir=directory_path, recursive=True).load_data()
+    all_files = glob.glob(os.path.join(DIRECTORY_PATH, "**", "*"), recursive=True)
+    all_files = [f for f in all_files if os.path.isfile(f)]  # Filter out directories
+
+    if len(all_files) > 0:
         documents = []
-        for docs in reader:
-            for doc in docs:
-                documents.append(doc)
+        for file_path in all_files:
+            reader = SimpleDirectoryReader(input_files=[file_path]).load_data()
+            documents.extend(reader)
     else:
-        documents = SimpleDirectoryReader(input_dir=directory_path).load_data()
+        documents = []
+
     return documents
 
 

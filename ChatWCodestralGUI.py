@@ -38,9 +38,9 @@ class CWCGradio:
 
     def launch(self):
         with gr.Blocks(theme="monochrome", fill_height=True, fill_width=True) as iface:
-            gr.Markdown("# Chat With Codestral")
+            gr.Markdown("# Chat With Codestral using RAG")
             gr.Markdown("Input your coding question and let the model do the rest! You can also upload files to give"
-                        "the model context to better answer your question with.")
+                        " the model context to better answer your question with.")
             with gr.Row():
                 with gr.Column(scale=6):
                     chatbot = gr.Chatbot(height=500)
@@ -49,7 +49,7 @@ class CWCGradio:
                         clear = gr.ClearButton([msg, chatbot])
                     msg.submit(self.chat, inputs=[msg, chatbot], outputs=[msg, chatbot])
                 with gr.Column(scale=1):
-                    gr.Files(height=300)
+                    gr.Files()
 
         iface.launch(inbrowser=True, share=True)
 
