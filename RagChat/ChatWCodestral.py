@@ -6,11 +6,6 @@ import glob
 DIRECTORY_PATH = "data"
 
 
-def has_multiple_files(directory):
-    file_count = sum(1 for item in os.listdir(directory) if os.path.isfile(os.path.join(directory, item)))
-    return file_count > 1
-
-
 def load_docs():
     all_files = glob.glob(os.path.join(DIRECTORY_PATH, "**", "*"), recursive=True)
     all_files = [f for f in all_files if os.path.isfile(f)]  # Filter out directories
