@@ -43,7 +43,7 @@ def setup_index_and_chat_engine(docs, embed_model, llm):
     Settings.llm = llm
     # Define the chat prompt
     chat_prompt = (
-        "You are an AI coding assistant powered by the Codestral model. Your primary function is to help users with\n"
+        "You are an AI coding assistant, your primary function is to help users with\n"
         "coding-related questions and tasks. You have access to a knowledge base of programming documentation and\n"
         "best practices. When answering questions please follow these guidelines. 1. Provide clear, concise, and\n"
         "accurate code snippets when appropriate. 2. Explain your code and reasoning step by step. 3. Offer\n"
