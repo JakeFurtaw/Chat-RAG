@@ -51,10 +51,10 @@ class CWCGradio:
                                      placeholder="Enter your coding question here...")
                     with gr.Row():
                         clear = gr.ClearButton([msg, chatbot])
-                    msg.submit(self.chat, inputs=[msg, chatbot], outputs=[msg, chatbot])
+                    msg.submit(self.chat, inputs=[msg, chatbot], outputs=[msg, chatbot], show_progress="full")
+                    selected_model.select()
                 with gr.Column(scale=1):
-                    upload_files = gr.Files(show_label=False)
-
+                    gr.Files(show_label=False)
 
         iface.launch(inbrowser=True, share=True)
 
