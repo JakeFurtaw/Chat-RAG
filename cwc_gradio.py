@@ -19,9 +19,12 @@ class CWCGradio:
 
     def launch(self):
         with gr.Blocks(theme="monochrome", fill_height=True, fill_width=True) as iface:
-            gr.Markdown("# Chat With Codestral using RAG")
-            gr.Markdown("Input your coding question and let the model do the rest! You can also upload files to give"
-                        " the model context to better answer your question with.")
+            gr.Markdown("# Chat RAG: Interactive Coding Assistant")
+            gr.Markdown("This app is a chat-based coding assistant with a graphical user interface built using "
+                        "Gradio. It allows users to interact with various language models to ask coding questions, "
+                        "with the ability to upload files for additional context. The app utilizes RAG ("
+                        "Retrieval-Augmented Generation) to provide more informed responses based on the loaded "
+                        "documents and user queries.")
             with gr.Row():
                 with gr.Column(scale=6):
                     selected_model = gr.Dropdown(
