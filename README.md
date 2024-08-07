@@ -29,3 +29,11 @@ language models and upload context files for more accurate assistance.
 - `cwc_gradio.py`: Gradio interface setup
 - `model_manager.py`: Manages model selection and threading
 - `utils.py`: Utility functions for embedding, LLM setup, and chat engine configuration
+
+## Pictures
+![Start State of the App](pics/start_state.png "Start State of the Program")
+
+![Dropdown Menu](pics/model dropdown.png "Start State of the Program")
+
+![Gemma Question](pics/start_state.png "Geema Gets a Question")
+
