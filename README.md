@@ -36,5 +36,5 @@ language models and upload context files for more accurate assistance.
 ### Dropdown Menu in Action
 ![Dropdown Menu](pics/model_dropdown.png "Dropdown Menu in Action")
 ### Gemma Question
-![Gemma Question](pics/start_state.png "Gemma Question")
+![Gemma Question](pics/gemma_question.png "Gemma Question")
 
