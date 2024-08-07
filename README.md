@@ -2,7 +2,9 @@
 
 ## Overview
 
-CodeChat RAG is an interactive coding assistant that leverages Retrieval-Augmented Generation (RAG) to provide informed responses to coding queries. Built with a user-friendly Gradio interface, it allows users to interact with various language models and upload context files for more accurate assistance.
+CodeChat RAG is an interactive coding assistant that leverages Retrieval-Augmented Generation (RAG) to provide informed 
+responses to coding queries. Built with a user-friendly Gradio interface, it allows users to interact with various 
+language models and upload context files for more accurate assistance.
 
 ## Features
 
