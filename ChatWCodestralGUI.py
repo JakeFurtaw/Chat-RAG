@@ -2,6 +2,7 @@ import gradio as gr
 import queue
 import threading
 from ChatWCodestral import main as CWCMain
+from ChatWCodestral import set_llm
 import dotenv
 
 
@@ -14,6 +15,8 @@ class CWCGradio:
 
         self.CWC_thread = threading.Thread(target=self.run_cwc)
         self.CWC_thread.start()
+
+        self.default_model = "codestral:latest"
 
     def run_cwc(self):
         def send_input():
@@ -53,7 +56,7 @@ class CWCGradio:
                     with gr.Row():
                         clear = gr.ClearButton([msg, chatbot])
                     msg.submit(self.chat, inputs=[msg, chatbot], outputs=[msg, chatbot], show_progress="full")
-                    selected_model.select()
+                    # selected_model.select(fn=,outputs="")
                 with gr.Column(scale=1):
                     gr.Files(show_label=False)
 

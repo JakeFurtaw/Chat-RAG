@@ -16,20 +16,14 @@ def set_device(gpu: int = None) -> str:
 
 
 def set_embedding_model():
-    embedding_model = HuggingFaceEmbedding(model_name="dunzhang/stella_en_400M_v5", device=set_device(0),
-                                           trust_remote_code=True)
-    return embedding_model
+    embed_model = HuggingFaceEmbedding(model_name="dunzhang/stella_en_400M_v5", device=set_device(0),
+                                       trust_remote_code=True)
+    return embed_model
 
 
 def set_llm():
     llm = Ollama(model="codestral:latest", request_timeout=30.0, device=set_device(1))
     return llm
-
-
-def load_models():
-    embed_model = set_embedding_model()
-    llm = set_llm()
-    return embed_model, llm
 
 
 def setup_index_and_chat_engine(docs, embed_model, llm):

@@ -1,5 +1,5 @@
 from llama_index.core import SimpleDirectoryReader
-from utils import setup_index_and_chat_engine, load_models
+from utils import setup_index_and_chat_engine, set_embedding_model, set_llm
 import os
 import glob
 
@@ -22,7 +22,8 @@ def load_docs():
 
 
 def main(send_input=input, input_print=input) -> None:
-    embed_model, llm = load_models()
+    embed_model = set_embedding_model()
+    llm = set_llm()
     documents = load_docs()
     chat_engine = setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model)
 
