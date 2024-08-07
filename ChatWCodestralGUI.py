@@ -43,13 +43,18 @@ class CWCGradio:
                         " the model context to better answer your question with.")
             with gr.Row():
                 with gr.Column(scale=6):
-                    chatbot = gr.Chatbot(height=500)
-                    msg = gr.Textbox(autoscroll=True, autofocus=True, placeholder="Enter your coding question here...")
+                    selected_model = gr.Dropdown(
+                        choices=["codestral:latest", "nemo-mistral:latest", "llama3.1:latest"],
+                        label="Select Model", value="codestral:latest", interactive=True)
+                    chatbot = gr.Chatbot(show_label=False, height=500)
+                    msg = gr.Textbox(show_label=False, autoscroll=True, autofocus=True,
+                                     placeholder="Enter your coding question here...")
                     with gr.Row():
                         clear = gr.ClearButton([msg, chatbot])
                     msg.submit(self.chat, inputs=[msg, chatbot], outputs=[msg, chatbot])
                 with gr.Column(scale=1):
-                    gr.Files()
+                    upload_files = gr.Files(show_label=False)
+
 
         iface.launch(inbrowser=True, share=True)
 
