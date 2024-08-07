@@ -33,8 +33,8 @@ class CWCGradio:
                                      placeholder="Enter your coding question here...")
                     with gr.Row():
                         clear = gr.ClearButton([msg, chatbot])
-                    msg.submit(self.chat, inputs=[msg], outputs=[msg, chatbot])
-                    selected_model.change(self.update_model, inputs=selected_model)
+                    msg.submit(self.chat, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
+                    selected_model.change(self.update_model, inputs=selected_model, show_progress="full")
                 with gr.Column(scale=1):
                     gr.Files(show_label=False)
 
