@@ -31,9 +31,10 @@ language models and upload context files for more accurate assistance.
 - `utils.py`: Utility functions for embedding, LLM setup, and chat engine configuration
 
 ## Pictures
-![Start State of the App](pics/start_state.png "Start State of the Program")
-
-![Dropdown Menu](pics/model_dropdown.png "Start State of the Program")
-
-![Gemma Question](pics/start_state.png "Geema Gets a Question")
+### Start State of the App
+![Start State of the App](pics/start_state.png "Start State of the App")
+### Dropdown Menu in Action
+![Dropdown Menu](pics/model_dropdown.png "Dropdown Menu in Action")
+### Gemma Question
+![Gemma Question](pics/start_state.png "Gemma Question")
 
