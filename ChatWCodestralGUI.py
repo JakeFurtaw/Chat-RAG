@@ -12,11 +12,10 @@ class CWCGradio:
     def __init__(self):
         self.input_queue = queue.Queue()
         self.output_queue = queue.Queue()
+        self.default_model = "codestral:latest"
 
         self.CWC_thread = threading.Thread(target=self.run_cwc)
         self.CWC_thread.start()
-
-        self.default_model = "codestral:latest"
 
     def run_cwc(self):
         def send_input():

@@ -21,8 +21,19 @@ def set_embedding_model():
     return embed_model
 
 
-def set_llm():
-    llm = Ollama(model="codestral:latest", request_timeout=30.0, device=set_device(1))
+def set_llm(model):
+    if model == "codestral:latest":
+        llm = Ollama(model="codestral:latest", request_timeout=30.0, device=set_device(1))
+    elif model == "mistral-nemo:latest":
+        llm = Ollama(model="mistral-nemo:latest", request_timeout=30.0, device=set_device(1))
+    elif model == "llama3.1:latest":
+        llm = Ollama(model="llama3.1:latest", request_timeout=30.0, device=set_device(1))
+    elif model == "deepseek-coder-v2:latest":
+        llm = Ollama(model="deepseek-coder-v2:latest", request_timeout=30.0, device=set_device(1))
+    elif model == "gemma2:latest":
+        llm = Ollama(model="gemma2:latest", request_timeout=30.0, device=set_device(1))
+    elif model == "codegemma:latest":
+        llm = Ollama(model="codegemma:latest", request_timeout=30.0, device=set_device(1))
     return llm
 
 
