@@ -20,9 +20,9 @@ class CWCGradio:
     def launch(self):
         with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_width=True) as iface:
             gr.Markdown("# Chat RAG: Interactive Coding Assistant")
-            gr.Markdown("This app is a chat-based coding assistant with a graphical user interface built using "
+            gr.Markdown("### This app is a chat-based coding assistant with a graphical user interface built using "
                         "Gradio. It allows users to interact with various language models to ask coding questions, "
-                        "with the ability to upload files for additional context. \n\nThe app utilizes RAG ("
+                        "with the ability to upload files for additional context. \n\n### The app utilizes RAG ("
                         "Retrieval-Augmented Generation) to provide more informed responses based on the loaded "
                         "documents and user queries.")
             with gr.Row():
