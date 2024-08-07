@@ -33,7 +33,7 @@ language models and upload context files for more accurate assistance.
 ## Pictures
 ![Start State of the App](pics/start_state.png "Start State of the Program")
 
-![Dropdown Menu](pics/model dropdown.png "Start State of the Program")
+![Dropdown Menu](pics/model_dropdown.png "Start State of the Program")
 
 ![Gemma Question](pics/start_state.png "Geema Gets a Question")
 
