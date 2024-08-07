@@ -44,7 +44,8 @@ class CWCGradio:
             with gr.Row():
                 with gr.Column(scale=6):
                     selected_model = gr.Dropdown(
-                        choices=["codestral:latest", "nemo-mistral:latest", "llama3.1:latest"],
+                        choices=["codestral:latest", "mistral-nemo:latest", "llama3.1:latest",
+                                 "deepseek-coder-v2:latest", "gemma2:latest", "codegemma:latest"],
                         label="Select Model", value="codestral:latest", interactive=True)
                     chatbot = gr.Chatbot(show_label=False, height=500)
                     msg = gr.Textbox(show_label=False, autoscroll=True, autofocus=True,
