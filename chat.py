@@ -16,20 +16,9 @@ def load_docs():
     return documents
 
 
-def main(model, send_input=input, input_print=input) -> None:
+def create_chat_engine(model):
+    documents = load_docs()
     embed_model = set_embedding_model()
     llm = set_llm(model)
-    documents = load_docs()
     memory = set_chat_memory(model)
-    chat_engine = setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model, memory=memory)
-
-    while True:
-        query = send_input()
-        if query is None:
-            break
-        response = chat_engine.chat(query)
-        input_print(str(response))
-
-
-if __name__ == "__main__":
-    main("codestral:latest")
+    return setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model, memory=memory)
