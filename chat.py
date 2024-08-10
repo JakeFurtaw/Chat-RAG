@@ -1,5 +1,5 @@
 from llama_index.core import SimpleDirectoryReader
-from utils import setup_index_and_chat_engine, set_embedding_model, set_llm
+from utils import setup_index_and_chat_engine, set_embedding_model, set_llm, set_chat_memory
 import os
 import glob
 
@@ -20,7 +20,8 @@ def main(model, send_input=input, input_print=input) -> None:
     embed_model = set_embedding_model()
     llm = set_llm(model)
     documents = load_docs()
-    chat_engine = setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model)
+    memory = set_chat_memory(model)
+    chat_engine = setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model, memory=memory)
 
     while True:
         query = send_input()

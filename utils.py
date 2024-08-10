@@ -43,8 +43,21 @@ def set_llm(model):
     return llm
 
 
-def setup_index_and_chat_engine(docs, embed_model, llm):
-    memory = ChatMemoryBuffer.from_defaults(token_limit=6000)
+def set_chat_memory(model):
+    if model == "codestral:latest":
+        memory = ChatMemoryBuffer.from_defaults(token_limit=30000)
+    elif model == "mistral-nemo:latest":
+        memory = ChatMemoryBuffer.from_defaults(token_limit=115000)
+    elif model == "llama3.1:latest":
+        memory = ChatMemoryBuffer.from_defaults(token_limit=115000)
+    elif model == "deepseek-coder-v2:latest":
+        memory = ChatMemoryBuffer.from_defaults(token_limit=115000)
+    else:
+        memory = ChatMemoryBuffer.from_defaults(token_limit=6000)
+    return memory
+
+
+def setup_index_and_chat_engine(docs, embed_model, llm, memory):
     index = VectorStoreIndex.from_documents(docs, embed_model=embed_model)
     Settings.llm = llm
     # Define the chat prompt
