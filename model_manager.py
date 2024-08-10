@@ -5,6 +5,7 @@ import dotenv
 
 dotenv.load_dotenv()
 
+
 class ModelManager:
     def __init__(self):
         self.input_queue = queue.Queue()

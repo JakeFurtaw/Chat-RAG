@@ -1,6 +1,7 @@
 import gradio as gr
 from model_manager import ModelManager
 
+
 class CWCGradio:
     def __init__(self):
         self.model_manager = ModelManager()
