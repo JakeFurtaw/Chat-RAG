@@ -53,8 +53,7 @@ class CWCGradio:
 
                 with gr.Column(scale=1):
                     files = gr.Files(label="Upload Files Here")
-                    upload_button = gr.UploadButton(label="Click to Upload Files", file_count="multiple",
-                                                    file_type="text")
+                    upload_button = gr.UploadButton(label="Click to Upload Files", file_count="multiple")
                     selected_chat_model = gr.Dropdown(
                         choices=["codestral:latest", "mistral-nemo:latest", "llama3.1:latest",
                                  "deepseek-coder-v2:latest", "gemma2:latest", "codegemma:latest"],
