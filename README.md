@@ -35,6 +35,6 @@ language models and upload context files for more accurate assistance.
 ![Start State of the App](pics/start_state.png "Start State of the App")
 ### Dropdown Menu in Action
 ![Dropdown Menu](pics/model_dropdown.png "Dropdown Menu in Action")
-### Gemma Question
-![Gemma Question](pics/gemma_question.png "Gemma Question")
+### RAG Query Example
+![Gemma Question](pics/RAG_Query.png "Gemma Question")
 

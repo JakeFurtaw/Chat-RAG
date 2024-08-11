@@ -53,7 +53,6 @@ class CWCGradio:
 
     def handle_doc_upload(self, files):
         self.file_paths = [file.name for file in files]
-        self.model_manager.reset_chat_engine()
         return self.file_paths
 
     def launch(self):
@@ -80,8 +79,7 @@ class CWCGradio:
                                 "the model.")
                     files = gr.Files(interactive=True, label="Upload Files Here", container=False,
                                      file_count="multiple", file_types=["text", ".pdf", ".py", ".txt", ".dart", ".c"
-                                                                                                                ".css",
-                                                                        ".cpp", ".html", ".docx", ".doc", ".js",
+                                                                        ".css", ".cpp", ".html", ".docx", ".doc", ".js",
                                                                         ".jsx", ".xml"])
                     clear_kb = gr.Button(value="Clear RAG Database", interactive=True)
                     temperature = gr.Slider(minimum=.1, maximum=1, value=.75, label="Model Temperature",
