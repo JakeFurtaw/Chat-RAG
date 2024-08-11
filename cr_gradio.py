@@ -2,7 +2,7 @@ import os
 import shutil
 
 import gradio as gr
-from model_manager import ModelManager
+from model_utils import ModelManager
 
 
 def delete_kb():
