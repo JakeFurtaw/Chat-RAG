@@ -52,8 +52,7 @@ class CWCGradio:
                     msg.submit(self.chat, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
 
                 with gr.Column(scale=1):
-                    files = gr.Files(label="Upload Files Here")
-                    upload_button = gr.UploadButton(label="Click to Upload Files", file_count="multiple")
+                    files = gr.Files(label="Upload Files Here", interactive=True)
                     selected_chat_model = gr.Dropdown(
                         choices=["codestral:latest", "mistral-nemo:latest", "llama3.1:latest",
                                  "deepseek-coder-v2:latest", "gemma2:latest", "codegemma:latest"],
@@ -66,7 +65,7 @@ class CWCGradio:
                 clear_chat_mem.click(fn=self.clear_his_and_mem, outputs=chatbot)
 
                 # Right Column Button Functionally
-                upload_button.upload(fn=self.handle_doc_upload, inputs=[upload_button], outputs=[files])
+                files.upload(fn=self.handle_doc_upload, outputs=[files])
                 selected_chat_model.change(fn=self.update_model, inputs=selected_chat_model)
 
         iface.launch(inbrowser=True, share=True)
