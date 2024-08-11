@@ -1,5 +1,20 @@
+import os
+import shutil
+
 import gradio as gr
 from model_manager import ModelManager
+
+
+def delete_kb():
+    for item_name in os.listdir("data"):
+        item_path = os.path.join("data", item_name)
+        try:
+            if os.path.isfile(item_path) or os.path.islink(item_path):
+                os.remove(item_path)
+            elif os.path.isdir(item_path):
+                shutil.rmtree(item_path)
+        except Exception as e:
+            print(f"Error deleting {item_path}: {e}")
 
 
 class CWCGradio:
@@ -15,6 +30,7 @@ class CWCGradio:
         return "", self.chat_history
 
     def load_chat_history(self):
+
         return self.chat_history
 
     def clear_chat_history(self):
@@ -22,7 +38,7 @@ class CWCGradio:
         return self.chat_history
 
     def clear_his_and_mem(self):
-        self.chat_history.clear()
+        self.clear_chat_history()
         self.model_manager.reset_chat_engine()
         return []
 
@@ -37,6 +53,7 @@ class CWCGradio:
 
     def handle_doc_upload(self, files):
         self.file_paths = [file.name for file in files]
+        self.model_manager.reset_chat_engine()
         return self.file_paths
 
     def launch(self):
@@ -44,7 +61,7 @@ class CWCGradio:
             gr.Markdown("# Chat RAG: Interactive Coding Assistant")
             gr.Markdown("### This app is a chat-based coding assistant with a graphical user interface built using "
                         "Gradio. It allows users to interact with various language models to ask coding questions, "
-                        "with the ability to upload files for additional context. \n### The app utilizes RAG ("
+                        "with the ability to upload files for additional context. The app utilizes RAG ("
                         "Retrieval-Augmented Generation) to provide more informed responses based on the loaded "
                         "documents and user queries.")
             with gr.Row():
@@ -58,15 +75,19 @@ class CWCGradio:
                         clear_chat_mem = gr.Button(value="Clear Chat Window and Chat Memory")
                     msg.submit(self.chat, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
 
-                with gr.Column(scale=1):
-                    files = gr.Files(interactive=True, label="Upload Files Here",
+                with gr.Column(scale=2):
+                    gr.Markdown("### Upload File(s) before querying the chatbot, otherwise the files wont be seen by "
+                                "the model.")
+                    files = gr.Files(interactive=True, label="Upload Files Here", container=False,
                                      file_count="multiple", file_types=["text", ".pdf", ".py", ".txt", ".dart", ".c"
-                                                                        ".css", ".cpp", ".html", ".docx", ".doc", ".js",
+                                                                                                                ".css",
+                                                                        ".cpp", ".html", ".docx", ".doc", ".js",
                                                                         ".jsx", ".xml"])
+                    clear_kb = gr.Button(value="Clear RAG Database", interactive=True)
                     temperature = gr.Slider(minimum=.1, maximum=1, value=.75, label="Model Temperature",
                                             info="Select a temperature between .1 and 1 to set the model to.",
                                             interactive=True, step=.05)
-                    state = gr.State(value=.75)
+                    temp_state = gr.State(value=.75)
                     selected_chat_model = gr.Dropdown(
                         choices=["codestral:latest", "mistral-nemo:latest", "llama3.1:latest",
                                  "deepseek-coder-v2:latest", "gemma2:latest", "codegemma:latest"],
@@ -80,7 +101,8 @@ class CWCGradio:
 
                 # Right Column Button Functionally
                 files.upload(self.handle_doc_upload)
-                temperature.release(self.update_model_temp, inputs=[temperature], outputs=[state])
+                clear_kb.click(delete_kb)
+                temperature.release(self.update_model_temp, inputs=[temperature], outputs=[temp_state])
                 selected_chat_model.change(self.update_model, inputs=selected_chat_model)
 
-        iface.launch(inbrowser=True, share=True)
+        iface.launch(inbrowser=True)
