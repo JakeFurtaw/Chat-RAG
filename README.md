@@ -18,9 +18,10 @@ language models and upload context files for more accurate assistance.
 
 1. Run the application:
 2. Open the provided URL in your web browser.
-3. Select a language model from the dropdown menu.
-4. Type your coding question in the text box and press enter.
-5. (Optional) Upload relevant files for additional context.
+3. (Optional) Upload relevant files for additional context.
+4. Select a language model from the dropdown menu.
+5. Type your coding question in the text box and press enter.
+
 
 ## Project Structure
 
