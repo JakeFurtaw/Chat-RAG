@@ -4,6 +4,8 @@ from model_manager import ModelManager
 
 class CWCGradio:
     def __init__(self):
+        self.model_temp = .75
+        self.file_paths = None
         self.model_manager = ModelManager()
         self.chat_history = []
 
@@ -24,13 +26,18 @@ class CWCGradio:
         self.model_manager.reset_chat_engine()
         return []
 
+    def update_model_temp(self, temperature):
+        self.model_temp = temperature
+        self.model_manager.reset_chat_engine()
+        return self.model_temp
+
     def update_model(self, model):
         self.model_manager.update_model(model)
         self.chat_history.clear()
 
     def handle_doc_upload(self, files):
-
-        return []
+        self.file_paths = [file.name for file in files]
+        return self.file_paths
 
     def launch(self):
         with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_width=True) as iface:
@@ -52,7 +59,14 @@ class CWCGradio:
                     msg.submit(self.chat, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
 
                 with gr.Column(scale=1):
-                    files = gr.Files(label="Upload Files Here", interactive=True)
+                    files = gr.Files(interactive=True, label="Upload Files Here",
+                                     file_count="multiple", file_types=["text", ".pdf", ".py", ".txt", ".dart", ".c"
+                                                                        ".css", ".cpp", ".html", ".docx", ".doc", ".js",
+                                                                        ".jsx", ".xml"])
+                    temperature = gr.Slider(minimum=.1, maximum=1, value=.75, label="Model Temperature",
+                                            info="Select a temperature between .1 and 1 to set the model to.",
+                                            interactive=True, step=.05)
+                    state = gr.State(value=.75)
                     selected_chat_model = gr.Dropdown(
                         choices=["codestral:latest", "mistral-nemo:latest", "llama3.1:latest",
                                  "deepseek-coder-v2:latest", "gemma2:latest", "codegemma:latest"],
@@ -60,12 +74,13 @@ class CWCGradio:
                         info="Choose the model you want to use from the list below.")
 
                 # Left Column Button Functionally
-                load_chat_history.click(fn=self.load_chat_history, outputs=chatbot)
-                clear.click(fn=self.clear_chat_history, outputs=chatbot)
-                clear_chat_mem.click(fn=self.clear_his_and_mem, outputs=chatbot)
+                load_chat_history.click(self.load_chat_history, outputs=chatbot)
+                clear.click(self.clear_chat_history, outputs=chatbot)
+                clear_chat_mem.click(self.clear_his_and_mem, outputs=chatbot)
 
                 # Right Column Button Functionally
-                files.upload(fn=self.handle_doc_upload, outputs=[files])
-                selected_chat_model.change(fn=self.update_model, inputs=selected_chat_model)
+                files.upload(self.handle_doc_upload)
+                temperature.release(self.update_model_temp, inputs=[temperature], outputs=[state])
+                selected_chat_model.change(self.update_model, inputs=selected_chat_model)
 
         iface.launch(inbrowser=True, share=True)

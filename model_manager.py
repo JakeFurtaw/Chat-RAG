@@ -11,8 +11,9 @@ class ModelManager:
         self.input_queue = queue.Queue()
         self.output_queue = queue.Queue()
         self.selected_model = "codestral:latest"
+        self.model_temp = .75
         self.stop_thread = threading.Event()
-        self.chat_engine = create_chat_engine(self.selected_model)
+        self.chat_engine = create_chat_engine(self.selected_model, self.model_temp)
         self.thread = threading.Thread(target=self.run_model)
         self.thread.start()
 
@@ -44,9 +45,9 @@ class ModelManager:
         self.input_queue = queue.Queue()
         self.output_queue = queue.Queue()
         self.stop_thread.clear()
-        self.chat_engine = create_chat_engine(self.selected_model)
+        self.chat_engine = create_chat_engine(self.selected_model, self.model_temp)
         self.thread = threading.Thread(target=self.run_model)
         self.thread.start()
 
     def reset_chat_engine(self):
-        self.chat_engine = create_chat_engine(self.selected_model)
+        self.chat_engine = create_chat_engine(self.selected_model, self.model_temp)
