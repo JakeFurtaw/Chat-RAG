@@ -29,9 +29,9 @@ class CWCGradio:
         self.chat_history.append((message, response))
         return "", self.chat_history
 
-    def load_chat_history(self):
-
-        return self.chat_history
+    # def load_chat_history(self):
+    #
+    #     return self.chat_history
 
     def clear_chat_history(self):
         self.chat_history.clear()
@@ -73,7 +73,7 @@ class CWCGradio:
                     msg = gr.Textbox(show_label=False, autoscroll=True, autofocus=True, container=False,
                                      placeholder="Enter your coding question here...")
                     with gr.Row():
-                        load_chat_history = gr.Button(value="Load Chat History")
+                        # load_chat_history = gr.Button(value="Load Chat History")
                         clear = gr.ClearButton([msg, chatbot], value="Clear Chat Window")
                         clear_chat_mem = gr.Button(value="Clear Chat Window and Chat Memory")
                     msg.submit(self.chat, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
@@ -99,7 +99,7 @@ class CWCGradio:
                         info="Choose the model you want to use from the list below.")
 
                 # Left Column Button Functionally
-                load_chat_history.click(self.load_chat_history, outputs=chatbot)
+                # load_chat_history.click(self.load_chat_history, outputs=chatbot)
                 clear.click(self.clear_chat_history, outputs=chatbot)
                 clear_chat_mem.click(self.clear_his_and_mem, outputs=chatbot)
 
@@ -110,4 +110,4 @@ class CWCGradio:
                 temperature.release(self.update_model_temp, inputs=[temperature], outputs=[temp_state])
                 selected_chat_model.change(self.update_model, inputs=selected_chat_model)
 
-        iface.launch(inbrowser=True)
+        iface.launch(inbrowser=True, share=True)
