@@ -42,6 +42,10 @@ class CWCGradio:
         self.model_manager.reset_chat_engine()
         return []
 
+    def upload_button(self):
+        self.model_manager.reset_chat_engine()
+        return []
+
     def update_model_temp(self, temperature):
         self.model_temp = temperature
         self.model_manager.reset_chat_engine()
@@ -81,7 +85,9 @@ class CWCGradio:
                                      file_count="multiple", file_types=["text", ".pdf", ".py", ".txt", ".dart", ".c"
                                                                         ".css", ".cpp", ".html", ".docx", ".doc", ".js",
                                                                         ".jsx", ".xml"])
-                    clear_kb = gr.Button(value="Clear RAG Database", interactive=True)
+                    with gr.Row():
+                        upload = gr.Button(value="Upload Data", interactive=True)
+                        clear_kb = gr.Button(value="Clear RAG Database", interactive=True)
                     temperature = gr.Slider(minimum=.1, maximum=1, value=.75, label="Model Temperature",
                                             info="Select a temperature between .1 and 1 to set the model to.",
                                             interactive=True, step=.05)
@@ -99,6 +105,7 @@ class CWCGradio:
 
                 # Right Column Button Functionally
                 files.upload(self.handle_doc_upload)
+                upload.click(self.upload_button)
                 clear_kb.click(delete_kb)
                 temperature.release(self.update_model_temp, inputs=[temperature], outputs=[temp_state])
                 selected_chat_model.change(self.update_model, inputs=selected_chat_model)
