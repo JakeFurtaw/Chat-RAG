@@ -28,6 +28,10 @@ class CWCGradio:
         self.model_manager.update_model(model)
         self.chat_history.clear()
 
+    def handle_doc_upload(self, files):
+
+        return []
+
     def launch(self):
         with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_width=True) as iface:
             gr.Markdown("# Chat RAG: Interactive Coding Assistant")
@@ -48,16 +52,21 @@ class CWCGradio:
                     msg.submit(self.chat, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
 
                 with gr.Column(scale=1):
-                    files = gr.Files()
+                    files = gr.Files(label="Upload Files Here")
+                    upload_button = gr.UploadButton(label="Click to Upload Files")
                     selected_chat_model = gr.Dropdown(
                         choices=["codestral:latest", "mistral-nemo:latest", "llama3.1:latest",
                                  "deepseek-coder-v2:latest", "gemma2:latest", "codegemma:latest"],
                         label="Select Chat Model", value="codestral:latest", interactive=True, filterable=True,
                         info="Choose the model you want to use from the list below.")
 
+                # Left Column Button Functionally
                 load_chat_history.click(fn=self.load_chat_history, outputs=chatbot)
                 clear.click(fn=self.clear_chat_history, outputs=chatbot)
                 clear_chat_mem.click(fn=self.clear_his_and_mem, outputs=chatbot)
+
+                # Right Column Button Functionally
+                upload_button.upload(fn=self.handle_doc_upload, inputs=[upload_button], outputs=[files])
                 selected_chat_model.change(fn=self.update_model, inputs=selected_chat_model)
 
         iface.launch(inbrowser=True, share=True)
