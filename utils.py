@@ -11,11 +11,7 @@ _embed_model = None
 
 
 def set_device(gpu: int = None) -> str:
-    if torch.cuda.is_available() and gpu is not None:
-        device = f"cuda:{gpu}"
-    else:
-        device = "cpu"
-    return device
+    return f"cuda:{gpu}" if torch.cuda.is_available() and gpu is not None else "cpu"
 
 
 def get_embedding_model():
