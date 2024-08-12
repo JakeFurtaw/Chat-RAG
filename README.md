@@ -2,9 +2,7 @@
 
 ## Overview
 
-CodeChat RAG is an interactive coding assistant that leverages Retrieval-Augmented Generation (RAG) to provide informed 
-responses to coding queries. Built with a user-friendly Gradio interface, it allows users to interact with various 
-language models and upload context files for more accurate assistance.
+CodeChat RAG is an interactive coding assistant that leverages Retrieval-Augmented Generation (RAG) to provide informed responses to coding queries. Built with a user-friendly Gradio interface, it allows users to interact with various language models and upload context files for more accurate assistance.
 
 ## Features
 
@@ -13,10 +11,18 @@ language models and upload context files for more accurate assistance.
 - **Interactive Chat Interface**: Easy-to-use chat interface for asking coding questions.
 - **File Upload**: Support for uploading additional context files.
 - **Model Switching**: Seamlessly switch between different language models.
+- **Reset Chat Engine**: Clear chat history and memory to start fresh.
+- **Delete Database**: Easily delete all stored data for privacy and reset purposes.
+- **Enhanced Memory Management**: Dynamically manage chat memory for different models.
+- **Refined Chat Prompts**: Contextual prompts guide the AI for more accurate and useful responses.
+
 
 ## Usage
 
 1. Run the application:
+    ```bash
+    python app.py
+   ```
 2. Open the provided URL in your web browser.
 3. (Optional) Upload relevant files for additional context.
 4. Select a language model from the dropdown menu.
@@ -26,9 +32,9 @@ language models and upload context files for more accurate assistance.
 ## Project Structure
 
 - `app.py`: Main application entry point
-- `chat.py`: Core chat functionality and document loading
-- `cwc_gradio.py`: Gradio interface setup
-- `model_manager.py`: Manages model selection and threading
+- `chat.py`: Core chat functionality, including document loading and chat engine setup
+- `cr_gradio.py`: Gradio interface setup and management
+- `model_utils.py`: Manages model selection, memory, and user input processing
 - `utils.py`: Utility functions for embedding, LLM setup, and chat engine configuration
 
 ## Pictures
