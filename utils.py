@@ -6,6 +6,9 @@ from llama_index.llms.ollama import Ollama
 from llama_index.core.llms import ChatMessage
 import torch
 
+# Global variable to store the embedding model
+_embed_model = None
+
 
 def set_device(gpu: int = None) -> str:
     if torch.cuda.is_available() and gpu is not None:
@@ -15,52 +18,43 @@ def set_device(gpu: int = None) -> str:
     return device
 
 
-def set_embedding_model():
-    embed_model = HuggingFaceEmbedding(model_name="dunzhang/stella_en_400M_v5", device=set_device(0),
-                                       trust_remote_code=True)
-    return embed_model
+def get_embedding_model():
+    global _embed_model
+    if _embed_model is None:
+        _embed_model = HuggingFaceEmbedding(model_name="dunzhang/stella_en_400M_v5", device=set_device(0),
+                                            trust_remote_code=True)
+    return _embed_model
 
 
 def set_llm(model, temperature):
-    if model == "codestral:latest":
-        llm = Ollama(model="codestral:latest", request_timeout=30.0, device=set_device(1),
-                     temperature=temperature, num_output=100)
-    elif model == "mistral-nemo:latest":
-        llm = Ollama(model="mistral-nemo:latest", request_timeout=30.0, device=set_device(1),
-                     temperature=temperature, num_output=100)
-    elif model == "llama3.1:latest":
-        llm = Ollama(model="llama3.1:latest", request_timeout=30.0, device=set_device(1),
-                     temperature=temperature, num_output=100)
-    elif model == "deepseek-coder-v2:latest":
-        llm = Ollama(model="deepseek-coder-v2:latest", request_timeout=30.0, device=set_device(1),
-                     temperature=temperature, num_output=100)
-    elif model == "gemma2:latest":
-        llm = Ollama(model="gemma2:latest", request_timeout=30.0, device=set_device(1),
-                     temperature=temperature, num_output=100)
-    elif model == "codegemma:latest":
-        llm = Ollama(model="codegemma:latest", request_timeout=30.0, device=set_device(1),
-                     temperature=temperature, num_output=100)
-    return llm
+    llm_models = {
+        "codestral:latest": {"model": "codestral:latest", "device": set_device(1)},
+        "mistral-nemo:latest": {"model": "mistral-nemo:latest", "device": set_device(1)},
+        "llama3.1:latest": {"model": "llama3.1:latest", "device": set_device(1)},
+        "deepseek-coder-v2:latest": {"model": "deepseek-coder-v2:latest", "device": set_device(1)},
+        "gemma2:latest": {"model": "gemma2:latest", "device": set_device(1)},
+        "codegemma:latest": {"model": "codegemma:latest", "device": set_device(1)}
+    }
+
+    llm_config = llm_models.get(model, llm_models["codestral:latest"])
+    return Ollama(model=llm_config["model"], request_timeout=30.0, device=llm_config["device"],
+                  temperature=temperature, num_output=100)
 
 
 def set_chat_memory(model):
-    if model == "codestral:latest":
-        memory = ChatMemoryBuffer.from_defaults(token_limit=30000)
-    elif model == "mistral-nemo:latest":
-        memory = ChatMemoryBuffer.from_defaults(token_limit=115000)
-    elif model == "llama3.1:latest":
-        memory = ChatMemoryBuffer.from_defaults(token_limit=115000)
-    elif model == "deepseek-coder-v2:latest":
-        memory = ChatMemoryBuffer.from_defaults(token_limit=115000)
-    else:
-        memory = ChatMemoryBuffer.from_defaults(token_limit=6000)
-    return memory
+    memory_limits = {
+        "codestral:latest": 30000,
+        "mistral-nemo:latest": 115000,
+        "llama3.1:latest": 115000,
+        "deepseek-coder-v2:latest": 115000
+    }
+    token_limit = memory_limits.get(model, 6000)
+    return ChatMemoryBuffer.from_defaults(token_limit=token_limit)
 
 
 def setup_index_and_chat_engine(docs, embed_model, llm, memory):
     index = VectorStoreIndex.from_documents(docs, embed_model=embed_model)
     Settings.llm = llm
-    # Define the chat prompt
     chat_prompt = (
         "You are an AI coding assistant, your primary function is to help users with\n"
         "coding-related questions and tasks. You have access to a knowledge base of programming documentation and\n"

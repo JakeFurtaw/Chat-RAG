@@ -1,20 +1,13 @@
 import os
 import shutil
-
 import gradio as gr
 from model_utils import ModelManager
 
 
 def delete_kb():
-    for item_name in os.listdir("data"):
-        item_path = os.path.join("data", item_name)
-        try:
-            if os.path.isfile(item_path) or os.path.islink(item_path):
-                os.remove(item_path)
-            elif os.path.isdir(item_path):
-                shutil.rmtree(item_path)
-        except Exception as e:
-            print(f"Error deleting {item_path}: {e}")
+    if os.path.exists("data"):
+        shutil.rmtree("data")
+        os.makedirs("data")
 
 
 class CWCGradio:
@@ -28,10 +21,6 @@ class CWCGradio:
         response = self.model_manager.process_input(message)
         self.chat_history.append((message, response))
         return "", self.chat_history
-
-    # def load_chat_history(self):
-    #
-    #     return self.chat_history
 
     def clear_chat_history(self):
         self.chat_history.clear()
@@ -48,7 +37,7 @@ class CWCGradio:
 
     def update_model_temp(self, temperature):
         self.model_temp = temperature
-        self.model_manager.reset_chat_engine()
+        self.model_manager.update_temperature(temperature)
         return self.model_temp
 
     def update_model(self, model):
@@ -73,7 +62,6 @@ class CWCGradio:
                     msg = gr.Textbox(show_label=False, autoscroll=True, autofocus=True, container=False,
                                      placeholder="Enter your coding question here...")
                     with gr.Row():
-                        # load_chat_history = gr.Button(value="Load Chat History")
                         clear = gr.ClearButton([msg, chatbot], value="Clear Chat Window")
                         clear_chat_mem = gr.Button(value="Clear Chat Window and Chat Memory")
                     msg.submit(self.chat, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
@@ -98,12 +86,9 @@ class CWCGradio:
                         label="Select Chat Model", value="codestral:latest", interactive=True, filterable=True,
                         info="Choose the model you want to use from the list below.")
 
-                # Left Column Button Functionally
-                # load_chat_history.click(self.load_chat_history, outputs=chatbot)
                 clear.click(self.clear_chat_history, outputs=chatbot)
                 clear_chat_mem.click(self.clear_his_and_mem, outputs=chatbot)
 
-                # Right Column Button Functionally
                 files.upload(self.handle_doc_upload)
                 upload.click(self.upload_button)
                 clear_kb.click(delete_kb)
