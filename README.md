@@ -45,5 +45,8 @@ various language models and upload context files for more accurate assistance.
 ### Dropdown Menu in Action
 ![Dropdown Menu](pics/model_dropdown.png "Dropdown Menu in Action")
 ### RAG Query Example
-![Gemma Question](pics/RAG_Query.png "Gemma Question")
+![RAG Query Example](pics/RAG_Query.png "RAG Query Example")
 
+
+### Need Help or Have Feature Suggestions
+Feel free to reach out to me through GitHub, LinkedIn, or through email. All of those are avialable on my website [JFCoded](https://www.jfcoded.com/contact).
