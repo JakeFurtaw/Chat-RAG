@@ -49,4 +49,4 @@ various language models and upload context files for more accurate assistance.
 
 
 ### Need Help or Have Feature Suggestions
-Feel free to reach out to me through GitHub, LinkedIn, or through email. All of those are avialable on my website [JFCoded](https://www.jfcoded.com/contact).
+Feel free to reach out to me through GitHub, LinkedIn, or through email. All of those are available on my website [JFCoded](https://www.jfcoded.com/contact).
