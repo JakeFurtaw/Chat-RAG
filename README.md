@@ -6,7 +6,7 @@ CodeChat RAG is an interactive coding assistant that leverages Retrieval-Augment
 
 ## Features
 
-- **Multiple Language Models**: Choose from models like Codestral, Mistral-Nemo, LLaMA3.1, DeepSeek Coder, Gemma2, and CodeGemma.
+- **Multiple Language Models**: Choose from models like Codestral, Mistral-Nemo, LLaMA3.1, DeepSeek Coder v2, Gemma2, and CodeGemma.
 - **RAG-powered Responses**: Utilizes uploaded documents to provide context-aware answers.
 - **Interactive Chat Interface**: Easy-to-use chat interface for asking coding questions.
 - **File Upload**: Support for uploading additional context files.
