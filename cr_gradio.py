@@ -10,6 +10,11 @@ def delete_kb():
         os.makedirs("data")
 
 
+def kb_warning():
+    gr.Warning("Wait about 5-10 seconds for the files to clear. After this message disappears you should  "
+               "be in the clear.", duration=7)
+
+
 class CWCGradio:
     def __init__(self):
         self.model_temp = .75
@@ -92,6 +97,7 @@ class CWCGradio:
                 files.upload(self.handle_doc_upload)
                 upload.click(self.upload_button)
                 clear_kb.click(delete_kb)
+                clear_kb.click(kb_warning)
                 temperature.release(self.update_model_temp, inputs=[temperature], outputs=[temp_state])
                 selected_chat_model.change(self.update_model, inputs=selected_chat_model)
 
