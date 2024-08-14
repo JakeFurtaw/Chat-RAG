@@ -13,8 +13,16 @@ class CWCGradio:
 
     def chat(self, message):
         response = self.model_manager.process_input(message)
-        self.chat_history.append((message, response))
+        self.chat_history.append((message, str(response)))
         return "", self.chat_history
+
+    def stream_response(self, message):
+        streaming_response = self.model_manager.process_input(message)
+        full_response = ""
+        for delta in streaming_response.response_gen:
+            full_response += delta
+            yield "", [(message, full_response)]
+        self.chat_history.append((message, full_response))
 
     def clear_chat_history(self):
         self.chat_history.clear()
@@ -45,6 +53,7 @@ class CWCGradio:
         self.chat_history.clear()
 
     def handle_doc_upload(self, files):
+        gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=5)
         self.file_paths = [file.name for file in files]
         return self.file_paths
 
@@ -64,7 +73,7 @@ class CWCGradio:
                     with gr.Row():
                         clear = gr.ClearButton([msg, chatbot], value="Clear Chat Window")
                         clear_chat_mem = gr.Button(value="Clear Chat Window and Chat Memory")
-                    msg.submit(self.chat, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
+                    msg.submit(self.stream_response, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
 
                 with gr.Column(scale=2):
                     files = gr.Files(interactive=True, label="Upload Files Here", container=False,
@@ -87,9 +96,9 @@ class CWCGradio:
                 clear.click(self.clear_chat_history, outputs=chatbot)
                 clear_chat_mem.click(self.clear_his_and_mem, outputs=chatbot)
                 # Buttons in Right Column
-                files.upload(self.handle_doc_upload)
+                files.upload(self.handle_doc_upload, show_progress="full")
                 upload.click(self.upload_button)
-                clear_db.click(self.delete_db)
+                clear_db.click(self.delete_db, show_progress="full")
                 temperature.release(self.update_model_temp, inputs=[temperature], outputs=[temp_state])
                 selected_chat_model.change(self.update_model, inputs=selected_chat_model)
 

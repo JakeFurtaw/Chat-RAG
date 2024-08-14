@@ -34,7 +34,7 @@ def set_llm(model, temperature):
 
     llm_config = llm_models.get(model, llm_models["codestral:latest"])
     return Ollama(model=llm_config["model"], request_timeout=30.0, device=llm_config["device"],
-                  temperature=temperature, num_output=100)
+                  temperature=temperature, num_output=100, sream=True)
 
 
 def set_chat_memory(model):
@@ -67,6 +67,7 @@ def setup_index_and_chat_engine(docs, embed_model, llm, memory):
     chat_engine = index.as_chat_engine(
         chat_mode=ChatMode.CONTEXT,
         memory=memory,
+        stream=True,
         system_prompt=system_message,
         llm=llm,
         context_prompt=("Context information is below.\n"

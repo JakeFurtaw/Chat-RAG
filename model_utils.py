@@ -12,8 +12,7 @@ class ModelManager:
 
     def process_input(self, message):
         try:
-            response = self.chat_engine.chat(message)
-            return str(response)
+            return self.chat_engine.stream_chat(message)
         except Exception as e:
             return f"Error: {str(e)}"
 
