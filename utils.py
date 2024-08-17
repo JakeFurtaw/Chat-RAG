@@ -17,7 +17,7 @@ def get_embedding_model():
     return embed_model
 
 
-def set_llm(model, temperature):
+def set_llm(model, temperature, max_tokens):
     llm_models = {
         "codestral:latest": {"model": "codestral:latest", "device": set_device(1)},
         "mistral-nemo:latest": {"model": "mistral-nemo:latest", "device": set_device(1)},
@@ -29,7 +29,7 @@ def set_llm(model, temperature):
 
     llm_config = llm_models.get(model, llm_models["codestral:latest"])
     return Ollama(model=llm_config["model"], request_timeout=30.0, device=llm_config["device"],
-                  temperature=temperature)  # To limit response add additional_kwargs={"num_predict": 100}
+                  temperature=temperature, additional_kwargs={"num_predict": max_tokens})  # To limit response add
 
 
 def set_chat_memory(model):

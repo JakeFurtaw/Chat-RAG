@@ -7,6 +7,7 @@ from model_utils import ModelManager
 class CWCGradio:
     def __init__(self):
         self.model_temp = .75
+        self.max_tokens = 2048
         self.file_paths = None
         self.model_manager = ModelManager()
         self.chat_history = []
@@ -48,6 +49,13 @@ class CWCGradio:
             os.makedirs("data")
         self.model_manager.reset_chat_engine()
 
+    def update_max_tokens(self, max_tokens):
+        self.max_tokens = max_tokens
+        self.model_manager.update_max_tokens(max_tokens)
+        gr.Warning("WARNING: This may cut the output of the model short if your response requires more tokens "
+                   "for the answer!!!", duration=10)
+        return max_tokens
+
     def update_model_temp(self, temperature):
         self.model_temp = temperature
         self.model_manager.update_temperature(temperature)
@@ -62,7 +70,7 @@ class CWCGradio:
         return []
 
     def handle_doc_upload(self, files):
-        gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=10, )
+        gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=10)
         self.file_paths = [file.name for file in files]
         return self.file_paths
 
@@ -95,6 +103,9 @@ class CWCGradio:
                     temperature = gr.Slider(minimum=.1, maximum=1, value=.75, label="Model Temperature",
                                             info="Select a temperature between .1 and 1 to set the model to.",
                                             interactive=True, step=.05)
+                    max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
+                                           label="Max Tokens in Response",
+                                           info="Set the maximum number of tokens the model can respond with.")
                     temp_state = gr.State(value=.75)
                     selected_chat_model = gr.Dropdown(choices=list(self.model_display_names.keys()), interactive=True,
                                                       label="Select Chat Model", value="Codestral 22B", filterable=True,
@@ -109,6 +120,7 @@ class CWCGradio:
                 upload.click(self.upload_button)
                 clear_db.click(self.delete_db, show_progress="full")
                 temperature.release(self.update_model_temp, inputs=[temperature], outputs=[temp_state])
+                max_tokens.release(self.update_max_tokens, inputs=[max_tokens], outputs=[max_tokens])
                 selected_chat_model.change(self.update_model, inputs=selected_chat_model, outputs=[chatbot])
 
         iface.launch(inbrowser=True, share=True)

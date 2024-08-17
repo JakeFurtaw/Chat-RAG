@@ -8,7 +8,8 @@ class ModelManager:
     def __init__(self):
         self.selected_model = "codestral:latest"
         self.model_temp = .75
-        self.chat_engine = create_chat_engine(self.selected_model, self.model_temp)
+        self.max_tokens = 2048
+        self.chat_engine = create_chat_engine(self.selected_model, self.model_temp, self.max_tokens)
 
     def process_input(self, message):
         try:
@@ -20,9 +21,13 @@ class ModelManager:
         self.selected_model = model
         self.reset_chat_engine()
 
+    def update_max_tokens(self, max_tokens):
+        self.max_tokens = max_tokens
+        self.reset_chat_engine()
+
     def update_temperature(self, temperature):
         self.model_temp = temperature
         self.reset_chat_engine()
 
     def reset_chat_engine(self):
-        self.chat_engine = create_chat_engine(self.selected_model, self.model_temp)
+        self.chat_engine = create_chat_engine(self.selected_model, self.model_temp, self.max_tokens)
