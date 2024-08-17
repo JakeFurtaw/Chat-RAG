@@ -49,6 +49,13 @@ class CWCGradio:
             os.makedirs("data")
         self.model_manager.reset_chat_engine()
 
+    def update_max_tokens(self, max_tokens):
+        self.max_tokens = max_tokens
+        self.model_manager.update_max_tokens(max_tokens)
+        gr.Warning("WARNING: This may cut the output of the model short if your response requires more tokens "
+                   "for the answer!!!", duration=10)
+        return max_tokens
+
     def update_model_temp(self, temperature):
         self.model_temp = temperature
         self.model_manager.update_temperature(temperature)
@@ -70,7 +77,7 @@ class CWCGradio:
         return []
 
     def handle_doc_upload(self, files):
-        gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=10, )
+        gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=10)
         self.file_paths = [file.name for file in files]
         return self.file_paths
 
