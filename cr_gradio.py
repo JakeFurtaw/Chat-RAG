@@ -2,6 +2,9 @@ import os
 import shutil
 import gradio as gr
 from model_utils import ModelManager
+from dotenv import load_dotenv
+
+# load_dotenv()
 
 
 class CWCGradio:
