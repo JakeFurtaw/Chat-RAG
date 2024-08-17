@@ -61,13 +61,6 @@ class CWCGradio:
         self.model_manager.update_temperature(temperature)
         return self.model_temp
 
-    def update_max_tokens(self, max_tokens):
-        self.max_tokens = max_tokens
-        self.model_manager.update_max_tokens(max_tokens)
-        gr.Warning("WARNING: This may cut the output of the model short if your response requires more tokens "
-                   "for the answer!!!", duration=10)
-        return max_tokens
-
     def update_model(self, display_name):
         model_name = self.model_display_names.get(display_name, "codestral:latest")
         self.model_manager.update_model(model_name)
