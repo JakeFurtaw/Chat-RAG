@@ -26,7 +26,7 @@ class CWCGradio:
         full_response = ""
         for delta in streaming_response.response_gen:
             full_response += delta
-            yield "", [(message, full_response)]
+            yield "", self.chat_history + [(message, full_response)]
         self.chat_history.append((message, full_response))
 
     def clear_chat_history(self):
