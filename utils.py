@@ -6,20 +6,15 @@ from llama_index.llms.ollama import Ollama
 from llama_index.core.llms import ChatMessage
 import torch
 
-# Global variable to store the embedding model
-_embed_model = None
-
 
 def set_device(gpu: int = None) -> str:
     return f"cuda:{gpu}" if torch.cuda.is_available() and gpu is not None else "cpu"
 
 
 def get_embedding_model():
-    global _embed_model
-    if _embed_model is None:
-        _embed_model = HuggingFaceEmbedding(model_name="dunzhang/stella_en_400M_v5", device=set_device(0),
-                                            trust_remote_code=True)
-    return _embed_model
+    embed_model = HuggingFaceEmbedding(model_name="C:\Programming\models\embedding\stella_en_400M_v5",
+                                       device=set_device(0), trust_remote_code=True)
+    return embed_model
 
 
 def set_llm(model, temperature):
@@ -34,7 +29,7 @@ def set_llm(model, temperature):
 
     llm_config = llm_models.get(model, llm_models["codestral:latest"])
     return Ollama(model=llm_config["model"], request_timeout=30.0, device=llm_config["device"],
-                  temperature=temperature, num_output=100, sream=True)
+                  temperature=temperature, additional_kwargs={"num_predict": 100})
 
 
 def set_chat_memory(model):

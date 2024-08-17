@@ -49,7 +49,7 @@ llama-index==0.10.62
 llama-index-agent-openai==0.2.9
 llama-index-cli==0.1.13
 llama-index-core==0.10.62
-llama-index-embeddings-huggingface==0.2.2
+llama-index-embeddings-huggingface==0.2.3
 llama-index-embeddings-openai==0.1.11
 llama-index-indices-managed-llama-cloud==0.2.7
 llama-index-legacy==0.9.48

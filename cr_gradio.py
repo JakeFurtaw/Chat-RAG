@@ -51,9 +51,10 @@ class CWCGradio:
     def update_model(self, model):
         self.model_manager.update_model(model)
         self.chat_history.clear()
+        gr.Warning("Model updated to "+model+".", duration=10)
 
     def handle_doc_upload(self, files):
-        gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=5)
+        gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=10)
         self.file_paths = [file.name for file in files]
         return self.file_paths
 
@@ -92,7 +93,8 @@ class CWCGradio:
                                  "deepseek-coder-v2:latest", "gemma2:latest", "codegemma:latest"],
                         label="Select Chat Model", value="codestral:latest", interactive=True, filterable=True,
                         info="Choose the model you want to chat with from the list below.")
-                # Buttons below chat window
+    # ---------Button Functionality controlled below----------------
+                # Buttons in Left Column
                 clear.click(self.clear_chat_history, outputs=chatbot)
                 clear_chat_mem.click(self.clear_his_and_mem, outputs=chatbot)
                 # Buttons in Right Column
