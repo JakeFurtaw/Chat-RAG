@@ -29,7 +29,7 @@ def set_llm(model, temperature):
 
     llm_config = llm_models.get(model, llm_models["codestral:latest"])
     return Ollama(model=llm_config["model"], request_timeout=30.0, device=llm_config["device"],
-                  temperature=temperature, additional_kwargs={"num_predict": 100})
+                  temperature=temperature)  # To limit response add additional_kwargs={"num_predict": 100}
 
 
 def set_chat_memory(model):

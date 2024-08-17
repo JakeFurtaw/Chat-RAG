@@ -58,6 +58,7 @@ class CWCGradio:
         self.model_manager.update_model(model_name)
         self.chat_history.clear()
         gr.Warning(f"Model updated to {display_name}.", duration=10)
+        return []
 
     def handle_doc_upload(self, files):
         gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=10)
@@ -107,6 +108,6 @@ class CWCGradio:
                 upload.click(self.upload_button)
                 clear_db.click(self.delete_db, show_progress="full")
                 temperature.release(self.update_model_temp, inputs=[temperature], outputs=[temp_state])
-                selected_chat_model.change(self.update_model, inputs=selected_chat_model)
+                selected_chat_model.change(self.update_model, inputs=selected_chat_model, outputs=[chatbot])
 
         iface.launch(inbrowser=True, share=True)
