@@ -16,9 +16,9 @@ def load_docs():
     return documents
 
 
-def create_chat_engine(model, temperature):
+def create_chat_engine(model, temperature, max_tokens):
     documents = load_docs()
     embed_model = get_embedding_model()
-    llm = set_llm(model, temperature)
+    llm = set_llm(model, temperature, max_tokens)
     memory = set_chat_memory(model)
     return setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model, memory=memory)
