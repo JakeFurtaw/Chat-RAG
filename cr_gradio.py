@@ -10,6 +10,11 @@ class CWCGradio:
         self.file_paths = None
         self.model_manager = ModelManager()
         self.chat_history = []
+        self.model_display_names = {
+            "Codestral 22B": "codestral:latest", "Mistral-Nemo 12B": "mistral-nemo:latest",
+            "Llama3.1 8B": "llama3.1:latest", "DeepSeek Coder V2 16B": "deepseek-coder-v2:latest",
+            "Gemma2 9B": "gemma2:latest", "CodeGemma 7B": "codegemma:latest"
+        }
 
     def chat(self, message):
         response = self.model_manager.process_input(message)
@@ -48,10 +53,11 @@ class CWCGradio:
         self.model_manager.update_temperature(temperature)
         return self.model_temp
 
-    def update_model(self, model):
-        self.model_manager.update_model(model)
+    def update_model(self, display_name):
+        model_name = self.model_display_names.get(display_name, "codestral:latest")
+        self.model_manager.update_model(model_name)
         self.chat_history.clear()
-        gr.Warning("Model updated to "+model+".", duration=10)
+        gr.Warning(f"Model updated to {display_name}.", duration=10)
 
     def handle_doc_upload(self, files):
         gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=10)
@@ -88,12 +94,11 @@ class CWCGradio:
                                             info="Select a temperature between .1 and 1 to set the model to.",
                                             interactive=True, step=.05)
                     temp_state = gr.State(value=.75)
-                    selected_chat_model = gr.Dropdown(
-                        choices=["codestral:latest", "mistral-nemo:latest", "llama3.1:latest",
-                                 "deepseek-coder-v2:latest", "gemma2:latest", "codegemma:latest"],
-                        label="Select Chat Model", value="codestral:latest", interactive=True, filterable=True,
-                        info="Choose the model you want to chat with from the list below.")
-    # ---------Button Functionality controlled below----------------
+                    selected_chat_model = gr.Dropdown(choices=list(self.model_display_names.keys()), interactive=True,
+                                                      label="Select Chat Model", value="Codestral 22B", filterable=True,
+                                                      info="Choose the model you want to chat with from the list below."
+                                                      )
+                # ---------Button Functionality controlled below----------------
                 # Buttons in Left Column
                 clear.click(self.clear_chat_history, outputs=chatbot)
                 clear_chat_mem.click(self.clear_his_and_mem, outputs=chatbot)
