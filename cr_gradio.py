@@ -57,11 +57,12 @@ class CWCGradio:
         model_name = self.model_display_names.get(display_name, "codestral:latest")
         self.model_manager.update_model(model_name)
         self.chat_history.clear()
-        gr.Warning(f"Model updated to {display_name}.", duration=10)
+        gr.Warning(f"Model updated to {display_name}. Please make sure you have this model installed through "
+                   "Ollama!", duration=10)
         return []
 
     def handle_doc_upload(self, files):
-        gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=10)
+        gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=10, )
         self.file_paths = [file.name for file in files]
         return self.file_paths
 
@@ -85,7 +86,7 @@ class CWCGradio:
 
                 with gr.Column(scale=2):
                     files = gr.Files(interactive=True, label="Upload Files Here", container=False,
-                                     file_count="multiple", file_types=["text", ".pdf", ".py", ".txt", ".dart", ".c"
+                                     file_count="multiple", file_types=["text", ".pdf", ".py", ".txt", ".dart", ".c",
                                                                         ".css", ".cpp", ".html", ".docx", ".doc", ".js",
                                                                         ".jsx", ".xml"])
                     with gr.Row():
