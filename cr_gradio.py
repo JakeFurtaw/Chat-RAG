@@ -65,7 +65,7 @@ class CWCGradio:
         return [file.name for file in files]
 
     def launch(self):
-        with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_width=True) as iface:
+        with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_width=True) as demo:
             gr.Markdown("# Chat RAG: Interactive Coding Assistant"
                         "\nThis app is a chat-based coding assistant with a graphical user interface built using "
                         "Gradio. It allows users to interact with various language models to ask coding questions, "
@@ -113,4 +113,4 @@ class CWCGradio:
                 temperature.release(self.update_model_temp, inputs=[temperature])
                 max_tokens.release(self.update_max_tokens, inputs=[max_tokens])
 
-        iface.launch(inbrowser=True, share=True)
+        demo.launch(inbrowser=True, share=True)

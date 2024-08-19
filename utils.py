@@ -12,7 +12,7 @@ def set_device(gpu: int = None) -> str:
 
 
 def get_embedding_model():
-    embed_model = HuggingFaceEmbedding(model_name="C:\Programming\models\embedding\stella_en_400M_v5",
+    embed_model = HuggingFaceEmbedding(model_name="/home/jake/Programming/Models/embedding/stella_en_400M_v5",
                                        device=set_device(0), trust_remote_code=True)
     return embed_model
 
