@@ -74,7 +74,7 @@ class CWCGradio:
                         "based on the loaded documents and user queries.")
             with gr.Row():
                 with gr.Column(scale=8, variant="compact"):
-                    chatbot = gr.Chatbot(label="Chat RAG", container=False, show_copy_button=True, height=600)
+                    chatbot = gr.Chatbot(label="Chat RAG", container=False, show_copy_button=True, height=800)
                     msg = gr.Textbox(show_label=False, autoscroll=True, autofocus=True, container=False,
                                      placeholder="Enter your coding question here...")
                     with gr.Row():
@@ -89,18 +89,21 @@ class CWCGradio:
                     with gr.Row():
                         upload = gr.Button(value="Upload Data", interactive=True)
                         clear_db = gr.Button(value="Clear RAG Database", interactive=True)
+                    selected_chat_model = gr.Dropdown(choices=list(self.model_display_names.keys()),
+                                                      interactive=True,
+                                                      label="Select Chat Model", value="Codestral 22B",
+                                                      filterable=True,
+                                                      info="Choose the model you want to chat with from the list below."
+                                                      )
                     temperature = gr.Slider(minimum=.1, maximum=1, value=.75, label="Model Temperature",
                                             info="Select a temperature between .1 and 1 to set the model to.",
                                             interactive=True, step=.05)
                     max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
                                            label="Max Tokens in Response",
                                            info="Set the maximum number of tokens the model can respond with.")
-                    selected_chat_model = gr.Dropdown(choices=list(self.model_display_names.keys()), interactive=True,
-                                                      label="Select Chat Model", value="Codestral 22B", filterable=True,
-                                                      info="Choose the model you want to chat with from the list below."
-                                                      )
                 # ---------Button Functionality controlled below----------------
                 # Buttons in Left Column
+                selected_chat_model.change(self.update_model, inputs=selected_chat_model, outputs=[chatbot])
                 clear.click(self.clear_chat_history, outputs=chatbot)
                 clear_chat_mem.click(self.clear_his_and_mem, outputs=chatbot)
                 # Buttons in Right Column
@@ -109,6 +112,5 @@ class CWCGradio:
                 clear_db.click(self.delete_db, show_progress="full")
                 temperature.release(self.update_model_temp, inputs=[temperature])
                 max_tokens.release(self.update_max_tokens, inputs=[max_tokens])
-                selected_chat_model.change(self.update_model, inputs=selected_chat_model, outputs=[chatbot])
 
         iface.launch(inbrowser=True, share=True)
