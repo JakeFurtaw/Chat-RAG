@@ -17,11 +17,6 @@ class GRUtils:
             "Gemma2 9B": "gemma2:latest", "CodeGemma 7B": "codegemma:latest"
         }
 
-    def chat(self, message: str):
-        response = self.model_manager.process_input(message)
-        self.chat_history.append((message, str(response)))
-        return "", self.chat_history
-
     def stream_response(self, message: str):
         streaming_response = self.model_manager.process_input(message)
         full_response = ""
