@@ -2,8 +2,6 @@ import os
 import shutil
 import gradio as gr
 from model_utils import ModelManager
-import logging
-
 
 class GRUtils:
     def __init__(self):
