@@ -4,7 +4,7 @@
 
 CodeChat RAG is an interactive coding assistant that leverages Retrieval-Augmented Generation (RAG) to provide 
 informed responses to coding queries. Built with a user-friendly Gradio interface, it allows users to interact with 
-various language models and upload context files for more accurate assistance.
+various language models, change model temperature, the models prompt, and upload context files for more accurate assistance.
 
 ## Features
 
@@ -25,10 +25,11 @@ various language models and upload context files for more accurate assistance.
     ```bash
     gradio chatrag.py
    ```
-2. Open the provided URL in your web browser.
+2. The app will automatically open a new tab and launch in your browser.
 3. (Optional) Upload relevant files for additional context.
 4. Select a language model from the dropdown menu.
 5. Type your coding question in the text box and press enter.
+6. The model will stream the response to your query back to you in the chat window.
 
 
 ## Project Structure
