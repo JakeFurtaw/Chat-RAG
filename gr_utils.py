@@ -2,6 +2,7 @@ import os
 import shutil
 import gradio as gr
 from model_utils import ModelManager
+import logging
 
 
 class GRUtils:
@@ -16,16 +17,19 @@ class GRUtils:
             "Gemma2 9B": "gemma2:latest", "CodeGemma 7B": "codegemma:latest"
         }
 
-    async def chat(self, message: str):
-        response = await self.model_manager.process_input(message)
+    def chat(self, message: str):
+        response = self.model_manager.process_input(message)
         self.chat_history.append((message, str(response)))
         return "", self.chat_history
 
-    async def stream_response(self, message: str):
-        streaming_response = await self.model_manager.process_input(message)
+    def stream_response(self, message: str):
+        streaming_response = self.model_manager.process_input(message)
         full_response = ""
         for delta in streaming_response.response_gen:
-            full_response += delta
+            if isinstance(delta, str):
+                full_response += delta
+            else:
+                full_response += delta.delta
             yield "", self.chat_history + [(message, full_response)]
         self.chat_history.append((message, full_response))
 

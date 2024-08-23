@@ -28,7 +28,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 clear_db = gr.Button(value="Clear RAG Database", interactive=True)
             selected_chat_model = gr.Dropdown(choices=list(grutils.model_display_names.keys()),
                                               interactive=True,
-                                              label="Select Chat Model", value="Mistral-Nemo 12B",
+                                              label="Select Chat Model", value="Codestral 22B",
                                               filterable=True,
                                               info="Choose the model you want to chat with from the list below."
                                               )
