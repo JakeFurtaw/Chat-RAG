@@ -43,7 +43,7 @@ def set_chat_memory(model):
     return ChatMemoryBuffer.from_defaults(token_limit=token_limit)
 
 
-def setup_index_and_chat_engine(docs, embed_model, llm, memory):
+def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt):
     index = VectorStoreIndex.from_documents(docs, embed_model=embed_model)
     Settings.llm = llm
     chat_prompt = (
@@ -58,7 +58,7 @@ def setup_index_and_chat_engine(docs, embed_model, llm, memory):
         "Response:"
     )
 
-    system_message = ChatMessage(role="system", content=chat_prompt)
+    system_message = ChatMessage(role="system", content=chat_prompt if custom_prompt is None else custom_prompt)
     chat_engine = index.as_chat_engine(
         chat_mode=ChatMode.CONTEXT,
         memory=memory,

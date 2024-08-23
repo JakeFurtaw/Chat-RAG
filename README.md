@@ -23,7 +23,7 @@ various language models and upload context files for more accurate assistance.
 
 1. Run the application:
     ```bash
-    python app.py
+    gradio chatrag.py
    ```
 2. Open the provided URL in your web browser.
 3. (Optional) Upload relevant files for additional context.
@@ -33,9 +33,9 @@ various language models and upload context files for more accurate assistance.
 
 ## Project Structure
 
-- `app.py`: Main application entry point
+- `chatrag.py`: Main application entry point and Gradio setup
 - `chat.py`: Core chat functionality, including document loading and chat engine setup
-- `cr_gradio.py`: Gradio interface setup and management
+- `gr_utils.py`: Gradio utils
 - `model_utils.py`: Manages model selection, memory, and user input processing
 - `utils.py`: Utility functions for embedding, LLM setup, and chat engine configuration
 
