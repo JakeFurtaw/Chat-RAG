@@ -12,8 +12,8 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 "based on the loaded documents and user queries.")
     with gr.Row():
         with gr.Column(scale=8):
-            chatbot = gr.Chatbot(height=1000, container=False)
-            msg = gr.Textbox(label="Chatbox", placeholder="Enter your message here and hit return when you're ready...",
+            chatbot = gr.Chatbot(label="Chat RAG",height=1000)
+            msg = gr.Textbox(label="Textbox", placeholder="Enter your message here and hit return when you're ready...",
                              interactive=True)
             with gr.Row():
                 clear = gr.ClearButton([msg, chatbot], value="Clear Chat Window")
