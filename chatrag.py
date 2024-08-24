@@ -1,4 +1,5 @@
 import gradio as gr
+
 from gr_utils import GRUtils
 
 grutils = GRUtils()
@@ -18,11 +19,10 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
             with gr.Row():
                 clear = gr.ClearButton([msg, chatbot], value="Clear Chat Window")
                 clear_chat_mem = gr.Button(value="Clear Chat Window and Chat Memory")
-            msg.submit(grutils.stream_response, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
         with gr.Column(scale=2):
             files = gr.Files(interactive=True, label="Upload Files Here", file_count="multiple",
                              file_types=["text", ".pdf", ".py", ".txt", ".dart", ".c", ".jsx", ".xml",
-                                         ".css", ".cpp", ".html", ".docx", ".doc", ".js"])
+                                         ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json"])
             with gr.Row():
                 upload = gr.Button(value="Upload Data", interactive=True)
                 clear_db = gr.Button(value="Clear RAG Database", interactive=True)
@@ -40,9 +40,18 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
             max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1, label="Max Output Tokens",
                                    info="Set the maximum number of tokens the model can respond with.",
                                    interactive=True)
-            custom_prompt = gr.Textbox(label="Enter a Custom Prompt", placeholder="Enter your custom prompt here..",
-                                       interactive=True)
+            custom_prompt = gr.Textbox(label="Enter a Custom Prompt", placeholder="Enter your custom prompt here....."
+            "\nDefault Chat Prompt: \nYou are an AI coding assistant, your primary function is to help users with"
+            " coding-related questions and tasks. You have access to a knowledge base of programming documentation and"
+            " best practices. When answering questions please follow these guidelines. \n1. Provide clear, concise, and"
+            " accurate code snippets when appropriate. \n2. Explain your code and reasoning step by step. \n3. Offer"
+            " suggestions for best practices and potential optimizations. \n4. If the user's question is unclear,"
+            " ask for clarification dont assume or guess the answer to any question. \n5. When referencing external "
+            " libraries or frameworks, briefly explain their purpose. \n6. If the question involves multiple possible"
+            " approaches, outline the pros and cons of each.\n"
+            "Response:", interactive=True)
         # Button Functionality For RAG Chat
+        msg.submit(grutils.stream_response, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
         # Buttons in Left Column
         selected_chat_model.change(grutils.update_model, inputs=selected_chat_model, outputs=[chatbot])
         clear.click(grutils.clear_chat_history, outputs=chatbot)
