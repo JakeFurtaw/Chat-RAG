@@ -12,7 +12,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 "based on the loaded documents and user queries.")
     with gr.Row():
         with gr.Column(scale=8):
-            chatbot = gr.Chatbot(height=800, container=False)
+            chatbot = gr.Chatbot(height=1000, container=False)
             msg = gr.Textbox(label="Chatbox", placeholder="Enter your message here and hit return when you're ready...",
                              interactive=True)
             with gr.Row():
@@ -26,7 +26,9 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
             with gr.Row():
                 upload = gr.Button(value="Upload Data", interactive=True)
                 clear_db = gr.Button(value="Clear RAG Database", interactive=True)
-            selected_chat_model = gr.Dropdown(choices=list(grutils.model_display_names.keys()),
+            gr.Radio(label="Select Model Provider",value="Ollama", choices=["Ollama", "HuggingFace", "NVIDIA NIM"],
+                     interactive=True, info="Choose your model provider.")
+            selected_chat_model = gr.Dropdown(choices=list(grutils.ollama_model_display_names.keys()),
                                               interactive=True,
                                               label="Select Chat Model", value="Codestral 22B",
                                               filterable=True,
@@ -34,7 +36,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                                               )
             temperature = gr.Slider(minimum=.1, maximum=1, value=.75, step=.05, label="Model Temperature",
                                     info="Select a temperature between .1 and 1 to set the model to.",
-                                    interactive=True, )
+                                    interactive=True)
             max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1, label="Max Output Tokens",
                                    info="Set the maximum number of tokens the model can respond with.",
                                    interactive=True)

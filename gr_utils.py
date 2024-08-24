@@ -9,7 +9,7 @@ class GRUtils:
         self.max_tokens = 2048
         self.model_manager = ModelManager()
         self.chat_history = []
-        self.model_display_names = {
+        self.ollama_model_display_names = {
             "Codestral 22B": "codestral:latest", "Mistral-Nemo 12B": "mistral-nemo:latest",
             "Llama3.1 8B": "llama3.1:latest", "DeepSeek Coder V2 16B": "deepseek-coder-v2:latest",
             "Gemma2 9B": "gemma2:latest", "CodeGemma 7B": "codegemma:latest"
@@ -55,7 +55,7 @@ class GRUtils:
                    "caution.", duration=10)
 
     def update_model(self, display_name):
-        model_name = self.model_display_names.get(display_name, "codestral:latest")
+        model_name = self.ollama_model_display_names.get(display_name, "codestral:latest")
         self.model_manager.update_model(model_name)
         self.chat_history.clear()
         gr.Warning(f"Model updated to {display_name}. Please make sure you have this model installed through "
