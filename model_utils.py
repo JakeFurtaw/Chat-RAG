@@ -1,5 +1,5 @@
 import dotenv
-from chat import create_chat_engine
+from chat_utils import create_chat_engine
 
 dotenv.load_dotenv()
 

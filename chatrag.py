@@ -1,6 +1,5 @@
 import gradio as gr
-
-from gr_utils import GRUtils
+from gradio_utils import GRUtils
 
 grutils = GRUtils()
 
