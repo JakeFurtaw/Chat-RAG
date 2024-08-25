@@ -8,7 +8,6 @@ class GradioUtils:
         self.model_manager = ModelManager()
         self.chat_history = []
 
-
     def stream_response(self, message: str):
         streaming_response = self.model_manager.process_input(message)
         full_response = ""
