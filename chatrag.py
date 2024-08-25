@@ -53,7 +53,7 @@ hf_custom_prompt = gr.Textbox(label="Enter a Custom Prompt",
                               visible=False)
 
 # ----------------------------NVIDIA NIM components---------------------------
-nim_model = gr.Dropdown(choices=["NIM1", "NIM2", "NIM3"],
+nv_model = gr.Dropdown(choices=["NIM1", "NIM2", "NIM3"],
                         interactive=True,
                         label="Select NVIDIA NIM Model",
                         value="NIM1",
@@ -123,7 +123,7 @@ with gr.Blocks(title="Chat RAG",
             hf_top_p.render()
             hf_max_tokens.render()
             hf_custom_prompt.render()
-            nim_model.render()
+            nv_model.render()
             nv_temperature.render()
             nv_top_p.render()
             nv_max_tokens.render()
@@ -153,7 +153,7 @@ with gr.Blocks(title="Chat RAG",
                 inputs=[model_provider],
                 outputs=[selected_chat_model, temperature, max_tokens, custom_prompt,
                          hf_model, hf_temperature, hf_top_p, hf_max_tokens, hf_custom_prompt,
-                         nim_model, nv_temperature, nv_top_p, nv_max_tokens]
+                         nv_model, nv_temperature, nv_top_p, nv_max_tokens]
             )
 
 # -------Button Functionality For RAG Chat-----------
