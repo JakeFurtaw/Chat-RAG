@@ -4,7 +4,7 @@ import os
 import glob
 
 DIRECTORY_PATH = "data"
-
+EMBED_MODEL = get_embedding_model()
 
 def load_docs():
     all_files = glob.glob(os.path.join(DIRECTORY_PATH, "**", "*"), recursive=True)
@@ -18,7 +18,7 @@ def load_docs():
 
 def create_chat_engine(model, temperature, max_tokens, custom_prompt):
     documents = load_docs()
-    embed_model = get_embedding_model()
+    embed_model = EMBED_MODEL
     llm = set_llm(model, temperature, max_tokens)
     memory = set_chat_memory(model)
     return setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model, memory=memory,
