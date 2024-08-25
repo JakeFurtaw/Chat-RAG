@@ -35,18 +35,24 @@ class ModelManager:
 
     def update_model_temp(self, temperature):
         self.model_temp = temperature
+        gr.Warning(f"Model temperature updated to {temperature}. Changing this value can affect the randomness "
+                   f"and diversity of generated responses. Use with caution!",
+            duration=10)
         self.reset_chat_engine()
 
     def update_max_tokens(self, max_tokens):
         self.max_tokens = max_tokens
-        gr.Warning("WARNING: This may cut the output of the model short if your response requires more tokens "
-                   "for the answer!!!", duration=10)
+        gr.Warning(f"Max Tokens set to {max_tokens}. Please note that reducing the maximum number of tokens may"
+                   f" cause incomplete or unexpected responses from the model if a user's question requires more tokens"
+                   f" for an accurate answer.",
+                   duration=10)
         self.reset_chat_engine()
 
     def update_chat_prompt(self, custom_prompt):
-        self.custom_prompt=custom_prompt
-        gr.Warning("WARNING: Changing the custom prompt may affect the model's responses. Use this feature with "
-                   "caution.", duration=10)
+        self.custom_prompt = custom_prompt
+        gr.Warning("Caution: Changing the chat prompt may significantly alter the model's responses and could "
+                   "potentially cause misleading or incorrect information to be generated. Please ensure that "
+                   "the modified prompt is appropriate for your intended use case.", duration=10)
         self.reset_chat_engine()
 
     def reset_chat_engine(self):
