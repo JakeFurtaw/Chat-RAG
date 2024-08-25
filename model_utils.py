@@ -22,7 +22,7 @@ class ModelManager:
         self.selected_model = model
         self.reset_chat_engine()
 
-    def update_temperature(self, temperature):
+    def update_model_temp(self, temperature):
         self.model_temp = temperature
         self.reset_chat_engine()
 

@@ -1,7 +1,7 @@
 import gradio as gr
-from gradio_utils import GRUtils
+from gradio_utils import GradioUtils
 
-grutils = GRUtils()
+grutils = GradioUtils()
 
 with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_width=True) as demo:
     gr.Markdown("# Chat RAG: Interactive Coding Assistant"

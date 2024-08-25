@@ -3,10 +3,8 @@ import shutil
 import gradio as gr
 from model_utils import ModelManager
 
-class GRUtils:
+class GradioUtils:
     def __init__(self):
-        self.model_temp = .75
-        self.max_tokens = 2048
         self.model_manager = ModelManager()
         self.chat_history = []
         self.ollama_model_display_names = {
@@ -19,11 +17,7 @@ class GRUtils:
         streaming_response = self.model_manager.process_input(message)
         full_response = ""
         for delta in streaming_response.response_gen:
-            if isinstance(delta, str):
-                full_response += delta
-            else:
-                full_response += delta.delta
-            yield "", self.chat_history + [(message, full_response)]
+            full_response += delta
         self.chat_history.append((message, full_response))
 
     def clear_chat_history(self):
@@ -47,7 +41,7 @@ class GRUtils:
                    "for the answer!!!", duration=10)
 
     def update_model_temp(self, temperature):
-        self.model_manager.update_temperature(temperature)
+        self.model_manager.update_model_temp(temperature)
 
     def update_chat_prompt(self, custom_prompt):
         self.model_manager.update_chat_prompt(custom_prompt)
