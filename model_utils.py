@@ -1,8 +1,12 @@
 import dotenv
+import os
 from chat_utils import create_chat_engine
 import gradio as gr
+from huggingface_hub import login
 
 dotenv.load_dotenv()
+HUGGINGFACE_HUB_TOKEN = os.getenv("HUGGINGFACE_HUB_TOKEN")
+login(HUGGINGFACE_HUB_TOKEN)
 
 
 class ModelManager:
@@ -35,10 +39,11 @@ class ModelManager:
         self.reset_chat_engine()
 
     def process_input(self, message):
-        try:
-            return self.chat_engine.stream_chat(message)
-        except Exception as e:
-            return f"Error: {str(e)}"
+        # if self.model_provider == "Ollama":
+        return self.chat_engine.stream_chat(message)
+        # elif self.model_provider == "Hugging Face":
+        #     return self.chat_engine.stream_complete(message)
+
     #TODO Add NVIDIA NIMS
     def update_model(self, display_name):
         if self.model_provider == "Ollama":

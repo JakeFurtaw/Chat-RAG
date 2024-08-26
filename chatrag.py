@@ -28,7 +28,7 @@ custom_prompt = gr.Textbox(label="Enter a Custom Prompt",
 hf_model = gr.Dropdown(choices=list(modelUtils.hf_model_display_names.keys()),
                        interactive=True,
                        label="Select Chat Model",
-                       value="Mistral-Nemo 12B-Instruct",
+                       value="Codestral 22B",
                        filterable=True,
                        info="Choose a Hugging Face model.",
                        visible=False)
@@ -173,8 +173,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 inputs=[model_provider],
                 outputs=[
                     selected_chat_model, temperature, max_tokens, custom_prompt,
-                    hf_model, hf_quantization, hf_temperature, hf_top_p, hf_max_tokens,
-                    hf_custom_prompt,
+                    hf_model, hf_quantization, hf_temperature, hf_top_p, hf_max_tokens, hf_custom_prompt,
                     nv_model, nv_temperature, nv_top_p, nv_max_tokens,
                 ]
             )

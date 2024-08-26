@@ -3,6 +3,7 @@ import shutil
 import gradio as gr
 from model_utils import ModelManager
 
+
 class GradioUtils:
     def __init__(self):
         self.model_manager = ModelManager()
@@ -11,9 +12,14 @@ class GradioUtils:
     def stream_response(self, message: str):
         streaming_response = self.model_manager.process_input(message)
         full_response = ""
-        for delta in streaming_response.response_gen:
-            full_response += delta
-            yield "", self.chat_history + [(message, full_response)]
+        if self.model_manager.model_provider == "Ollama":
+            for tokens in streaming_response.response_gen:
+                full_response += tokens
+                yield "", self.chat_history + [(message, full_response)]
+        elif self.model_manager.model_provider == "Hugging Face":
+            for tokens in streaming_response:
+                full_response += tokens
+                yield "", self.chat_history + [(message, full_response)]
         self.chat_history.append((message, full_response))
 
     def clear_chat_history(self):
