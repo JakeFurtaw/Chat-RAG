@@ -24,7 +24,7 @@ class GradioUtils:
         self.model_manager.reset_chat_engine()
 
     def delete_db(self):
-        gr.Warning("Wait about 5-10 seconds for the files to clear. After this message disappears you should  "
+        gr.Info("Wait about 5-10 seconds for the files to clear. After this message disappears you should  "
                    "be in the clear.", duration=10)
         if os.path.exists("data"):
             shutil.rmtree("data")
@@ -43,6 +43,13 @@ class GradioUtils:
     def update_model(self, display_name):
         self.clear_chat_history()
         self.model_manager.update_model(display_name)
+
+    def update_model_provider(self, provider):
+        self.clear_chat_history()
+        self.model_manager.update_model_provider(provider)
+
+    def update_top_p(self, top_p):
+        self.model_manager.update_top_p(top_p)
 
     @staticmethod
     async def handle_doc_upload(files):

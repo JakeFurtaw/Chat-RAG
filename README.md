@@ -21,6 +21,11 @@ various language models, change model temperature, the models prompt, and upload
 
 ## Usage
 
+0. Setup and Environment File with :
+   ```bash
+   GRADIO_TEMP_DIR="YourPathTo/Chat-RAG/data"
+   GRADIO_WATCH_DIRS="YourPathTo/Chat-RAG"
+   ```
 1. Run the application:
     ```bash
     gradio chatrag.py
