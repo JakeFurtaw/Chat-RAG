@@ -60,6 +60,7 @@ class ModelManager:
         if provider == "Ollama":
             self.selected_model = "codestral:latest"
         elif provider == "Hugging Face":
+            gr.Warning("Model is loading, this could take some time depending on your hardware.", duration=20)
             self.selected_model = "mistralai/Codestral-22B-v0.1"
         self.reset_chat_engine()
         gr.Info(f"Model provider updated to {provider}.", duration=10)
@@ -68,7 +69,7 @@ class ModelManager:
         self.model_temp = temperature
         gr.Info(f"Model temperature updated to {temperature}.", duration=10)
         gr.Warning("Changing this value can affect the randomness "
-                   f"and diversity of generated responses. Use with caution!",
+                   "and diversity of generated responses. Use with caution!",
                    duration=10)
         self.reset_chat_engine()
 
@@ -76,7 +77,7 @@ class ModelManager:
         self.model_top_p = top_p
         gr.Info(f"Top P updated to {top_p}.", duration=10)
         gr.Warning("Changing this value can affect the randomness "
-                   f"and diversity of generated responses. Use with caution!",
+                   "and diversity of generated responses. Use with caution!",
                    duration=10)
         self.reset_chat_engine()
 
@@ -84,8 +85,8 @@ class ModelManager:
         self.max_tokens = max_tokens
         gr.Info(f"Max Tokens set to {max_tokens}.", duration=10)
         gr.Warning( "Please note that reducing the maximum number of tokens may"
-                   f" cause incomplete or unexpected responses from the model if a user's question requires more tokens"
-                   f" for an accurate answer.",
+                   " cause incomplete or unexpected responses from the model if a user's question requires more tokens"
+                   " for an accurate answer.",
                    duration=10)
         self.reset_chat_engine()
 
