@@ -21,20 +21,21 @@ various language models, change model temperature, the models prompt, and upload
 
 ## Usage
 
-0. Setup and Environment File with :
+1. Setup and Environment File(.env) with :
    ```bash
    GRADIO_TEMP_DIR="YourPathTo/Chat-RAG/data"
    GRADIO_WATCH_DIRS="YourPathTo/Chat-RAG"
+   HUGGINGFACE_HUB_TOKEN="YOUR HF TOKEN HERE"
    ```
-1. Run the application:
+2. Run the application:
     ```bash
     gradio chatrag.py
    ```
-2. The app will automatically open a new tab and launch in your browser.
-3. (Optional) Upload relevant files for additional context.
-4. Select a language model from the dropdown menu.
-5. Type your coding question in the text box and press enter.
-6. The model will stream the response to your query back to you in the chat window.
+3. The app will automatically open a new tab and launch in your browser.
+4. (Optional) Upload relevant files for additional context.
+5. Select a language model from the dropdown menu.
+6. Type your coding question in the text box and press enter.
+7. The model will stream the response to your query back to you in the chat window.
 
 
 ## Project Structure
