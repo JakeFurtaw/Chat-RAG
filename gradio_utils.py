@@ -12,14 +12,9 @@ class GradioUtils:
     def stream_response(self, message: str):
         streaming_response = self.model_manager.process_input(message)
         full_response = ""
-        if self.model_manager.model_provider == "Ollama":
-            for tokens in streaming_response.response_gen:
-                full_response += tokens
-                yield "", self.chat_history + [(message, full_response)]
-        elif self.model_manager.model_provider == "Hugging Face":
-            for tokens in streaming_response:
-                full_response += tokens
-                yield "", self.chat_history + [(message, full_response)]
+        for tokens in streaming_response.response_gen:
+            full_response += tokens
+            yield "", self.chat_history + [(message, full_response)]
         self.chat_history.append((message, full_response))
 
     def clear_chat_history(self):

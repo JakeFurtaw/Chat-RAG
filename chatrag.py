@@ -188,11 +188,11 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         files.upload(gradioUtils.handle_doc_upload, show_progress="full")
         upload.click(lambda: gradioUtils.model_manager.reset_chat_engine())
         clear_db.click(gradioUtils.delete_db, show_progress="full")
+        # ---------Ollama Buttons-----------------
         temperature.release(gradioUtils.update_model_temp, inputs=[temperature])
         max_tokens.release(gradioUtils.update_max_tokens, inputs=[max_tokens])
         custom_prompt.submit(gradioUtils.update_chat_prompt, inputs=[custom_prompt])
-
-        model_provider.change(gradioUtils.update_model_provider, inputs=[model_provider])
+        # ---------HuggingFace Buttons-----------------
         hf_model.change(gradioUtils.update_model, inputs=[hf_model])
         hf_temperature.release(gradioUtils.update_model_temp, inputs=[hf_temperature])
         hf_top_p.release(gradioUtils.update_top_p, inputs=[hf_top_p])

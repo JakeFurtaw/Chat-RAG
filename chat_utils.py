@@ -41,8 +41,9 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
             generate_kwargs={
                 "temperature": temperature,
                 "top_p": top_p,
+                "do_sample": True
             },
-            device_map="auto",
+            device_map="cuda:0",
         )
     else:
         raise ValueError(f"Unsupported model provider: {model_provider}")
