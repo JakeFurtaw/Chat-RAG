@@ -112,7 +112,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                                      interactive=True)
             model_provider = gr.Radio(label="Select Model Provider",
                                       value="Ollama",
-                                      choices=["Ollama", "Hugging Face", "NVIDIA NIM"],
+                                      choices=["Ollama", "HuggingFace", "NVIDIA NIM"],
                                       interactive=True,
                                       info="Choose your model provider.")
 
@@ -133,7 +133,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
 
             def update_layout(choice):
                 ollama_visible = choice == "Ollama"
-                hf_visible = choice == "Hugging Face"
+                hf_visible = choice == "HuggingFace"
                 nv_visible = choice == "NVIDIA NIM"
                 return (
                     gr.update(visible=ollama_visible),
@@ -155,7 +155,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
             def update_model_options(choice):
                 if choice == "Ollama":
                     return gr.update(choices=list(modelUtils.ollama_model_display_names.keys()), value="Codestral 22B")
-                elif choice == "Hugging Face":
+                elif choice == "HuggingFace":
                     return gr.update(choices=list(modelUtils.hf_model_display_names.keys()),
                                      value="Codestral 22B")
                 else:

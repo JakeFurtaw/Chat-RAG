@@ -44,7 +44,7 @@ class ModelManager:
     def update_model(self, display_name):
         if self.provider == "Ollama":
             self.selected_model = self.ollama_model_display_names.get(display_name, "codestral:latest")
-        elif self.provider == "Hugging Face":
+        elif self.provider == "HuggingFace":
             self.selected_model = self.hf_model_display_names.get(display_name, "mistralai/Codestral-22B-v0.1")
         else:
             self.selected_model = "codestral:latest"  # Default to Ollama model
@@ -56,11 +56,13 @@ class ModelManager:
         self.provider = provider
         if provider == "Ollama":
             self.selected_model = "codestral:latest"
-        elif provider == "Hugging Face":
+            gr.Info(f"Model provider updated to {provider}.", duration=10)
+        elif provider == "HuggingFace":
+            gr.Info(f"Model provider updated to {provider}.", duration=10)
             gr.Warning("Model is loading, this could take some time depending on your hardware.", duration=20)
             self.selected_model = "mistralai/Codestral-22B-v0.1"
         self.reset_chat_engine()
-        gr.Info(f"Model provider updated to {provider}.", duration=10)
+
 
     def update_model_temp(self, temperature):
         self.temperature = temperature

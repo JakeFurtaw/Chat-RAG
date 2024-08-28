@@ -2,7 +2,7 @@ from llama_index.core import SimpleDirectoryReader
 from utils import setup_index_and_chat_engine, get_embedding_model, set_llm, set_chat_memory
 from llama_index.llms.huggingface import HuggingFaceLLM
 from transformers import BitsAndBytesConfig
-import torch, os, glob
+import torch, os, glob, gc
 
 DIRECTORY_PATH = "data"
 EMBED_MODEL = get_embedding_model()
@@ -18,12 +18,15 @@ def load_docs():
 
 
 def create_chat_engine(model_provider, model, temperature, max_tokens, custom_prompt, top_p):
+    torch.cuda.empty_cache()
+    gc.collect()
+
     documents = load_docs()
     embed_model = EMBED_MODEL
 
     if model_provider == "Ollama":
         llm = set_llm(model, temperature, max_tokens)
-    elif model_provider == "Hugging Face":
+    elif model_provider == "HuggingFace":
         quantization_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_compute_dtype=torch.float16,
