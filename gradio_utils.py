@@ -1,5 +1,4 @@
-import os
-import shutil
+import os, shutil
 import gradio as gr
 from model_utils import ModelManager
 

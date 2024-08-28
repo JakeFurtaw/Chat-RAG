@@ -1,7 +1,6 @@
-import dotenv
-import os
-from chat_utils import create_chat_engine
+import dotenv, os, torch, gc
 import gradio as gr
+from chat_utils import create_chat_engine
 from huggingface_hub import login
 
 dotenv.load_dotenv()
@@ -96,5 +95,7 @@ class ModelManager:
         self.reset_chat_engine()
 
     def reset_chat_engine(self):
+        torch.cuda.empty_cache()
+        gc.collect()
         self.chat_engine = create_chat_engine(self.provider, self.selected_model, self.temperature,
                                               self.max_tokens, self.custom_prompt, self.top_p)

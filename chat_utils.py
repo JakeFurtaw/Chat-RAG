@@ -2,9 +2,7 @@ from llama_index.core import SimpleDirectoryReader
 from utils import setup_index_and_chat_engine, get_embedding_model, set_llm, set_chat_memory
 from llama_index.llms.huggingface import HuggingFaceLLM
 from transformers import BitsAndBytesConfig
-import torch
-import os
-import glob
+import torch, os, glob
 
 DIRECTORY_PATH = "data"
 EMBED_MODEL = get_embedding_model()
