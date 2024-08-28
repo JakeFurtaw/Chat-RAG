@@ -17,7 +17,7 @@ def get_embedding_model():
     return embed_model
 
 
-def set_llm(model, temperature, max_tokens):
+def set_ollama_llm(model, temperature, max_tokens):
     llm_models = {
         "codestral:latest": {"model": "codestral:latest", "device": set_device(1)},
         "mistral-nemo:latest": {"model": "mistral-nemo:latest", "device": set_device(1)},
@@ -29,15 +29,19 @@ def set_llm(model, temperature, max_tokens):
 
     llm_config = llm_models.get(model, llm_models["codestral:latest"])
     return Ollama(model=llm_config["model"], request_timeout=30.0, device=llm_config["device"],
-                  temperature=temperature, additional_kwargs={"num_predict": max_tokens})  # To limit response add
+                  temperature=temperature, additional_kwargs={"num_predict": max_tokens})
 
 
 def set_chat_memory(model):
     memory_limits = {
         "codestral:latest": 30000,
-        "mistral-nemo:latest": 115000,
-        "llama3.1:latest": 115000,
-        "deepseek-coder-v2:latest": 115000
+        "mistralai/Codestral-22B-v0.1":30000,
+        "mistral-nemo:latest": 124000,
+        "mistralai/Mistral-Nemo-Instruct-2407": 124000,
+        "llama3.1:latest": 124000,
+        "meta-llama/Meta-Llama-3.1-8B-Instruct": 124000,
+        "deepseek-coder-v2:latest": 124000,
+        "deepseek-ai/DeepSeek-Coder-V2-Instruct": 124000
     }
     token_limit = memory_limits.get(model, 6000)
     return ChatMemoryBuffer.from_defaults(token_limit=token_limit)
