@@ -181,11 +181,11 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
 
 # -------Button Functionality For RAG Chat-----------
         msg.submit(gradioUtils.stream_response, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
-        # Buttons in Left Column
+    # --------------------Buttons in Left Column--------------------------------
         selected_chat_model.change(gradioUtils.update_model, inputs=[selected_chat_model], outputs=[chatbot])
         clear.click(gradioUtils.clear_chat_history, outputs=chatbot)
         clear_chat_mem.click(gradioUtils.clear_his_and_mem, outputs=chatbot)
-        # Buttons in Right Column
+    # --------------------Buttons in Right Column--------------------------------
         files.upload(gradioUtils.handle_doc_upload, show_progress="full")
         upload.click(lambda: gradioUtils.model_manager.reset_chat_engine())
         clear_db.click(gradioUtils.delete_db, show_progress="full")
