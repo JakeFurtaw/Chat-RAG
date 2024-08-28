@@ -32,6 +32,7 @@ hf_model = gr.Dropdown(choices=list(modelUtils.hf_model_display_names.keys()),
                        filterable=True,
                        info="Choose a Hugging Face model.",
                        visible=False)
+# TODO Implement Quantization Change Feature
 hf_quantization = gr.Dropdown(choices=["4 Bit", "8 Bit", "16 Bit"],
                               interactive=True,
                               label="Model Quantization",
@@ -199,4 +200,4 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         hf_max_tokens.release(gradioUtils.update_max_tokens, inputs=[hf_max_tokens])
         hf_custom_prompt.submit(gradioUtils.update_chat_prompt, inputs=[hf_custom_prompt])
 
-demo.launch(inbrowser=True, share=True)
+demo.launch(inbrowser=True) # , share=True

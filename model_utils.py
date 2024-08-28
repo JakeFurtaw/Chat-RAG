@@ -13,11 +13,11 @@ class ModelManager:
     def __init__(self):
         self.chat_engine = None
         self.custom_prompt = None
-        self.model_provider = "Ollama"
+        self.provider = "Ollama"
         self.selected_model = "codestral:latest"
         self.max_tokens = 2048
-        self.model_temp = .75
-        self.model_top_p = .4
+        self.temperature = .75
+        self.top_p = .4
         self.quantization = "4 Bit"
         self.ollama_model_display_names = {
             "Codestral 22B": "codestral:latest",
@@ -39,24 +39,22 @@ class ModelManager:
         self.reset_chat_engine()
 
     def process_input(self, message):
-        # if self.model_provider == "Ollama":
         return self.chat_engine.stream_chat(message)
-        # elif self.model_provider == "Hugging Face":
-        #     return self.chat_engine.stream_complete(message)
 
     #TODO Add NVIDIA NIMS
     def update_model(self, display_name):
-        if self.model_provider == "Ollama":
+        if self.provider == "Ollama":
             self.selected_model = self.ollama_model_display_names.get(display_name, "codestral:latest")
-        elif self.model_provider == "Hugging Face":
+        elif self.provider == "Hugging Face":
             self.selected_model = self.hf_model_display_names.get(display_name, "mistralai/Codestral-22B-v0.1")
         else:
             self.selected_model = "codestral:latest"  # Default to Ollama model
         self.reset_chat_engine()
         gr.Info(f"Model updated to {display_name}.", duration=10)
+
     #TODO Add NVIDIA NIMS
     def update_model_provider(self, provider):
-        self.model_provider = provider
+        self.provider = provider
         if provider == "Ollama":
             self.selected_model = "codestral:latest"
         elif provider == "Hugging Face":
@@ -66,7 +64,7 @@ class ModelManager:
         gr.Info(f"Model provider updated to {provider}.", duration=10)
 
     def update_model_temp(self, temperature):
-        self.model_temp = temperature
+        self.temperature = temperature
         gr.Info(f"Model temperature updated to {temperature}.", duration=10)
         gr.Warning("Changing this value can affect the randomness "
                    "and diversity of generated responses. Use with caution!",
@@ -74,7 +72,7 @@ class ModelManager:
         self.reset_chat_engine()
 
     def update_top_p(self, top_p):
-        self.model_top_p = top_p
+        self.top_p = top_p
         gr.Info(f"Top P updated to {top_p}.", duration=10)
         gr.Warning("Changing this value can affect the randomness "
                    "and diversity of generated responses. Use with caution!",
@@ -98,5 +96,5 @@ class ModelManager:
         self.reset_chat_engine()
 
     def reset_chat_engine(self):
-        self.chat_engine = create_chat_engine(self.model_provider, self.selected_model, self.model_temp,
-                                              self.max_tokens, self.custom_prompt, self.model_top_p)
+        self.chat_engine = create_chat_engine(self.provider, self.selected_model, self.temperature,
+                                              self.max_tokens, self.custom_prompt, self.top_p)
