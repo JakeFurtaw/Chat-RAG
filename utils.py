@@ -38,19 +38,19 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
             load_in_4bit=True,
             bnb_4bit_compute_dtype=torch.float16,
             bnb_4bit_quant_type="nf4",
-            bnb_4bit_use_double_quant=True,
+            bnb_4bit_use_double_quant=True
         )
     elif quantization == "4 Bit":
         quantization_config = BitsAndBytesConfig(
             load_in_4bit=True,
             bnb_4bit_compute_dtype=torch.float16,
-            bnb_4bit_quant_type="nf4",
+            bnb_4bit_quant_type="nf4"
         )
     elif quantization == "8 Bit":
         quantization_config = BitsAndBytesConfig(
             load_in_8bit=True,
             bnb_8bit_compute_dtype=torch.float16,
-            bnb_8bit_quant_type="nf8",
+            bnb_8bit_quant_type="nf8"
         )
     elif quantization == "No Quantization":
         quantization_config = None
@@ -60,9 +60,10 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
             load_in_4bit=True,
             bnb_4bit_compute_dtype=torch.float16,
             bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True
         )
 
-    model_kwargs = {"quantization_config": quantization_config} if quantization_config else {}
+    model_kwargs = {"quantization_config": quantization_config}
 
     return HuggingFaceLLM(
         model_name=model,

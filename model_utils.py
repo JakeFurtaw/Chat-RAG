@@ -67,6 +67,8 @@ class ModelManager:
         gr.Info(f"Model updated to {display_name}.", duration=10)
 
     def update_quant(self, quantization):
+        torch.cuda.empty_cache()
+        gc.collect()
         self.quantization = quantization
         gr.Info(f"Quantization updated to {quantization}.", duration=10)
         self.reset_chat_engine()

@@ -202,7 +202,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         custom_prompt.submit(gradioUtils.update_chat_prompt, inputs=[custom_prompt])
         # ---------HuggingFace Buttons-----------------
         hf_model.change(gradioUtils.update_model, inputs=[hf_model])
-        hf_quantization.change(gradioUtils.update_quant, inputs=[hf_model])
+        hf_quantization.change(gradioUtils.update_quant, inputs=[hf_quantization])
         hf_temperature.release(gradioUtils.update_model_temp, inputs=[hf_temperature])
         hf_top_p.release(gradioUtils.update_top_p, inputs=[hf_top_p])
         hf_ctx_wnd.release(gradioUtils.update_context_window, inputs=[hf_ctx_wnd])
