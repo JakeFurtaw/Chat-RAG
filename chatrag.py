@@ -116,7 +116,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                                      interactive=True)
             model_provider = gr.Radio(label="Select Model Provider",
                                       value="Ollama",
-                                      choices=["Ollama", "HuggingFace", "NVIDIA NIM"],
+                                      choices=["Ollama", "HuggingFace", "NVIDIA NIM", "OpenAI", "Anthropic"],
                                       interactive=True,
                                       info="Choose your model provider.")
 
@@ -186,10 +186,9 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 ]
             )
 
-# -------Button Functionality For RAG Chat-----------
+# ----------------------------------Button Functionality For RAG Chat-----------------------------------------------
         msg.submit(gradioUtils.stream_response, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
     # --------------------Buttons in Left Column--------------------------------
-        selected_chat_model.change(gradioUtils.update_model, inputs=[selected_chat_model], outputs=[chatbot])
         clear.click(gradioUtils.clear_chat_history, outputs=chatbot)
         clear_chat_mem.click(gradioUtils.clear_his_and_mem, outputs=chatbot)
     # --------------------Buttons in Right Column--------------------------------
@@ -197,6 +196,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         upload.click(lambda: gradioUtils.model_manager.reset_chat_engine())
         clear_db.click(gradioUtils.delete_db, show_progress="full")
         # ---------Ollama Buttons-----------------
+        selected_chat_model.change(gradioUtils.update_model, inputs=[selected_chat_model], outputs=[chatbot])
         temperature.release(gradioUtils.update_model_temp, inputs=[temperature])
         max_tokens.release(gradioUtils.update_max_tokens, inputs=[max_tokens])
         custom_prompt.submit(gradioUtils.update_chat_prompt, inputs=[custom_prompt])
@@ -209,4 +209,4 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         hf_max_tokens.release(gradioUtils.update_max_tokens, inputs=[hf_max_tokens])
         hf_custom_prompt.submit(gradioUtils.update_chat_prompt, inputs=[hf_custom_prompt])
 
-demo.launch(inbrowser=True, share=True) # , share=True
+demo.launch(inbrowser=True, share=True)
