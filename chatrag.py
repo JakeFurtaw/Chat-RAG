@@ -147,6 +147,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                     gr.update(visible=ollama_visible),
                     gr.update(visible=ollama_visible),
                     gr.update(visible=ollama_visible),
+
                     gr.update(visible=hf_visible),
                     gr.update(visible=hf_visible),
                     gr.update(visible=hf_visible),
@@ -154,6 +155,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                     gr.update(visible=hf_visible),
                     gr.update(visible=hf_visible),
                     gr.update(visible=hf_visible),
+
                     gr.update(visible=nv_visible),
                     gr.update(visible=nv_visible),
                     gr.update(visible=nv_visible),
@@ -168,13 +170,11 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 else:
                     return gr.update(choices=["NIM1", "NIM2", "NIM3"], value="NIM1")
 
-
             def update_layout_and_model(choice):
                 layout_updates = update_layout(choice)
                 model_options_update = update_model_options(choice)
                 gradioUtils.update_model_provider(choice)
                 return layout_updates + (model_options_update,)
-
 
             model_provider.change(
                 fn=update_layout_and_model,
@@ -185,7 +185,6 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                     nv_model, nv_temperature, nv_top_p, nv_max_tokens,
                 ]
             )
-
 # ----------------------------------Button Functionality For RAG Chat-----------------------------------------------
         msg.submit(gradioUtils.stream_response, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
     # --------------------Buttons in Left Column--------------------------------
