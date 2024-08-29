@@ -12,12 +12,10 @@ import torch
 def set_device(gpu: int = None) -> str:
     return f"cuda:{gpu}" if torch.cuda.is_available() and gpu is not None else "cpu"
 
-
 def get_embedding_model():
     embed_model = HuggingFaceEmbedding(model_name="/home/jake/Programming/Models/embedding/stella_en_400M_v5",
                                        device=set_device(0), trust_remote_code=True)
     return embed_model
-
 
 def set_ollama_llm(model, temperature, max_tokens):
     llm_models = {
@@ -54,7 +52,6 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
         )
     elif quantization == "No Quantization":
         quantization_config = None
-
     else:
         quantization_config = BitsAndBytesConfig(
             load_in_4bit=True,
@@ -71,12 +68,13 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
         context_window=context_window,
         max_new_tokens=max_tokens,
         model_kwargs=model_kwargs,
+        is_chat_model= True,
+        device_map="cuda:0",
         generate_kwargs={
             "temperature": temperature,
             "top_p": top_p,
             "do_sample": True
         },
-        device_map="cuda:0",
     )
 
 def set_chat_memory(model):
@@ -92,7 +90,6 @@ def set_chat_memory(model):
     }
     token_limit = memory_limits.get(model, 6000)
     return ChatMemoryBuffer.from_defaults(token_limit=token_limit)
-
 
 def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt):
     index = VectorStoreIndex.from_documents(docs, embed_model=embed_model)
