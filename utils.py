@@ -1,9 +1,11 @@
 from llama_index.core.chat_engine.types import ChatMode
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.llms.huggingface import HuggingFaceLLM
 from llama_index.core import VectorStoreIndex, Settings
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.llms.ollama import Ollama
 from llama_index.core.llms import ChatMessage
+from transformers import BitsAndBytesConfig
 import torch
 
 
@@ -26,11 +28,48 @@ def set_ollama_llm(model, temperature, max_tokens):
         "gemma2:latest": {"model": "gemma2:latest", "device": set_device(1)},
         "codegemma:latest": {"model": "codegemma:latest", "device": set_device(1)}
     }
-
     llm_config = llm_models.get(model, llm_models["codestral:latest"])
     return Ollama(model=llm_config["model"], request_timeout=30.0, device=llm_config["device"],
                   temperature=temperature, additional_kwargs={"num_predict": max_tokens})
 
+def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, quantization):
+    if quantization == "2 Bit":
+        quantization_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_quant_type="nf4",
+            bnb_4bit_use_double_quant=True,
+        )
+    elif quantization == "4 Bit":
+        quantization_config = BitsAndBytesConfig(
+            load_in_4bit=True,
+            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_quant_type="nf4",
+        )
+    elif quantization == "8 Bit":
+        quantization_config = BitsAndBytesConfig(
+            load_in_8bit=True,
+            bnb_8bit_compute_dtype=torch.float16,
+            bnb_8bit_quant_type="nf8",
+        )
+    else:
+        quantization_config = None
+
+    model_kwargs = {"quantization_config": quantization_config} if quantization_config else {}
+
+    return HuggingFaceLLM(
+        model_name=model,
+        tokenizer_name=model,
+        context_window=context_window,
+        max_new_tokens=max_tokens,
+        model_kwargs=model_kwargs,
+        generate_kwargs={
+            "temperature": temperature,
+            "top_p": top_p,
+            "do_sample": True
+        },
+        device_map="cuda:0",
+    )
 
 def set_chat_memory(model):
     memory_limits = {

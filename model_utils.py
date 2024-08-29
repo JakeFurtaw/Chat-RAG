@@ -17,6 +17,7 @@ class ModelManager:
         self.max_tokens = 2048
         self.temperature = .75
         self.top_p = .4
+        self.context_window = 2048
         self.quantization = "4 Bit"
         self.ollama_model_display_names = {
             "Codestral 22B": "codestral:latest",
@@ -41,17 +42,6 @@ class ModelManager:
         return self.chat_engine.stream_chat(message)
 
     #TODO Add NVIDIA NIMS
-    def update_model(self, display_name):
-        if self.provider == "Ollama":
-            self.selected_model = self.ollama_model_display_names.get(display_name, "codestral:latest")
-        elif self.provider == "HuggingFace":
-            self.selected_model = self.hf_model_display_names.get(display_name, "mistralai/Codestral-22B-v0.1")
-        else:
-            self.selected_model = "codestral:latest"  # Default to Ollama model
-        self.reset_chat_engine()
-        gr.Info(f"Model updated to {display_name}.", duration=10)
-
-    #TODO Add NVIDIA NIMS
     def update_model_provider(self, provider):
         self.provider = provider
         if provider == "Ollama":
@@ -59,10 +49,29 @@ class ModelManager:
             gr.Info(f"Model provider updated to {provider}.", duration=10)
         elif provider == "HuggingFace":
             gr.Info(f"Model provider updated to {provider}.", duration=10)
-            gr.Warning("Model is loading, this could take some time depending on your hardware.", duration=20)
+            gr.Warning("Model is loading, this could take some time depending on your hardware.", duration=30)
             self.selected_model = "mistralai/Codestral-22B-v0.1"
         self.reset_chat_engine()
 
+    #TODO Add NVIDIA NIMS
+    def update_model(self, display_name):
+        if self.provider == "Ollama":
+            self.selected_model = self.ollama_model_display_names.get(display_name, "codestral:latest")
+        elif self.provider == "HuggingFace":
+            torch.cuda.empty_cache()
+            gc.collect()
+            self.selected_model = self.hf_model_display_names.get(display_name, "mistralai/Codestral-22B-v0.1")
+        else:
+            self.selected_model = "codestral:latest"  # Default to Ollama model
+        self.reset_chat_engine()
+        gr.Info(f"Model updated to {display_name}.", duration=10)
+
+    def update_quant(self, quantization):
+        torch.cuda.empty_cache()
+        gc.collect()
+        self.quantization = quantization
+        gr.Info(f"Quantization updated to {quantization}.", duration=10)
+        self.reset_chat_engine()
 
     def update_model_temp(self, temperature):
         self.temperature = temperature
@@ -79,6 +88,15 @@ class ModelManager:
                    "and diversity of generated responses. Use with caution!",
                    duration=10)
         self.reset_chat_engine()
+
+    def update_context_window(self, context_window):
+        self.context_window = context_window
+        gr.Info(f"Context Window updated to {context_window}.", duration=10)
+        gr.Warning("Changing this value can affect the amount of the context the model can see and use "
+                   "to answer your question.",
+                   duration=10)
+        self.reset_chat_engine()
+
 
     def update_max_tokens(self, max_tokens):
         self.max_tokens = max_tokens
@@ -100,4 +118,5 @@ class ModelManager:
         torch.cuda.empty_cache()
         gc.collect()
         self.chat_engine = create_chat_engine(self.provider, self.selected_model, self.temperature,
-                                              self.max_tokens, self.custom_prompt, self.top_p)
+                                              self.max_tokens, self.custom_prompt, self.top_p, self.context_window,
+                                              self.quantization)

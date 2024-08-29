@@ -32,8 +32,7 @@ hf_model = gr.Dropdown(choices=list(modelUtils.hf_model_display_names.keys()),
                        filterable=True,
                        info="Choose a Hugging Face model.",
                        visible=False)
-# TODO Implement Quantization Change Feature
-hf_quantization = gr.Dropdown(choices=["4 Bit", "8 Bit", "16 Bit"],
+hf_quantization = gr.Dropdown(choices=["No Quantization","2 Bit","4 Bit", "8 Bit"],
                               interactive=True,
                               label="Model Quantization",
                               value="4 Bit",
@@ -41,12 +40,17 @@ hf_quantization = gr.Dropdown(choices=["4 Bit", "8 Bit", "16 Bit"],
                               visible=False)
 hf_temperature = gr.Slider(minimum=0, maximum=1, value=.75, step=.05,
                            label="Model Temperature",
-                           info="Select a temperature between 0 and 1 for the model.",
+                           info="Select a Temperature between 0 and 1 for the model.",
                            interactive=True,
                            visible=False)
 hf_top_p = gr.Slider(minimum=0, maximum=1, value=0.4, step=0.05,
                      label="Top P",
-                     info="Select a top p value between 0 and 1 for the model.",
+                     info="Select a Top P value between 0 and 1 for the model.",
+                     interactive=True,
+                     visible=False)
+hf_ctx_wnd = gr.Slider(minimum=100, maximum=10000, value=2048, step=1,
+                     label="Context Window",
+                     info="Select a Context Window value between 100 and 10000 for the model.",
                      interactive=True,
                      visible=False)
 hf_max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
@@ -92,14 +96,14 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 "The app utilizes RAG (Retrieval-Augmented Generation) to provide more informed responses "
                 "based on the loaded documents and user queries.")
     with gr.Row():
-        with gr.Column(scale=8):
+        with gr.Column(scale=7):
             chatbot = gr.Chatbot(label="Chat RAG",height=1100)
             msg = gr.Textbox(label="Textbox", placeholder="Enter your message here and hit return when you're ready...",
                              interactive=True)
             with gr.Row():
                 clear = gr.ClearButton([msg, chatbot],value="Clear Chat Window")
                 clear_chat_mem = gr.Button(value="Clear Chat Window and Chat Memory")
-        with gr.Column(scale=2):
+        with gr.Column(scale=3):
             files = gr.Files(interactive=True,
                              label="Upload Files Here",
                              file_count="multiple",
@@ -120,12 +124,15 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
             temperature.render()
             max_tokens.render()
             custom_prompt.render()
+
             hf_model.render()
             hf_quantization.render()
             hf_temperature.render()
             hf_top_p.render()
+            hf_ctx_wnd.render()
             hf_max_tokens.render()
             hf_custom_prompt.render()
+
             nv_model.render()
             nv_temperature.render()
             nv_top_p.render()
@@ -146,6 +153,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                     gr.update(visible=hf_visible),
                     gr.update(visible=hf_visible),
                     gr.update(visible=hf_visible),
+                    gr.update(visible=hf_visible),
                     gr.update(visible=nv_visible),
                     gr.update(visible=nv_visible),
                     gr.update(visible=nv_visible),
@@ -156,8 +164,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 if choice == "Ollama":
                     return gr.update(choices=list(modelUtils.ollama_model_display_names.keys()), value="Codestral 22B")
                 elif choice == "HuggingFace":
-                    return gr.update(choices=list(modelUtils.hf_model_display_names.keys()),
-                                     value="Codestral 22B")
+                    return gr.update(choices=list(modelUtils.hf_model_display_names.keys()), value="Codestral 22B")
                 else:
                     return gr.update(choices=["NIM1", "NIM2", "NIM3"], value="NIM1")
 
@@ -174,7 +181,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 inputs=[model_provider],
                 outputs=[
                     selected_chat_model, temperature, max_tokens, custom_prompt,
-                    hf_model, hf_quantization, hf_temperature, hf_top_p, hf_max_tokens, hf_custom_prompt,
+                    hf_model, hf_quantization, hf_temperature, hf_top_p, hf_ctx_wnd, hf_max_tokens, hf_custom_prompt,
                     nv_model, nv_temperature, nv_top_p, nv_max_tokens,
                 ]
             )
@@ -195,9 +202,11 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         custom_prompt.submit(gradioUtils.update_chat_prompt, inputs=[custom_prompt])
         # ---------HuggingFace Buttons-----------------
         hf_model.change(gradioUtils.update_model, inputs=[hf_model])
+        hf_quantization.change(gradioUtils.update_quant, inputs=[hf_model])
         hf_temperature.release(gradioUtils.update_model_temp, inputs=[hf_temperature])
         hf_top_p.release(gradioUtils.update_top_p, inputs=[hf_top_p])
+        hf_ctx_wnd.release(gradioUtils.update_context_window, inputs=[hf_ctx_wnd])
         hf_max_tokens.release(gradioUtils.update_max_tokens, inputs=[hf_max_tokens])
         hf_custom_prompt.submit(gradioUtils.update_chat_prompt, inputs=[hf_custom_prompt])
 
-demo.launch(inbrowser=True) # , share=True
+demo.launch(inbrowser=True, share=True) # , share=True

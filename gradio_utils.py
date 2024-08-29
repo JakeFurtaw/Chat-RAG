@@ -31,25 +31,33 @@ class GradioUtils:
             os.makedirs("data")
         self.model_manager.reset_chat_engine()
 
-    def update_max_tokens(self, max_tokens):
-        self.model_manager.update_max_tokens(max_tokens)
-
-    def update_model_temp(self, temperature):
-        self.model_manager.update_model_temp(temperature)
-
-    def update_chat_prompt(self, custom_prompt):
-        self.model_manager.update_chat_prompt(custom_prompt)
+    def update_model_provider(self, provider):
+        self.clear_chat_history()
+        self.model_manager.update_model_provider(provider)
 
     def update_model(self, display_name):
         self.clear_chat_history()
         self.model_manager.update_model(display_name)
 
-    def update_model_provider(self, provider):
-        self.clear_chat_history()
-        self.model_manager.update_model_provider(provider)
+    def update_quant(self, quantization):
+        self.model_manager.update_quant(quantization)
+
+    def update_model_temp(self, temperature):
+        self.model_manager.update_model_temp(temperature)
 
     def update_top_p(self, top_p):
         self.model_manager.update_top_p(top_p)
+
+    def update_context_window(self, context_window):
+        self.model_manager.update_context_window(context_window)
+
+    def update_max_tokens(self, max_tokens):
+        self.model_manager.update_max_tokens(max_tokens)
+
+    def update_chat_prompt(self, custom_prompt):
+        self.model_manager.update_chat_prompt(custom_prompt)
+
+
 
     @staticmethod
     async def handle_doc_upload(files):
