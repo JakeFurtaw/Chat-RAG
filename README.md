@@ -2,49 +2,57 @@
 
 ## Overview
 
-CodeChat RAG is an interactive coding assistant that leverages Retrieval-Augmented Generation (RAG) to provide 
-informed responses to coding queries. Built with a user-friendly Gradio interface, it allows users to interact with 
-various language models, change model temperature, the models prompt, and upload context files for more accurate assistance.
+Chat RAG is an advanced interactive coding assistant that leverages Retrieval-Augmented Generation (RAG) to provide 
+informed responses to coding queries. Built with a user-friendly Gradio interface, it allows users to interact 
+with various language models, customize model parameters, and upload context files for more accurate assistance.
 
 ## Features
 
-- **Multiple Language Models**: Choose from models like Codestral, Mistral-Nemo, LLaMA3.1, DeepSeek Coder v2, Gemma2, and CodeGemma.
+- **Multiple Model Providers**: Support for Ollama, HuggingFace, and NVIDIA NIM models.
+- **Wide Range of Language Models**: Choose from models like Codestral, Mistral-Nemo, LLaMA3.1, DeepSeek Coder v2,
+Gemma2, and CodeGemma.
 - **RAG-powered Responses**: Utilizes uploaded documents to provide context-aware answers.
 - **Interactive Chat Interface**: Easy-to-use chat interface for asking coding questions.
 - **File Upload**: Support for uploading additional context files.
 - **Model Switching**: Seamlessly switch between different language models.
+- **Customizable Model Parameters**: Adjust temperature, max tokens, top-p, and context window size.
+- **Custom Prompts**: Ability to set custom system prompts for the chat engine.
 - **Reset Chat Engine**: Clear chat history and memory to start fresh.
 - **Delete Database**: Easily delete all stored data for privacy and reset purposes.
 - **Enhanced Memory Management**: Dynamically manage chat memory for different models.
-- **Refined Chat Prompts**: Contextual prompts guide the AI for more accurate and useful responses.
+- **Streaming Responses**: Real-time response generation for a more interactive experience.
+- **Model Quantization**: Options for 2-bit, 4-bit, and 8-bit quantization for HuggingFace models.
 
 
-## Usage
+## Setup and Usage
 
-1. Setup an Environment File(.env) with :
+1. Clone the repository.
+2. Install the required dependencies.
+3. Set up your .env file with the following:
    ```bash
    GRADIO_TEMP_DIR="YourPathTo/Chat-RAG/data"
    GRADIO_WATCH_DIRS="YourPathTo/Chat-RAG"
    HUGGINGFACE_HUB_TOKEN="YOUR HF TOKEN HERE"
    ```
-2. Run the application:
+4. Run the application:
     ```bash
     gradio chatrag.py
    ```
-3. The app will automatically open a new tab and launch in your browser.
-4. (Optional) Upload relevant files for additional context.
-5. Select a language model from the dropdown menu.
-6. Type your coding question in the text box and press enter.
-7. The model will stream the response to your query back to you in the chat window.
+5. The app will automatically open a new tab and launch in your browser.
+6. (Optional) Upload relevant files for additional context.
+7. Select a Model Provider.
+8. Select a language model from the dropdown menu.
+9. Type your coding question in the text box and press enter.
+10. The model will stream the response to your query back to you in the chat window.
 
 
 ## Project Structure
 
-- `chatrag.py`: Main application entry point and Gradio setup
-- `chat.py`: Core chat functionality, including document loading and chat engine setup
-- `gr_utils.py`: Gradio utils
-- `model_utils.py`: Manages model selection, memory, and user input processing
-- `utils.py`: Utility functions for embedding, LLM setup, and chat engine configuration
+- `chatrag.py`: Main application file with Gradio UI setup.
+- `chat.py`: Utilities for document loading and chat engine creation.
+- `gr_utils.py`: Gradio-specific utility functions for UI interactions.
+- `model_utils.py`: Model management and configuration utilities.
+- `utils.py`: General utilities for embedding, LLM setup, and chat memory.
 
 ## Pictures
 ### Start State of the App
@@ -56,6 +64,8 @@ various language models, change model temperature, the models prompt, and upload
 ### RAG Query Example
 ![RAG Query Example](pics/RAG_Query.png "RAG Query Example")
 
+### Contributing
+Contributions are welcome! Please feel free to submit a Pull Request or Fork the Repository.
 
-### Need Help or Have Feature Suggestions
+### Need Help or Have Feature Suggestions?
 Feel free to reach out to me through GitHub, LinkedIn, or through email. All of those are available on my website [JFCoded](https://www.jfcoded.com/contact).
