@@ -52,7 +52,7 @@ various language models, change model temperature, the models prompt, and upload
 ### Dropdown Menu in Action
 ![Dropdown Menu](pics/model_dropdown.png "Dropdown Menu in Action")
 ### Query Example
-![Query Example](pics/query.png "RAG Query Example")
+![Query Example](pics/query.png "Query Example")
 ### RAG Query Example
 ![RAG Query Example](pics/RAG_Query.png "RAG Query Example")
 
