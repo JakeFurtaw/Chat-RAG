@@ -51,8 +51,8 @@ various language models, change model temperature, the models prompt, and upload
 ![Start State of the App](pics/start_state.png "Start State of the App")
 ### Dropdown Menu in Action
 ![Dropdown Menu](pics/model_dropdown.png "Dropdown Menu in Action")
-### Llama 3.1 Query Example
-![Llama Query Example](pics/Llama_Query.png "RAG Query Example")
+### Query Example
+![Query Example](pics/query.png "RAG Query Example")
 ### RAG Query Example
 ![RAG Query Example](pics/RAG_Query.png "RAG Query Example")
 
