@@ -21,7 +21,7 @@ various language models, change model temperature, the models prompt, and upload
 
 ## Usage
 
-1. Setup and Environment File(.env) with :
+1. Setup an Environment File(.env) with :
    ```bash
    GRADIO_TEMP_DIR="YourPathTo/Chat-RAG/data"
    GRADIO_WATCH_DIRS="YourPathTo/Chat-RAG"
