@@ -1,10 +1,13 @@
 from llama_index.core import SimpleDirectoryReader
+from llama_index.readers.github import GithubClient, GithubRepositoryReader
 from utils import (setup_index_and_chat_engine, get_embedding_model, set_chat_memory,
                    set_ollama_llm, set_huggingface_llm, set_nvidia_model, set_openai_model, set_anth_model)
-import torch, os, glob, gc
+import torch, os, glob, gc, dotenv
+dotenv.load_dotenv()
 
 DIRECTORY_PATH = "data"
 EMBED_MODEL = get_embedding_model()
+
 
 # TODO Add parsing for different types of files. PDF, EXCEL FILES, etc..
 def load_docs():
@@ -16,12 +19,30 @@ def load_docs():
         documents.extend(reader)
     return documents
 
+def load_github_repo(owner, repo, branch):
+    github_client = GithubClient(github_token=os.getenv("GITHUB_PAT"), verbose=True)
+    owner=owner
+    repo=repo
+    branch=branch
+    documents= GithubRepositoryReader(
+        github_client=github_client,
+        owner=owner,
+        repo=repo,
+        use_parser=False,
+        verbose=False,
+        # filter_directories=directories, # TODO add textbox to get list of directories to include
+        filter_file_extensions=([".png", "jpg", "jpeg", ".gif", ".svg", ".ico"],
+                                GithubRepositoryReader.FilterType.EXCLUDE),
+    ).load_data(branch=branch)
+    return documents
+
 
 def create_chat_engine(model_provider, model, temperature, max_tokens, custom_prompt, top_p,
-                       context_window, quantization):
+                       context_window, quantization, owner, repo, branch):
     torch.cuda.empty_cache()
     gc.collect()
     documents = load_docs()
+    documents += load_github_repo(owner, repo, branch)
     embed_model = EMBED_MODEL
     if model_provider == "Ollama":
         llm = set_ollama_llm(model, temperature, max_tokens)

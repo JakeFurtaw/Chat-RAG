@@ -4,7 +4,6 @@ from model_utils import ModelManager
 
 gradioUtils = GradioUtils()
 modelUtils = ModelManager()
-
 # --------------Ollama Components------------------------
 selected_chat_model = gr.Dropdown(choices=list(modelUtils.ollama_model_display_names.keys()),
                                   interactive=True,
@@ -179,9 +178,13 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 repoBranch = gr.Textbox(label="GitHub Repository Branch Name:",
                                         placeholder="Enter Branch Name Here....",
                                         interactive=True)
-                getRepo = gr.Button(value="Get GitHub Repository",
-                                    size="sm",
-                                    interactive=True)
+                with gr.Row():
+                    getRepo = gr.Button(value="Load GitHub Repository",
+                                        size="sm",
+                                        interactive=True)
+                    uploadRepo = gr.Button(value="Upload Repo",
+                                           size="sm",
+                                           interactive=True)
 
             model_provider = gr.Radio(label="Select Model Provider",
                                       value="Ollama",
@@ -308,7 +311,9 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         clear_db.click(gradioUtils.delete_db,
                        show_progress="full")
         # TODO Add functionality for repo ripper
-        getRepo.click()
+        getRepo.click(modelUtils.set_github_info, inputs=[repoOwnerUsername,repoName,repoBranch])# Maybe add outputs= [chatbot}
+        uploadRepo.click(lambda: gradioUtils.model_manager.reset_chat_engine())# Maybe add outputs= [chatbot}
+
         # ---------Ollama Buttons-----------------
         selected_chat_model.change(gradioUtils.update_model,
                                    inputs=[selected_chat_model],

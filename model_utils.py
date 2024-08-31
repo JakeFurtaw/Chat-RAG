@@ -1,13 +1,18 @@
 import torch, gc
 import gradio as gr
-from chat_utils import create_chat_engine
+from chat_utils import create_chat_engine, load_github_repo
+
 
 def reset_gpu_memory():
     torch.cuda.empty_cache()
     gc.collect()
 
+
 class ModelManager:
     def __init__(self):
+        self.branch = None
+        self.repo = None
+        self.owner = None
         self.chat_engine = None
         self.custom_prompt = None
         self.provider = "Ollama"
@@ -37,7 +42,7 @@ class ModelManager:
             "Codestral 22B": "mistralai/codestral-22b-instruct-v0.1",
             "Mistral-Nemo 12B": "nv-mistralai/mistral-nemo-12b-instruct",
             "Llama 3.1 8B": "meta/llama-3.1-8b-instruct",
-            "Gemma2 9B":"google/gemma-2-9b-it",
+            "Gemma2 9B": "google/gemma-2-9b-it",
             "CodeGemma 7B": "google/codegemma-7b"
         }
         self.openai_model_display_names = {
@@ -85,9 +90,9 @@ class ModelManager:
         elif self.provider == "NVIDIA NIM":
             self.selected_model = self.nv_model_display_names.get(display_name, "mistralai/codestral-22b-instruct-v0.1")
         elif self.provider == "OpenAI":
-            self.selected_model = self.openai_model_display_names.get(display_name,"gpt-4o")
+            self.selected_model = self.openai_model_display_names.get(display_name, "gpt-4o")
         elif self.provider == "Anthropic":
-            self.selected_model = self.openai_model_display_names.get(display_name,"claude-3-5-sonnet-20240620")
+            self.selected_model = self.openai_model_display_names.get(display_name, "claude-3-5-sonnet-20240620")
         self.reset_chat_engine()
         gr.Info(f"Model updated to {display_name}.", duration=10)
 
@@ -128,7 +133,7 @@ class ModelManager:
         reset_gpu_memory()
         self.max_tokens = max_tokens
         gr.Info(f"Max Tokens set to {max_tokens}.", duration=10)
-        gr.Warning( "Please note that reducing the maximum number of tokens may"
+        gr.Warning("Please note that reducing the maximum number of tokens may"
                    " cause incomplete or unexpected responses from the model if a user's question requires more tokens"
                    " for an accurate answer.",
                    duration=10)
@@ -142,8 +147,15 @@ class ModelManager:
                    "the modified prompt is appropriate for your intended use case.", duration=10)
         self.reset_chat_engine()
 
+    def set_github_info(self, owner, repo, branch):
+        self.owner = owner
+        self.repo = repo
+        self.branch = branch
+        gr.Info(f"GitHub repository info set: {owner}/{repo} ({branch})")
+        self.reset_chat_engine()
+
     def reset_chat_engine(self):
         reset_gpu_memory()
         self.chat_engine = create_chat_engine(self.provider, self.selected_model, self.temperature,
                                               self.max_tokens, self.custom_prompt, self.top_p, self.context_window,
-                                              self.quantization)
+                                              self.quantization, self.owner, self.repo, self.branch)
