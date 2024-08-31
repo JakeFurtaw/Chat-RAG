@@ -140,7 +140,7 @@ anth_max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
                             interactive=True,
                             visible=False)
 
-# ----------Gradio Layout-----------------------------
+# --------------------------Gradio Layout-----------------------------
 with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_width=True) as demo:
     gr.Markdown("# Chat RAG: Interactive Coding Assistant"
                 "\nThis app is a chat-based coding assistant with a graphical user interface built using "
@@ -336,23 +336,36 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         hf_custom_prompt.submit(gradioUtils.update_chat_prompt,
                                 inputs=[hf_custom_prompt])
         # ---------NVIDIA Buttons-----------------
-        # TODO Add button functionality
-        nv_model.change()
-        nv_temperature.release()
-        nv_top_p.release()
-        nv_max_tokens.release()
+        nv_model.change(gradioUtils.update_model,
+                        inputs=[nv_model],
+                        outputs=[chatbot])
+        nv_temperature.release(gradioUtils.update_model_temp,
+                               inputs=[nv_temperature])
+        nv_top_p.release(gradioUtils.update_top_p,
+                         inputs=[nv_top_p])
+        nv_max_tokens.release(gradioUtils.update_max_tokens,
+                              inputs=[nv_max_tokens])
         # ---------OpenAI Buttons-----------------
-        # TODO Add button functionality
-        openai_model.change()
-        openai_temperature.release()
-        openai_top_p.release()
-        openai_ctx_wnd.release()
-        openai_max_tokens.release()
+        openai_model.change(gradioUtils.update_model,
+                            inputs=[openai_model],
+                            outputs=[chatbot])
+        openai_temperature.release(gradioUtils.update_model_temp,
+                                   inputs=[openai_temperature])
+        openai_top_p.release(gradioUtils.update_top_p,
+                             inputs=[openai_top_p])
+        openai_ctx_wnd.release(gradioUtils.update_context_window,
+                               inputs=[openai_ctx_wnd])
+        openai_max_tokens.release(gradioUtils.update_max_tokens,
+                                  inputs=[openai_max_tokens])
         # ---------Anthropic Buttons-----------------
-        # TODO Add button functionality
-        anth_model.change()
-        anth_temperature.release()
-        anth_ctx_wnd.release()
-        anth_max_tokens.release()
+        anth_model.change(gradioUtils.update_model,
+                          inputs=[anth_model],
+                          outputs=[chatbot])
+        anth_temperature.release(gradioUtils.update_model_temp,
+                                 inputs=[anth_temperature])
+        anth_ctx_wnd.release(gradioUtils.update_context_window,
+                             inputs=[anth_ctx_wnd])
+        anth_max_tokens.release(gradioUtils.update_max_tokens,
+                                inputs=[anth_max_tokens])
 
 demo.launch(inbrowser=True, share=True)
