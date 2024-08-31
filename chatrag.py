@@ -8,7 +8,7 @@ modelUtils = ModelManager()
 # --------------Ollama Components------------------------
 selected_chat_model = gr.Dropdown(choices=list(modelUtils.ollama_model_display_names.keys()),
                                   interactive=True,
-                                  label="Select Chat Model",
+                                  label="Select a Chat Model",
                                   value="Codestral 22B",
                                   filterable=True,
                                   info="Choose the model you want to chat with from the list below.")
@@ -27,7 +27,7 @@ custom_prompt = gr.Textbox(label="Enter a Custom Prompt",
 # ------------------HuggingFace components-------------------------------
 hf_model = gr.Dropdown(choices=list(modelUtils.hf_model_display_names.keys()),
                        interactive=True,
-                       label="Select Chat Model",
+                       label="Select a Chat Model",
                        value="Codestral 22B",
                        filterable=True,
                        info="Choose a Hugging Face model.",
@@ -66,7 +66,7 @@ hf_custom_prompt = gr.Textbox(label="Enter a Custom Prompt",
 # ----------------------------NVIDIA NIM components---------------------------
 nv_model = gr.Dropdown(choices=list(modelUtils.nv_model_display_names.keys()),
                         interactive=True,
-                        label="Select NVIDIA NIM",
+                        label="Select a NVIDIA NIM",
                         value="Codestral 22B",
                         filterable=True,
                         info="Choose a NVIDIA NIM.",
@@ -89,36 +89,56 @@ nv_max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
 
 # ----------------------------OPEN AI components---------------------------
 openai_model = gr.Dropdown(choices=list(modelUtils.openai_model_display_names.keys()),
-                        interactive=True,
-                        label="Select OpenAI Model",
-                        value="GPT-4o",
-                        filterable=True,
-                        info="Choose a OpenAI model.",
-                        visible=False)
-openai_temperature = gr.Slider(minimum=0, maximum=1, value=.75, step=.05,
-                           label="Model Temperature",
-                           info="Select a temperature between .1 and 1 to set the model to.",
                            interactive=True,
+                           label="Select a OpenAI Model",
+                           value="GPT-4o",
+                           filterable=True,
+                           info="Choose a OpenAI model.",
                            visible=False)
+openai_temperature = gr.Slider(minimum=0, maximum=1, value=.75, step=.05,
+                               label="Model Temperature",
+                               info="Select a temperature between .1 and 1 to set the model to.",
+                               interactive=True,
+                               visible=False)
 openai_top_p = gr.Slider(minimum=0, maximum=1, value=0.4, step=0.05,
-                     label="Top P",
-                     info="Set the top p value for the model.",
+                         label="Top P",
+                         info="Set the top p value for the model.",
+                         interactive=True,
+                         visible=False)
+openai_ctx_wnd = gr.Slider(minimum=100, maximum=10000, value=2048, step=1,
+                     label="Context Window",
+                     info="Select a Context Window value between 100 and 10000 for the model.",
                      interactive=True,
                      visible=False)
 openai_max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
-                          label="Max Output Tokens",
-                          info="Set the maximum number of tokens the model can respond with.",
-                          interactive=True,
-                          visible=False)
+                              label="Max Output Tokens",
+                              info="Set the maximum number of tokens the model can respond with.",
+                              interactive=True,
+                              visible=False)
 
 # ----------------------------Anthropic components---------------------------
-anth_model = gr.Dropdown(choices=["Claude 3.5 Sonnet", "Claude 3 Opus", "Claude 3 Sonnet", "Claude 3 Haiku"],
-                        interactive=True,
-                        label="Select Anthropic Model",
-                        value="Claude 3.5 Sonnet",
-                        filterable=True,
-                        info="Choose a Anthropic model.",
-                        visible=False)
+anth_model = gr.Dropdown(choices=list(modelUtils.openai_model_display_names.keys()),
+                         interactive=True,
+                         label="Select a Anthropic Model",
+                         value="Claude 3.5 Sonnet",
+                         filterable=True,
+                         info="Choose a Anthropic model.",
+                         visible=False)
+anth_temperature = gr.Slider(minimum=0, maximum=1, value=.75, step=.05,
+                             label="Model Temperature",
+                             info="Select a temperature between .1 and 1 to set the model to.",
+                             interactive=True,
+                             visible=False)
+anth_ctx_wnd = gr.Slider(minimum=100, maximum=10000, value=2048, step=1,
+                     label="Context Window",
+                     info="Select a Context Window value between 100 and 10000 for the model.",
+                     interactive=True,
+                     visible=False)
+anth_max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
+                            label="Max Output Tokens",
+                            info="Set the maximum number of tokens the model can respond with.",
+                            interactive=True,
+                            visible=False)
 
 # ----------Gradio Layout-----------------------------
 with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_width=True) as demo:
@@ -189,9 +209,13 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
             openai_model.render()
             openai_temperature.render()
             openai_top_p.render()
+            openai_ctx_wnd.render()
             openai_max_tokens.render()
 
             anth_model.render()
+            anth_temperature.render()
+            anth_ctx_wnd.render()
+            anth_max_tokens.render()
 
             def update_layout(choice):
                 ollama_visible = choice == "Ollama"
@@ -222,21 +246,30 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                     gr.update(visible=oai_visible),
                     gr.update(visible=oai_visible),
                     gr.update(visible=oai_visible),
+                    gr.update(visible=oai_visible),
 
+                    gr.update(visible=ath_visible),
+                    gr.update(visible=ath_visible),
+                    gr.update(visible=ath_visible),
                     gr.update(visible=ath_visible)
                 )
 
             def update_model_options(choice):
                 if choice == "Ollama":
-                    return gr.update(choices=list(modelUtils.ollama_model_display_names.keys()), value="Codestral 22B")
+                    return gr.update(choices=list(modelUtils.ollama_model_display_names.keys()),
+                                     value="Codestral 22B")
                 elif choice == "HuggingFace":
-                    return gr.update(choices=list(modelUtils.hf_model_display_names.keys()), value="Codestral 22B")
+                    return gr.update(choices=list(modelUtils.hf_model_display_names.keys()),
+                                     value="Codestral 22B")
                 elif choice == "NVIDIA NIM":
-                    return gr.update(choices=list(modelUtils.nv_model_display_names.keys()), value="Codestral 22B")
+                    return gr.update(choices=list(modelUtils.nv_model_display_names.keys()),
+                                     value="Codestral 22B")
                 elif choice == "OpenAI":
-                    return gr.update(choices=list(modelUtils.openai_model_display_names.keys()), value="GPT-4o")
+                    return gr.update(choices=list(modelUtils.openai_model_display_names.keys()),
+                                     value="GPT-4o")
                 elif choice == "Anthropic":
-                    return gr.update()
+                    return gr.update(choices=list(modelUtils.anth_model_display_names.keys()),
+                                     value="Claude 3.5 Sonnet")
                 else:
                     return ValueError(f"{choice} not supported")
 
@@ -254,7 +287,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                     hf_model, hf_quantization, hf_temperature, hf_top_p, hf_ctx_wnd, hf_max_tokens, hf_custom_prompt,
                     nv_model, nv_temperature, nv_top_p, nv_max_tokens,
                     openai_model, openai_temperature, openai_top_p, openai_max_tokens,
-                    anth_model
+                    anth_model, anth_temperature, anth_ctx_wnd ,anth_max_tokens
                 ]
             )
 # ----------------------------------Button Functionality For RAG Chat-----------------------------------------------
@@ -270,18 +303,31 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         # TODO Add functionality for repo ripper
         getRepo.click()
         # ---------Ollama Buttons-----------------
-        selected_chat_model.change(gradioUtils.update_model, inputs=[selected_chat_model], outputs=[chatbot])
-        temperature.release(gradioUtils.update_model_temp, inputs=[temperature])
-        max_tokens.release(gradioUtils.update_max_tokens, inputs=[max_tokens])
-        custom_prompt.submit(gradioUtils.update_chat_prompt, inputs=[custom_prompt])
+        selected_chat_model.change(gradioUtils.update_model,
+                                   inputs=[selected_chat_model],
+                                   outputs=[chatbot])
+        temperature.release(gradioUtils.update_model_temp,
+                            inputs=[temperature])
+        max_tokens.release(gradioUtils.update_max_tokens,
+                           inputs=[max_tokens])
+        custom_prompt.submit(gradioUtils.update_chat_prompt,
+                             inputs=[custom_prompt])
         # ---------HuggingFace Buttons-----------------
-        hf_model.change(gradioUtils.update_model, inputs=[hf_model])
-        hf_quantization.change(gradioUtils.update_quant, inputs=[hf_quantization])
-        hf_temperature.release(gradioUtils.update_model_temp, inputs=[hf_temperature])
-        hf_top_p.release(gradioUtils.update_top_p, inputs=[hf_top_p])
-        hf_ctx_wnd.release(gradioUtils.update_context_window, inputs=[hf_ctx_wnd])
-        hf_max_tokens.release(gradioUtils.update_max_tokens, inputs=[hf_max_tokens])
-        hf_custom_prompt.submit(gradioUtils.update_chat_prompt, inputs=[hf_custom_prompt])
+        hf_model.change(gradioUtils.update_model,
+                        inputs=[hf_model],
+                        outputs=[chatbot])
+        hf_quantization.change(gradioUtils.update_quant,
+                               inputs=[hf_quantization])
+        hf_temperature.release(gradioUtils.update_model_temp,
+                               inputs=[hf_temperature])
+        hf_top_p.release(gradioUtils.update_top_p,
+                         inputs=[hf_top_p])
+        hf_ctx_wnd.release(gradioUtils.update_context_window,
+                           inputs=[hf_ctx_wnd])
+        hf_max_tokens.release(gradioUtils.update_max_tokens,
+                              inputs=[hf_max_tokens])
+        hf_custom_prompt.submit(gradioUtils.update_chat_prompt,
+                                inputs=[hf_custom_prompt])
         # ---------NVIDIA Buttons-----------------
         # TODO Add button functionality
         nv_model.change()
@@ -293,8 +339,13 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         openai_model.change()
         openai_temperature.release()
         openai_top_p.release()
+        openai_ctx_wnd.release()
         openai_max_tokens.release()
         # ---------Anthropic Buttons-----------------
         # TODO Add button functionality
+        anth_model.change()
+        anth_temperature.release()
+        anth_ctx_wnd.release()
+        anth_max_tokens.release()
 
 demo.launch(inbrowser=True, share=True)

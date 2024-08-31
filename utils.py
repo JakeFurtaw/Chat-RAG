@@ -1,5 +1,8 @@
+from lib2to3.fixes.fix_input import context
+
 from llama_index.core.chat_engine.types import ChatMode
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.legacy.llms import Anthropic
 from llama_index.llms.ollama import Ollama
 from llama_index.llms.huggingface import HuggingFaceLLM
 from llama_index.llms.nvidia import NVIDIA
@@ -92,15 +95,29 @@ def set_nvidia_model(model, temperature, max_tokens, top_p):
         nvidia_api_key= os.getenv("NVIDIA_API_KEY")
     )
 
-def set_openai_model(model, temperature, max_tokens, top_p):
+def set_openai_model(model, temperature, max_tokens, top_p, context_window):
     return OpenAI(
         model=model,
         max_tokens=max_tokens,
         temperature=temperature,
         top_p=top_p,
-        api_key= os.getenv("OPENAI_API_KEY")
+        api_key= os.getenv("OPENAI_API_KEY"),
+        additional_kwargs={
+            "context_window": context_window
+        }
     )
 
+def set_anth_model(model, temperature, max_tokens, context_window):
+    return Anthropic(
+        model=model,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        api_key= os.getenv("ANTHROPIC_API_KEY"),
+        additional_kwargs={
+            "context_window":context_window
+        }
+    )
+# TODO add the rest of the models to chat memory limit list
 def set_chat_memory(model):
     memory_limits = {
         "codestral:latest": 30000,

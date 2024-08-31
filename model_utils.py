@@ -47,13 +47,16 @@ class ModelManager:
             "GPT-4o mini": "gpt-4o-mini",
             "GPT-4": "gpt-4",
         }
-        # TODO Add Anthropic Model Names
+        self.anth_model_display_names = {
+            "Claude 3.5 Sonnet": "claude-3-5-sonnet-20240620",
+            "Claude 3 Opus": "claude-3-opus-20240229",
+            "Claude 3 Sonnet": "claude-3-sonnet-20240229",
+            "Claude 3 Haiku": "claude-3-haiku-20240307"
+        }
 
     def process_input(self, message):
         return self.chat_engine.stream_chat(message)
 
-    # TODO Add Open AI Models
-    # TODO Add Anthropic Models
     def update_model_provider(self, provider):
         reset_gpu_memory()
         self.provider = provider
@@ -70,10 +73,11 @@ class ModelManager:
         elif provider == "OpenAI":
             gr.Info(f"Model provider updated to {provider}.", duration=10)
             self.selected_model = "gpt-4o"
+        elif provider == "Anthropic":
+            gr.Info(f"Model provider updated to {provider}.", duration=10)
+            self.selected_model = "claude-3-5-sonnet-20240620"
         self.reset_chat_engine()
 
-    # TODO Add Open AI Models
-    # TODO Add Anthropic Models
     def update_model(self, display_name):
         if self.provider == "Ollama":
             self.selected_model = self.ollama_model_display_names.get(display_name, "codestral:latest")
@@ -84,6 +88,8 @@ class ModelManager:
             self.selected_model = self.nv_model_display_names.get(display_name, "mistralai/codestral-22b-instruct-v0.1")
         elif self.provider == "OpenAI":
             self.selected_model = self.openai_model_display_names.get(display_name,"gpt-4o")
+        elif self.provider == "Anthropic":
+            self.selected_model = self.openai_model_display_names.get(display_name,"claude-3-5-sonnet-20240620")
         self.reset_chat_engine()
         gr.Info(f"Model updated to {display_name}.", duration=10)
 

@@ -57,8 +57,6 @@ class GradioUtils:
     def update_chat_prompt(self, custom_prompt):
         self.model_manager.update_chat_prompt(custom_prompt)
 
-
-
     @staticmethod
     async def handle_doc_upload(files):
         gr.Warning("Make sure you hit the upload button or the model wont see your files!", duration=10)
