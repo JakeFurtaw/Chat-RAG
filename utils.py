@@ -1,12 +1,18 @@
 from llama_index.core.chat_engine.types import ChatMode
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.llms.ollama import Ollama
 from llama_index.llms.huggingface import HuggingFaceLLM
+from llama_index.llms.nvidia import NVIDIA
 from llama_index.core import VectorStoreIndex, Settings
 from llama_index.core.memory import ChatMemoryBuffer
-from llama_index.llms.ollama import Ollama
 from llama_index.core.llms import ChatMessage
 from transformers import BitsAndBytesConfig
-import torch
+import torch, dotenv, os
+from huggingface_hub import login
+
+dotenv.load_dotenv()
+OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
 
 
 def set_device(gpu: int = None) -> str:
@@ -61,7 +67,7 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
         )
 
     model_kwargs = {"quantization_config": quantization_config}
-
+    login(token=os.getenv("HUGGINGFACE_HUB_TOKEN"))
     return HuggingFaceLLM(
         model_name=model,
         tokenizer_name=model,
@@ -75,6 +81,15 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
             "top_p": top_p,
             "do_sample": True
         },
+    )
+
+def set_nvidia_model(model, temperature, max_tokens, top_p):
+    return NVIDIA(
+        model=model,
+        max_tokens=max_tokens,
+        temperature=temperature,
+        top_p=top_p,
+        nvidia_api_key= os.getenv("NVIDIA_API_KEY")
     )
 
 def set_chat_memory(model):

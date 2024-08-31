@@ -1,5 +1,6 @@
 from llama_index.core import SimpleDirectoryReader
-from utils import setup_index_and_chat_engine, get_embedding_model, set_ollama_llm, set_chat_memory, set_huggingface_llm
+from utils import (setup_index_and_chat_engine, get_embedding_model, set_chat_memory,
+                   set_ollama_llm, set_huggingface_llm, set_nvidia_model)
 import torch, os, glob, gc
 
 DIRECTORY_PATH = "data"
@@ -28,6 +29,8 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
         llm = set_ollama_llm(model, temperature, max_tokens)
     elif model_provider == "HuggingFace":
         llm = set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, quantization)
+    elif model_provider == "NVIDIA NIM":
+        llm = set_nvidia_model(model, temperature, max_tokens, top_p)
     else:
         raise ValueError(f"Unsupported model provider: {model_provider}")
     memory = set_chat_memory(model)

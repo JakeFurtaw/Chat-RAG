@@ -1,12 +1,10 @@
-import dotenv, os, torch, gc
+import torch, gc
 import gradio as gr
 from chat_utils import create_chat_engine
-from huggingface_hub import login
 
-dotenv.load_dotenv()
-HUGGINGFACE_HUB_TOKEN = os.getenv("HUGGINGFACE_HUB_TOKEN")
-login(HUGGINGFACE_HUB_TOKEN)
-
+def reset_gpu_memory():
+    torch.cuda.empty_cache()
+    gc.collect()
 
 class ModelManager:
     def __init__(self):
@@ -35,14 +33,24 @@ class ModelManager:
             "Gemma2 9B": "mistralai/Mistral-Nemo-Instruct-2407",
             "CodeGemma 7B-Instruct": "google/codegemma-7b-it",
         }
-        # TODO Add NVIDIA NIMS Model Names
+        self.nv_model_display_names = {
+            "Codestral 22B": "mistralai/codestral-22b-instruct-v0.1",
+            "Mistral-Nemo 12B": "nv-mistralai/mistral-nemo-12b-instruct",
+            "Llama 3.1 8B": "meta/llama-3.1-8b-instruct",
+            "Gemma2 9B":"google/gemma-2-9b-it",
+            "CodeGemma 7B": "google/codegemma-7b"
+        }
+        # TODO Add Open AI Model Names
+        # TODO Add Anthropic Model Names
         self.reset_chat_engine()
 
     def process_input(self, message):
         return self.chat_engine.stream_chat(message)
 
-    #TODO Add NVIDIA NIMS
+    # TODO Add Open AI Models
+    # TODO Add Anthropic Models
     def update_model_provider(self, provider):
+        reset_gpu_memory()
         self.provider = provider
         if provider == "Ollama":
             self.selected_model = "codestral:latest"
@@ -51,24 +59,28 @@ class ModelManager:
             gr.Info(f"Model provider updated to {provider}.", duration=10)
             gr.Warning("Model is loading, this could take some time depending on your hardware.", duration=30)
             self.selected_model = "mistralai/Codestral-22B-v0.1"
+        elif provider == "NVIDIA NIM":
+            gr.Info(f"Model provider updated to {provider}.", duration=10)
+            self.selected_model = "mistralai/codestral-22b-instruct-v0.1"
         self.reset_chat_engine()
 
-    #TODO Add NVIDIA NIMS
+    # TODO Add Open AI Models
+    # TODO Add Anthropic Models
     def update_model(self, display_name):
         if self.provider == "Ollama":
             self.selected_model = self.ollama_model_display_names.get(display_name, "codestral:latest")
         elif self.provider == "HuggingFace":
-            torch.cuda.empty_cache()
-            gc.collect()
+            reset_gpu_memory()
             self.selected_model = self.hf_model_display_names.get(display_name, "mistralai/Codestral-22B-v0.1")
+        elif self.provider == "NVIDIA NIM":
+            self.selected_model = self.nv_model_display_names.get(display_name, "mistralai/codestral-22b-instruct-v0.1")
         else:
             self.selected_model = "codestral:latest"  # Default to Ollama model
         self.reset_chat_engine()
         gr.Info(f"Model updated to {display_name}.", duration=10)
 
     def update_quant(self, quantization):
-        torch.cuda.empty_cache()
-        gc.collect()
+        reset_gpu_memory()
         self.quantization = quantization
         gr.Info(f"Quantization updated to {quantization}.", duration=10)
         self.reset_chat_engine()
@@ -115,8 +127,7 @@ class ModelManager:
         self.reset_chat_engine()
 
     def reset_chat_engine(self):
-        torch.cuda.empty_cache()
-        gc.collect()
+        reset_gpu_memory()
         self.chat_engine = create_chat_engine(self.provider, self.selected_model, self.temperature,
                                               self.max_tokens, self.custom_prompt, self.top_p, self.context_window,
                                               self.quantization)
