@@ -53,7 +53,7 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
         quantization_config = BitsAndBytesConfig(
             load_in_8bit=True,
             bnb_8bit_compute_dtype=torch.float16,
-            bnb_8bit_quant_type="nf8"
+            bnb_8bit_quant_type="nf4" # TODO Need to fix quantization for 8 bit
         )
     elif quantization == "No Quantization":
         quantization_config = None
