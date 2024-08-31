@@ -14,6 +14,7 @@ Gemma2, and CodeGemma.
 - **RAG-powered Responses**: Utilizes uploaded documents to provide context-aware answers.
 - **Interactive Chat Interface**: Easy-to-use chat interface for asking coding questions.
 - **File Upload**: Support for uploading additional context files.
+- **Chat with a GitHub Repo**: Support for using a GitHub repositories files as context for the model.
 - **Model Switching**: Seamlessly switch between different language models.
 - **Customizable Model Parameters**: Adjust temperature, max tokens, top-p, and context window size.
 - **Custom Prompts**: Ability to set custom system prompts for the chat engine.
@@ -21,7 +22,7 @@ Gemma2, and CodeGemma.
 - **Delete Database**: Easily delete all stored data for privacy and reset purposes.
 - **Enhanced Memory Management**: Dynamically manage chat memory for different models.
 - **Streaming Responses**: Real-time response generation for a more interactive experience.
-- **Model Quantization**: Options for 2-bit, 4-bit, and 8-bit quantization for HuggingFace models.
+- **Model Quantization**: Options for 2-bit(Double 4 Bit Quant), 4-bit, and 8-bit quantization for HuggingFace models.
 
 
 ## Setup and Usage
@@ -36,6 +37,7 @@ Gemma2, and CodeGemma.
    NVIDIA_API_KEY="YOUR NVIDIA TOKEN HERE"
    OPENAI_API_KEY="YOUR OpenAI TOKEN HERE"
    ANTHROPIC_API_KEY="YOUR Anthropic TOKEN HERE"
+   GITHUB_PAT="YOUR GITHUB PERSONAL ACCESS TOKEN HERE"
    ```
 4. Run the application:
     ```bash
@@ -71,8 +73,6 @@ Gemma2, and CodeGemma.
 Contributions are welcome! Please feel free to submit a Pull Request or Fork the Repository.
 
 ### Coming in Future Updates
-- The ability to use a GitHub repository as context for the model so you can chat with any public repository.
-- Support for Anthropic models.
 - Video of the program in action.
 - Document parsing for different files including but not limited to PDF files, Excel files, csv files, docx files.
 - The ability to add models to the list for different model providers.

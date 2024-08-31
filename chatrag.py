@@ -310,7 +310,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         upload.click(lambda: gradioUtils.model_manager.reset_chat_engine())
         clear_db.click(gradioUtils.delete_db,
                        show_progress="full")
-        # TODO Add functionality for repo ripper
+        # TODO Add the rest of the functionality for repo ripper
         getRepo.click(modelUtils.set_github_info, inputs=[repoOwnerUsername,repoName,repoBranch])# Maybe add outputs= [chatbot}
         uploadRepo.click(lambda: gradioUtils.model_manager.reset_chat_engine())# Maybe add outputs= [chatbot}
 
