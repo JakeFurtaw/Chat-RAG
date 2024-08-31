@@ -1,7 +1,5 @@
 import torch, gc
 import gradio as gr
-from llama_index.llms.openai import OpenAI
-
 from chat_utils import create_chat_engine
 
 def reset_gpu_memory():
