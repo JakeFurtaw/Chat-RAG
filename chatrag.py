@@ -284,6 +284,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         nv_top_p.release()
         nv_max_tokens.release()
         # ---------OpenAI Buttons-----------------
+        # TODO Add button functionality
         openai_model.change()
         openai_temperature.release()
         openai_top_p.release()
