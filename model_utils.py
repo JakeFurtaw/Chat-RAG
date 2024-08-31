@@ -1,5 +1,7 @@
 import torch, gc
 import gradio as gr
+from llama_index.llms.openai import OpenAI
+
 from chat_utils import create_chat_engine
 
 def reset_gpu_memory():
@@ -40,9 +42,12 @@ class ModelManager:
             "Gemma2 9B":"google/gemma-2-9b-it",
             "CodeGemma 7B": "google/codegemma-7b"
         }
-        # TODO Add Open AI Model Names
+        self.openai_model_display_names = {
+            "GPT-4o": "gpt-4o",
+            "GPT-4o mini": "gpt-4o-mini",
+            "GPT-4": "gpt-4",
+        }
         # TODO Add Anthropic Model Names
-        self.reset_chat_engine()
 
     def process_input(self, message):
         return self.chat_engine.stream_chat(message)
@@ -62,6 +67,9 @@ class ModelManager:
         elif provider == "NVIDIA NIM":
             gr.Info(f"Model provider updated to {provider}.", duration=10)
             self.selected_model = "mistralai/codestral-22b-instruct-v0.1"
+        elif provider == "OpenAI":
+            gr.Info(f"Model provider updated to {provider}.", duration=10)
+            self.selected_model = "gpt-4o"
         self.reset_chat_engine()
 
     # TODO Add Open AI Models
@@ -74,8 +82,8 @@ class ModelManager:
             self.selected_model = self.hf_model_display_names.get(display_name, "mistralai/Codestral-22B-v0.1")
         elif self.provider == "NVIDIA NIM":
             self.selected_model = self.nv_model_display_names.get(display_name, "mistralai/codestral-22b-instruct-v0.1")
-        else:
-            self.selected_model = "codestral:latest"  # Default to Ollama model
+        elif self.provider == "OpenAI":
+            self.selected_model = self.openai_model_display_names.get(display_name,"gpt-4o")
         self.reset_chat_engine()
         gr.Info(f"Model updated to {display_name}.", duration=10)
 
@@ -86,6 +94,7 @@ class ModelManager:
         self.reset_chat_engine()
 
     def update_model_temp(self, temperature):
+        reset_gpu_memory()
         self.temperature = temperature
         gr.Info(f"Model temperature updated to {temperature}.", duration=10)
         gr.Warning("Changing this value can affect the randomness "
@@ -94,6 +103,7 @@ class ModelManager:
         self.reset_chat_engine()
 
     def update_top_p(self, top_p):
+        reset_gpu_memory()
         self.top_p = top_p
         gr.Info(f"Top P updated to {top_p}.", duration=10)
         gr.Warning("Changing this value can affect the randomness "
@@ -102,6 +112,7 @@ class ModelManager:
         self.reset_chat_engine()
 
     def update_context_window(self, context_window):
+        reset_gpu_memory()
         self.context_window = context_window
         gr.Info(f"Context Window updated to {context_window}.", duration=10)
         gr.Warning("Changing this value can affect the amount of the context the model can see and use "
@@ -109,8 +120,8 @@ class ModelManager:
                    duration=10)
         self.reset_chat_engine()
 
-
     def update_max_tokens(self, max_tokens):
+        reset_gpu_memory()
         self.max_tokens = max_tokens
         gr.Info(f"Max Tokens set to {max_tokens}.", duration=10)
         gr.Warning( "Please note that reducing the maximum number of tokens may"
@@ -120,6 +131,7 @@ class ModelManager:
         self.reset_chat_engine()
 
     def update_chat_prompt(self, custom_prompt):
+        reset_gpu_memory()
         self.custom_prompt = custom_prompt
         gr.Warning("Caution: Changing the chat prompt may significantly alter the model's responses and could "
                    "potentially cause misleading or incorrect information to be generated. Please ensure that "
