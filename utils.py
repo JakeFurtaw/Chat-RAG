@@ -5,7 +5,7 @@ from llama_index.llms.ollama import Ollama
 from llama_index.llms.huggingface import HuggingFaceLLM
 from llama_index.llms.nvidia import NVIDIA
 from llama_index.llms.openai import OpenAI
-from llama_index.core import VectorStoreIndex, Settings
+from llama_index.core import VectorStoreIndex
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.llms import ChatMessage
 from transformers import BitsAndBytesConfig
@@ -13,8 +13,6 @@ import torch, dotenv, os
 from huggingface_hub import login
 
 dotenv.load_dotenv()
-ANTHROPIC_API_KEY = os.getenv("ANTHROPIC_API_KEY")
-
 
 def set_device(gpu: int = None) -> str:
     return f"cuda:{gpu}" if torch.cuda.is_available() and gpu is not None else "cpu"
@@ -132,7 +130,6 @@ def set_chat_memory(model):
 
 def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt):
     index = VectorStoreIndex.from_documents(docs, embed_model=embed_model)
-    Settings.llm = llm
     chat_prompt = (
         "You are an AI coding assistant, your primary function is to help users with coding-related questions \n"
         "and tasks. You have access to a knowledge base of programming documentation and best practices. \n"
@@ -144,7 +141,6 @@ def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt):
         "approaches, outline the pros and cons of each. Always Remember to be friendly! \n"
         "Response:"
     )
-
     system_message = ChatMessage(role="system", content=chat_prompt if custom_prompt is None else custom_prompt)
     chat_engine = index.as_chat_engine(
         chat_mode=ChatMode.CONTEXT,

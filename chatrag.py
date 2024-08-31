@@ -286,8 +286,8 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                     selected_chat_model, temperature, max_tokens, custom_prompt,
                     hf_model, hf_quantization, hf_temperature, hf_top_p, hf_ctx_wnd, hf_max_tokens, hf_custom_prompt,
                     nv_model, nv_temperature, nv_top_p, nv_max_tokens,
-                    openai_model, openai_temperature, openai_top_p, openai_max_tokens,
-                    anth_model, anth_temperature, anth_ctx_wnd ,anth_max_tokens
+                    openai_model, openai_temperature, openai_top_p, openai_ctx_wnd, openai_max_tokens,
+                    anth_model, anth_temperature, anth_ctx_wnd, anth_max_tokens
                 ]
             )
 # ----------------------------------Button Functionality For RAG Chat-----------------------------------------------

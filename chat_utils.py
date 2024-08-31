@@ -19,13 +19,10 @@ def load_docs():
 
 def create_chat_engine(model_provider, model, temperature, max_tokens, custom_prompt, top_p,
                        context_window, quantization):
-    # Emptying GPU Memory
     torch.cuda.empty_cache()
     gc.collect()
-    #Loading Docs and Embedding Model
     documents = load_docs()
     embed_model = EMBED_MODEL
-    # Choosing LLM
     if model_provider == "Ollama":
         llm = set_ollama_llm(model, temperature, max_tokens)
     elif model_provider == "HuggingFace":
