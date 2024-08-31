@@ -8,7 +8,7 @@ with various language models, customize model parameters, and upload context fil
 
 ## Features
 
-- **Multiple Model Providers**: Support for Ollama, HuggingFace, and NVIDIA NIM models.
+- **Multiple Model Providers**: Support for Ollama, HuggingFace, NVIDIA NIM, OpenAI, and Anthropic models.
 - **Wide Range of Language Models**: Choose from models like Codestral, Mistral-Nemo, LLaMA3.1, DeepSeek Coder v2,
 Gemma2, and CodeGemma.
 - **RAG-powered Responses**: Utilizes uploaded documents to provide context-aware answers.
@@ -33,6 +33,9 @@ Gemma2, and CodeGemma.
    GRADIO_TEMP_DIR="YourPathTo/Chat-RAG/data"
    GRADIO_WATCH_DIRS="YourPathTo/Chat-RAG"
    HUGGINGFACE_HUB_TOKEN="YOUR HF TOKEN HERE"
+   NVIDIA_API_KEY="YOUR NVIDIA TOKEN HERE"
+   OPENAI_API_KEY="YOUR OpenAI TOKEN HERE"
+   ANTHROPIC_API_KEY="YOUR Anthropic TOKEN HERE"
    ```
 4. Run the application:
     ```bash
@@ -66,6 +69,13 @@ Gemma2, and CodeGemma.
 
 ### Contributing
 Contributions are welcome! Please feel free to submit a Pull Request or Fork the Repository.
+
+### Coming in Future Updates
+- The ability to use a GitHub repository as context for the model so you can chat with any public repository.
+- Support for Anthropic models.
+- Video of the program in action.
+- Document parsing for different files including but not limited to PDF files, Excel files, csv files, docx files.
+- The ability to add models to the list for different model providers.
 
 ### Need Help or Have Feature Suggestions?
 Feel free to reach out to me through GitHub, LinkedIn, or through email. All of those are available on my website [JFCoded](https://www.jfcoded.com/contact).

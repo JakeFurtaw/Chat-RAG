@@ -145,21 +145,24 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                                              ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json"])
                 with gr.Row():
                     upload = gr.Button(value="Upload Data",
-                                           interactive=True)
+                                       interactive=True)
                     clear_db = gr.Button(value="Clear RAG Database",
-                                             interactive=True)
+                                         interactive=True)
             # TODO Implement the rest of the REPO RIPPER
             with gr.Tab("Chat With a GitHub Repository"):
                 repoOwnerUsername = gr.Textbox(label="GitHub Repository Owners Username:",
-                                           placeholder="Enter GitHub Repository Owners Username Here....",
-                                           interactive= True)
+                                               placeholder="Enter GitHub Repository Owners Username Here....",
+                                               interactive= True)
                 repoName = gr.Textbox(label="GitHub Repository Name:",
                                       placeholder="Enter Repository Name Here....",
                                       interactive= True)
                 repoBranch = gr.Textbox(label="GitHub Repository Branch Name:",
                                         placeholder="Enter Branch Name Here....",
                                         interactive=True)
-                getRepo = gr.Button(value="Get GitHub Repository", size="sm", interactive=True)
+                getRepo = gr.Button(value="Get GitHub Repository",
+                                    size="sm",
+                                    interactive=True)
+
             model_provider = gr.Radio(label="Select Model Provider",
                                       value="Ollama",
                                       choices=["Ollama", "HuggingFace", "NVIDIA NIM", "OpenAI", "Anthropic"],
@@ -235,7 +238,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 elif choice == "Anthropic":
                     return gr.update()
                 else:
-                    return
+                    return ValueError(f"{choice} not supported")
 
             def update_layout_and_model(choice):
                 layout_updates = update_layout(choice)
@@ -292,5 +295,6 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         openai_top_p.release()
         openai_max_tokens.release()
         # ---------Anthropic Buttons-----------------
+        # TODO Add button functionality
 
 demo.launch(inbrowser=True, share=True)
