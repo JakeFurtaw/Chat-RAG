@@ -1,6 +1,3 @@
-from mailbox import Error
-from random import choice
-
 import gradio as gr
 from gradio_utils import GradioUtils
 from model_utils import ModelManager
@@ -126,8 +123,6 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 clear_chat_mem = gr.Button(value="Clear Chat Window and Chat Memory")
         with gr.Column(scale=3):
             with gr.Tab("Chat With Files"):
-                gr.Markdown("## File Finder \n Chat with any files on your computer. "
-                            "Just drag and drop and hit upload and you're off!")
                 files = gr.Files(interactive=True,
                                  label="Upload Files Here",
                                  file_count="multiple",
@@ -140,26 +135,21 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                                              interactive=True)
             # TODO Implement the rest of the REPO RIPPER
             with gr.Tab("Chat With a GitHub Repository"):
-                gr.Markdown("## Repo Ripper \n Chat with any public github repository. "
-                            "Just fill out the files below and your off!")
-                repoOwnerUsername = gr.Textbox(label="GitHub Repository Owners Username",
-                                           info="Enter the username of the github repository owner below.",
+                repoOwnerUsername = gr.Textbox(label="GitHub Repository Owners Username:",
                                            placeholder="Enter GitHub Repository Owners Username Here....",
                                            interactive= True)
-                repoName = gr.Textbox(label="GitHub Repository Name",
-                                      info="Enter the name of github repository below.",
+                repoName = gr.Textbox(label="GitHub Repository Name:",
                                       placeholder="Enter Repository Name Here....",
                                       interactive= True)
-                repoBranch = gr.Textbox(label="GitHub Repository Branch Name",
-                                        info="Enter the name of the github repositories branch you want to chat with below.",
+                repoBranch = gr.Textbox(label="GitHub Repository Branch Name:",
                                         placeholder="Enter Branch Name Here....",
                                         interactive=True)
+                getRepo = gr.Button(value="Get GitHub Repository", size="sm")
             model_provider = gr.Radio(label="Select Model Provider",
                                       value="Ollama",
                                       choices=["Ollama", "HuggingFace", "NVIDIA NIM", "OpenAI", "Anthropic"],
                                       interactive=True,
                                       info="Choose your model provider.")
-
             selected_chat_model.render()
             temperature.render()
             max_tokens.render()
@@ -244,7 +234,8 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                 ]
             )
 # ----------------------------------Button Functionality For RAG Chat-----------------------------------------------
-        msg.submit(gradioUtils.stream_response, inputs=[msg], outputs=[msg, chatbot], show_progress="full")
+        msg.submit(gradioUtils.stream_response, inputs=[msg], outputs=[msg, chatbot],
+                   show_progress="full", scroll_to_output=True)
     # --------------------Buttons in Left Column--------------------------------
         clear.click(gradioUtils.clear_chat_history, outputs=chatbot)
         clear_chat_mem.click(gradioUtils.clear_his_and_mem, outputs=chatbot)
@@ -266,7 +257,11 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         hf_max_tokens.release(gradioUtils.update_max_tokens, inputs=[hf_max_tokens])
         hf_custom_prompt.submit(gradioUtils.update_chat_prompt, inputs=[hf_custom_prompt])
         # ---------NVIDIA Buttons-----------------
-
+        # TODO Add button functionality
+        nv_model.change()
+        nv_temperature.release()
+        nv_top_p.release()
+        nv_max_tokens.release()
         # ---------OpenAI Buttons-----------------
 
         # ---------Anthropic Buttons-----------------

@@ -6,12 +6,13 @@ import torch, os, glob, gc
 DIRECTORY_PATH = "data"
 EMBED_MODEL = get_embedding_model()
 
+# TODO Add parsing for different types of files. PDF, EXCEL FILES, etc..
 def load_docs():
     all_files = glob.glob(os.path.join(DIRECTORY_PATH, "**", "*"), recursive=True)
     all_files = [f for f in all_files if os.path.isfile(f)]
     documents = []
-    for file_path in all_files:
-        reader = SimpleDirectoryReader(input_files=[file_path]).load_data()
+    for file in all_files:
+        reader = SimpleDirectoryReader(input_files=[file]).load_data()
         documents.extend(reader)
     return documents
 
