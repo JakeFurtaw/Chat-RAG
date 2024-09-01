@@ -42,10 +42,10 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
     torch.cuda.empty_cache()
     gc.collect()
     documents = load_docs()
-    if owner or repo or branch is None:
+    if owner and repo and branch is not None or "":
         documents += load_github_repo(owner, repo, branch)
     else:
-        documents += load_github_repo(owner, repo, branch)
+        documents = documents
     embed_model = EMBED_MODEL
     if model_provider == "Ollama":
         llm = set_ollama_llm(model, temperature, max_tokens)
@@ -60,5 +60,6 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
     else:
         raise ValueError(f"Unsupported model provider: {model_provider}")
     memory = set_chat_memory(model)
+
     return setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model, memory=memory,
                                        custom_prompt=custom_prompt)

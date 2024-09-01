@@ -139,8 +139,14 @@ anth_max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
                             interactive=True,
                             visible=False)
 
+css = """
+.gradio-container{
+
+}
+"""
+
 # --------------------------Gradio Layout-----------------------------
-with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_width=True) as demo:
+with gr.Blocks(title="Chat RAG", theme="monochrome", css=css) as demo:
     gr.Markdown("# Chat RAG: Interactive Coding Assistant"
                 "\nThis app is a chat-based coding assistant with a graphical user interface built using "
                 "Gradio. It allows users to interact with various language models to ask coding questions, "
@@ -377,4 +383,4 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         anth_max_tokens.release(gradioUtils.update_max_tokens,
                                 inputs=[anth_max_tokens])
 
-demo.launch(inbrowser=True, share=True)
+demo.launch(inbrowser=True)# , share=True
