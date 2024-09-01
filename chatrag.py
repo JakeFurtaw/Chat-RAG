@@ -190,14 +190,10 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                         placeholder="Enter Branch Name Here....",
                                         interactive=True)
                 with gr.Row():
-                    getRepo = gr.Button(value="Load Info",
+                    getRepo = gr.Button(value="Load Repository to Model",
                                         size="sm",
                                         interactive=True,
                                         elem_id="button")
-                    uploadRepo = gr.Button(value="Load Repository to Model",
-                                           size="sm",
-                                           interactive=True,
-                                           elem_id="button")
                     removeRepo = gr.Button(value="Reset Info",
                                            size="sm",
                                            interactive=True,
@@ -331,7 +327,6 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
         # TODO Add the rest of the functionality for repo ripper
         # TODO Add a way to reset the info back to None and clear text boxes
         getRepo.click(modelUtils.set_github_info, inputs=[repoOwnerUsername, repoName, repoBranch])
-        uploadRepo.click(lambda: gradioUtils.model_manager.reset_chat_engine())
         removeRepo.click(modelUtils.reset_github_info, outputs=[repoOwnerUsername, repoName, repoBranch]) # Fix this
         # ---------Ollama Buttons-----------------
         selected_chat_model.change(gradioUtils.update_model,
