@@ -178,12 +178,16 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                                         placeholder="Enter Branch Name Here....",
                                         interactive=True)
                 with gr.Row():
-                    getRepo = gr.Button(value="Load GitHub Repository",
+                    getRepo = gr.Button(value="Load Info",
                                         size="sm",
                                         interactive=True)
-                    uploadRepo = gr.Button(value="Upload Repo",
+                    uploadRepo = gr.Button(value="Load Repository to Model",
                                            size="sm",
                                            interactive=True)
+                    removeRepo = gr.Button(value="Reset Context",
+                                           size="sm",
+                                           interactive=True)
+
 
             model_provider = gr.Radio(label="Select Model Provider",
                                       value="Ollama",
@@ -313,7 +317,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         # TODO Add a way to reset the info back to None and clear text boxes
         getRepo.click(modelUtils.set_github_info, inputs=[repoOwnerUsername, repoName, repoBranch])
         uploadRepo.click(lambda: gradioUtils.model_manager.reset_chat_engine())
-
+        removeRepo.click(modelUtils.reset_github_info, outputs=[repoOwnerUsername, repoName, repoBranch]) # Fix this
         # ---------Ollama Buttons-----------------
         selected_chat_model.change(gradioUtils.update_model,
                                    inputs=[selected_chat_model],
