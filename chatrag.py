@@ -141,27 +141,29 @@ anth_max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
 
 css = """
 .gradio-container{
-
+background:radial-gradient(#416e8a, #000000);
+}
+#button{
+background:#06354d
 }
 """
 
 # --------------------------Gradio Layout-----------------------------
-with gr.Blocks(title="Chat RAG", theme="monochrome", css=css) as demo:
+with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
     gr.Markdown("# Chat RAG: Interactive Coding Assistant"
-                "\nThis app is a chat-based coding assistant with a graphical user interface built using "
-                "Gradio. It allows users to interact with various language models to ask coding questions, "
-                "with the ability to upload files for additional context. "
-                "The app utilizes RAG (Retrieval-Augmented Generation) to provide more informed responses "
-                "based on the loaded documents and user queries.")
+)
     with gr.Row():
-        with gr.Column(scale=10, variant="compact"):
-            chatbot = gr.Chatbot(label="Chat RAG",height=1200)
+        with gr.Column(scale=7, variant="compact"): #
+            chatbot = gr.Chatbot(label="Chat RAG", height="80vh")
             msg = gr.Textbox(placeholder="Enter your message here and hit return when you're ready...",
                              interactive=True, container=False, autoscroll=True)
             with gr.Row():
-                clear = gr.ClearButton([msg, chatbot],value="Clear Chat Window")
-                clear_chat_mem = gr.Button(value="Clear Chat Window and Chat Memory")
-        with gr.Column(scale=3):
+                clear = gr.ClearButton([msg, chatbot],
+                                       value="Clear Chat Window",
+                                       elem_id="button")
+                clear_chat_mem = gr.Button(value="Clear Chat Window and Chat Memory",
+                                           elem_id="button")
+        with gr.Column(scale=3): #
             with gr.Tab("Chat With Files"):
                 files = gr.Files(interactive=True,
                                  label="Upload Files Here",
@@ -170,9 +172,13 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", css=css) as demo:
                                              ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json"])
                 with gr.Row():
                     upload = gr.Button(value="Upload Data",
-                                       interactive=True)
+                                       interactive=True,
+                                       size="sm",
+                                       elem_id="button")
                     clear_db = gr.Button(value="Clear RAG Database",
-                                         interactive=True)
+                                         interactive=True,
+                                         size="sm",
+                                         elem_id="button")
             with gr.Tab("Chat With a GitHub Repository"):
                 repoOwnerUsername = gr.Textbox(label="GitHub Repository Owners Username:",
                                                placeholder="Enter GitHub Repository Owners Username Here....",
@@ -186,13 +192,16 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", css=css) as demo:
                 with gr.Row():
                     getRepo = gr.Button(value="Load Info",
                                         size="sm",
-                                        interactive=True)
+                                        interactive=True,
+                                        elem_id="button")
                     uploadRepo = gr.Button(value="Load Repository to Model",
                                            size="sm",
-                                           interactive=True)
+                                           interactive=True,
+                                           elem_id="button")
                     removeRepo = gr.Button(value="Reset Info",
                                            size="sm",
-                                           interactive=True)
+                                           interactive=True,
+                                           elem_id="button")
 
 
             model_provider = gr.Radio(label="Select Model Provider",
