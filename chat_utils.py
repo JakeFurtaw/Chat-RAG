@@ -57,9 +57,9 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
     elif model_provider == "NVIDIA NIM":
         llm = set_nvidia_model(model, temperature, max_tokens, top_p)
     elif model_provider == "OpenAI":
-        llm = set_openai_model(model, temperature, max_tokens, top_p, context_window)
+        llm = set_openai_model(model, temperature, max_tokens, top_p)
     elif model_provider == "Anthropic":
-        llm = set_anth_model(model, temperature, max_tokens, context_window)
+        llm = set_anth_model(model, temperature, max_tokens)
     else:
         raise ValueError(f"Unsupported model provider: {model_provider}")
     memory = set_chat_memory(model)

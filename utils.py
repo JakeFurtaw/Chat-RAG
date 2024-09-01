@@ -91,27 +91,22 @@ def set_nvidia_model(model, temperature, max_tokens, top_p):
         nvidia_api_key= os.getenv("NVIDIA_API_KEY")
     )
 
-def set_openai_model(model, temperature, max_tokens, top_p, context_window):
+def set_openai_model(model, temperature, max_tokens, top_p):
     return OpenAI(
         model=model,
         max_tokens=max_tokens,
         temperature=temperature,
         top_p=top_p,
         api_key= os.getenv("OPENAI_API_KEY"),
-        additional_kwargs={
-            "context_window": context_window
-        }
     )
 
-def set_anth_model(model, temperature, max_tokens, context_window):
+def set_anth_model(model, temperature, max_tokens):
     return Anthropic(
         model=model,
         max_tokens=max_tokens,
         temperature=temperature,
         api_key= os.getenv("ANTHROPIC_API_KEY"),
-        additional_kwargs={
-            "context_window":context_window
-        }
+
     )
 # TODO add the rest of the models to chat memory limit list
 def set_chat_memory(model):

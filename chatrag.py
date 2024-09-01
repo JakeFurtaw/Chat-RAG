@@ -104,11 +104,6 @@ openai_top_p = gr.Slider(minimum=0, maximum=1, value=0.4, step=0.05,
                          info="Set the top p value for the model.",
                          interactive=True,
                          visible=False)
-openai_ctx_wnd = gr.Slider(minimum=100, maximum=10000, value=2048, step=1,
-                     label="Context Window",
-                     info="Select a Context Window value between 100 and 10000 for the model.",
-                     interactive=True,
-                     visible=False)
 openai_max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
                               label="Max Output Tokens",
                               info="Set the maximum number of tokens the model can respond with.",
@@ -128,11 +123,6 @@ anth_temperature = gr.Slider(minimum=0, maximum=1, value=.75, step=.05,
                              info="Select a temperature between .1 and 1 to set the model to.",
                              interactive=True,
                              visible=False)
-anth_ctx_wnd = gr.Slider(minimum=100, maximum=10000, value=2048, step=1,
-                     label="Context Window",
-                     info="Select a Context Window value between 100 and 10000 for the model.",
-                     interactive=True,
-                     visible=False)
 anth_max_tokens = gr.Slider(minimum=100, maximum=5000, value=2048, step=1,
                             label="Max Output Tokens",
                             info="Set the maximum number of tokens the model can respond with.",
@@ -226,12 +216,10 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
             openai_model.render()
             openai_temperature.render()
             openai_top_p.render()
-            openai_ctx_wnd.render()
             openai_max_tokens.render()
 
             anth_model.render()
             anth_temperature.render()
-            anth_ctx_wnd.render()
             anth_max_tokens.render()
 
             def update_layout(choice):
@@ -263,12 +251,10 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                     gr.update(visible=oai_visible),
                     gr.update(visible=oai_visible),
                     gr.update(visible=oai_visible),
-                    gr.update(visible=oai_visible),
 
                     gr.update(visible=ath_visible),
                     gr.update(visible=ath_visible),
                     gr.update(visible=ath_visible),
-                    gr.update(visible=ath_visible)
                 )
 
             def update_model_options(choice):
@@ -303,8 +289,8 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                     selected_chat_model, temperature, max_tokens, custom_prompt,
                     hf_model, hf_quantization, hf_temperature, hf_top_p, hf_ctx_wnd, hf_max_tokens, hf_custom_prompt,
                     nv_model, nv_temperature, nv_top_p, nv_max_tokens,
-                    openai_model, openai_temperature, openai_top_p, openai_ctx_wnd, openai_max_tokens,
-                    anth_model, anth_temperature, anth_ctx_wnd, anth_max_tokens
+                    openai_model, openai_temperature, openai_top_p, openai_max_tokens,
+                    anth_model, anth_temperature, anth_max_tokens
                 ]
             )
 # ----------------------------------Button Functionality For RAG Chat-----------------------------------------------
@@ -372,8 +358,6 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                    inputs=[openai_temperature])
         openai_top_p.release(gradioUtils.update_top_p,
                              inputs=[openai_top_p])
-        openai_ctx_wnd.release(gradioUtils.update_context_window,
-                               inputs=[openai_ctx_wnd])
         openai_max_tokens.release(gradioUtils.update_max_tokens,
                                   inputs=[openai_max_tokens])
         # ---------Anthropic Buttons-----------------
@@ -382,8 +366,6 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                           outputs=[chatbot])
         anth_temperature.release(gradioUtils.update_model_temp,
                                  inputs=[anth_temperature])
-        anth_ctx_wnd.release(gradioUtils.update_context_window,
-                             inputs=[anth_ctx_wnd])
         anth_max_tokens.release(gradioUtils.update_max_tokens,
                                 inputs=[anth_max_tokens])
 
