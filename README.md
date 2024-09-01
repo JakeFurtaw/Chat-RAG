@@ -44,9 +44,9 @@ Gemma2, and CodeGemma.
     gradio chatrag.py
    ```
 5. The app will automatically open a new tab and launch in your browser.
-6. (Optional) Upload relevant files for additional context.
-7. Select a Model Provider.
-8. Select a language model from the dropdown menu.
+6. Select a Model Provider.
+7. Select a language model from the dropdown menu.
+8. (Optional) Upload relevant files for additional context.
 9. Type your coding question in the text box and press enter.
 10. The model will stream the response to your query back to you in the chat window.
 
