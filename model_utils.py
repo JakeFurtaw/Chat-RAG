@@ -151,7 +151,7 @@ class ModelManager:
         self.owner = owner
         self.repo = repo
         self.branch = branch
-        gr.Info(f"GitHub repository info set: {owner}/{repo} ({branch})")
+        gr.Info(f"GitHub repository info set to Owners Username:{owner}, Repository Name:{repo}, and Branch Name:{branch}")
         self.reset_chat_engine()
 
     def reset_chat_engine(self):

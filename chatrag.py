@@ -167,7 +167,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                                        interactive=True)
                     clear_db = gr.Button(value="Clear RAG Database",
                                          interactive=True)
-            # TODO Implement the rest of the REPO RIPPER
+            # TODO Implement the rest of the REPO RIPPER.
             with gr.Tab("Chat With a GitHub Repository"):
                 repoOwnerUsername = gr.Textbox(label="GitHub Repository Owners Username:",
                                                placeholder="Enter GitHub Repository Owners Username Here....",
@@ -311,6 +311,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
         clear_db.click(gradioUtils.delete_db,
                        show_progress="full")
         # TODO Add the rest of the functionality for repo ripper
+        # TODO Add a way to reset the info back to none and clear text boxes
         getRepo.click(modelUtils.set_github_info, inputs=[repoOwnerUsername,repoName,repoBranch])# Maybe add outputs= [chatbot}
         uploadRepo.click(lambda: gradioUtils.model_manager.reset_chat_engine())# Maybe add outputs= [chatbot}
 
