@@ -42,7 +42,10 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
     torch.cuda.empty_cache()
     gc.collect()
     documents = load_docs()
-    documents += load_github_repo(owner, repo, branch)
+    if owner or repo or branch is None:
+        documents += load_github_repo(owner, repo, branch)
+    else:
+        documents += load_github_repo(owner, repo, branch)
     embed_model = EMBED_MODEL
     if model_provider == "Ollama":
         llm = set_ollama_llm(model, temperature, max_tokens)

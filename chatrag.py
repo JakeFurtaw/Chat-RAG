@@ -184,7 +184,7 @@ with gr.Blocks(title="Chat RAG", theme="monochrome", fill_height=True, fill_widt
                     uploadRepo = gr.Button(value="Load Repository to Model",
                                            size="sm",
                                            interactive=True)
-                    removeRepo = gr.Button(value="Reset Context",
+                    removeRepo = gr.Button(value="Reset Info",
                                            size="sm",
                                            interactive=True)
 
