@@ -30,9 +30,6 @@ def load_github_repo(owner, repo, branch):
         repo=repo,
         use_parser=False,
         verbose=False,
-        # filter_directories=directories, # TODO add textbox to get list of directories to include
-        filter_file_extensions=([".png", "jpg", "jpeg", ".gif", ".svg", ".ico"],
-                                GithubRepositoryReader.FilterType.EXCLUDE),
     ).load_data(branch=branch)
     return documents
 
@@ -42,8 +39,14 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
     torch.cuda.empty_cache()
     gc.collect()
     documents = load_docs()
-    if owner and repo and branch is not None or "":
+    # fix issue of model not getting context from repo ripper
+    if owner and repo and branch:
+        print(f"Loading GitHub repo: {owner}/{repo} (branch: {branch})")
         documents += load_github_repo(owner, repo, branch)
+        if not documents:
+            print(f"No documents loaded from {owner}/{repo} on branch {branch}")
+        else:
+            print(f"Loaded {len(documents)} documents from {owner}/{repo} on branch {branch}")
     else:
         documents = documents
     embed_model = EMBED_MODEL
@@ -60,6 +63,5 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
     else:
         raise ValueError(f"Unsupported model provider: {model_provider}")
     memory = set_chat_memory(model)
-
     return setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model, memory=memory,
                                        custom_prompt=custom_prompt)

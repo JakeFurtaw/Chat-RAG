@@ -6,6 +6,7 @@ from model_utils import ModelManager
 class GradioUtils:
     def __init__(self):
         self.model_manager = ModelManager()
+        self.model_manager.reset_chat_engine()
         self.chat_history = []
 
     def stream_response(self, message: str):

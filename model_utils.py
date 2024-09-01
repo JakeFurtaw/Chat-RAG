@@ -1,6 +1,6 @@
 import torch, gc
 import gradio as gr
-from chat_utils import create_chat_engine, load_github_repo
+from chat_utils import create_chat_engine
 
 
 def reset_gpu_memory():
