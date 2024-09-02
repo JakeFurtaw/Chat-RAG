@@ -6,7 +6,6 @@ from model_utils import ModelManager
 class GradioUtils:
     def __init__(self):
         self.model_manager = ModelManager()
-        self.model_manager.reset_chat_engine()
         self.chat_history = []
 
     def stream_response(self, message: str):
@@ -57,6 +56,9 @@ class GradioUtils:
 
     def update_chat_prompt(self, custom_prompt):
         self.model_manager.update_chat_prompt(custom_prompt)
+
+    def set_github_info(self, owner, repo, branch):
+        self.model_manager.set_github_info(owner, repo, branch)
 
     @staticmethod
     def handle_doc_upload(files):

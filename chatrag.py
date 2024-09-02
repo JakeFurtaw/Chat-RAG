@@ -312,7 +312,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                        show_progress="full")
         # TODO Add the rest of the functionality for repo ripper
         # TODO Add a way to reset the info back to None and clear text boxes
-        getRepo.click(modelUtils.set_github_info, inputs=[repoOwnerUsername, repoName, repoBranch])
+        getRepo.click(gradioUtils.set_github_info, inputs=[repoOwnerUsername, repoName, repoBranch])
         removeRepo.click(modelUtils.reset_github_info, outputs=[repoOwnerUsername, repoName, repoBranch]) # Fix this
         # ---------Ollama Buttons-----------------
         selected_chat_model.change(gradioUtils.update_model,

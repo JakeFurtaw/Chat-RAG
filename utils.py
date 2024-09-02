@@ -143,6 +143,7 @@ def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt):
         stream=True,
         system_prompt=system_message,
         llm=llm,
+        verbose=True,
         context_prompt=("Context information is below.\n"
                         "---------------------\n"
                         "{context_str}\n"

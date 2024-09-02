@@ -39,14 +39,8 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
     torch.cuda.empty_cache()
     gc.collect()
     documents = load_docs()
-    # fix issue of model not getting context from repo ripper
     if owner and repo and branch:
-        print(f"Loading GitHub repo: {owner}/{repo} (branch: {branch})")
         documents += load_github_repo(owner, repo, branch)
-        if not documents:
-            print(f"No documents loaded from {owner}/{repo} on branch {branch}")
-        else:
-            print(f"Loaded {len(documents)} documents from {owner}/{repo} on branch {branch}")
     else:
         documents = documents
     embed_model = EMBED_MODEL
