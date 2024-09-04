@@ -3,7 +3,8 @@
 ## Overview
 Chat RAG is an advanced interactive coding assistant that leverages Retrieval-Augmented Generation (RAG) to provide 
 informed responses to coding queries. Built with a user-friendly Gradio interface, it allows users to interact 
-with various language models, customize model parameters, and upload context files for more accurate assistance.
+with various language models, customize model parameters, and upload context files from local directories or GitHub 
+repositories for more accurate assistance.
 
 
 ## Features
