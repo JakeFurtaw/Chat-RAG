@@ -9,7 +9,7 @@ from llama_index.core import VectorStoreIndex
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.llms import ChatMessage
 from transformers import BitsAndBytesConfig
-import torch, dotenv, os
+import torch, dotenv, os, gc
 from huggingface_hub import login
 
 dotenv.load_dotenv()
@@ -36,6 +36,8 @@ def set_ollama_llm(model, temperature, max_tokens):
                   temperature=temperature, additional_kwargs={"num_predict": max_tokens})
 
 def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, quantization):
+    torch.cuda.empty_cache()
+    gc.collect()
     if quantization == "2 Bit":
         quantization_config = BitsAndBytesConfig(
             load_in_4bit=True,
