@@ -161,8 +161,8 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                 files = gr.Files(interactive=True,
                                  label="Upload Files Here",
                                  file_count="multiple",
-                                 file_types=["text", ".pdf", ".py", ".txt", ".dart", ".c", ".jsx", ".xml",
-                                             ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json"])
+                                 file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c", ".jsx", ".xml",
+                                             ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json", ".csv"])
                 with gr.Row():
                     upload = gr.Button(value="Upload Data",
                                        interactive=True,
