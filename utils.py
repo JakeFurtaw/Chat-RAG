@@ -41,31 +41,25 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
     if quantization == "2 Bit":
         quantization_config = BitsAndBytesConfig(
             load_in_4bit=True,
-            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_compute_dtype=torch.bfloat16,
             bnb_4bit_quant_type="nf4",
             bnb_4bit_use_double_quant=True
         )
     elif quantization == "4 Bit":
         quantization_config = BitsAndBytesConfig(
             load_in_4bit=True,
-            bnb_4bit_compute_dtype=torch.float16,
+            bnb_4bit_compute_dtype=torch.bfloat16,
             bnb_4bit_quant_type="nf4"
         )
     elif quantization == "8 Bit":
         quantization_config = BitsAndBytesConfig(
             load_in_8bit=True,
-            bnb_8bit_compute_dtype=torch.float16,
-            bnb_8bit_quant_type="nf4" # TODO Need to fix quantization for 8 bit
+            bnb_8bit_compute_dtype=torch.bfloat16,
         )
     elif quantization == "No Quantization":
         quantization_config = None
     else:
-        quantization_config = BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_compute_dtype=torch.float16,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_use_double_quant=True
-        )
+        quantization_config = None
 
     model_kwargs = {"quantization_config": quantization_config}
     login(token=os.getenv("HUGGINGFACE_HUB_TOKEN"))
