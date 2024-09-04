@@ -15,7 +15,7 @@ def load_docs():
     all_files = [f for f in all_files if os.path.isfile(f)]
     documents = []
     for file in all_files:
-        reader = SimpleDirectoryReader(input_files=[file]).load_data()
+        reader = SimpleDirectoryReader(input_files=[file]).load_data(num_workers=10)# Added Parallel load
         documents.extend(reader)
     return documents
 
