@@ -9,6 +9,7 @@ dotenv.load_dotenv()
 DIRECTORY_PATH = "data"
 EMBED_MODEL = get_embedding_model()
 
+# TODO Add free parsing options for advanced docs
 def load_docs():
     parser =LlamaParse(api_key=os.getenv("LLAMA_CLOUD_API_KEY"))
     all_files = glob.glob(os.path.join(DIRECTORY_PATH, "**", "*"), recursive=True)
@@ -31,6 +32,9 @@ def load_docs():
             elif file.endswith(".xml"):
                 file_extractor = {".xml": parser}
                 documents.extend(SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data(num_workers=10))
+            elif file.endswith(".html"):
+                file_extractor = {".html": parser}
+                documents.extend(SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data(num_workers=10))
             else:
                 documents.extend(SimpleDirectoryReader(input_files=[file]).load_data(num_workers=10))
         else:
@@ -38,18 +42,22 @@ def load_docs():
     return documents
 
 def load_github_repo(owner, repo, branch):
-    github_client = GithubClient(github_token=os.getenv("GITHUB_PAT"), verbose=True)
-    owner=owner
-    repo=repo
-    branch=branch
-    documents= GithubRepositoryReader(
-        github_client=github_client,
-        owner=owner,
-        repo=repo,
-        use_parser=False,
-        verbose=False,
-    ).load_data(branch=branch)
-    return documents
+    if "GITHUB_PAT" in os.environ:
+        github_client = GithubClient(github_token=os.getenv("GITHUB_PAT"), verbose=True)
+        owner=owner
+        repo=repo
+        branch=branch
+        documents= GithubRepositoryReader(
+            github_client=github_client,
+            owner=owner,
+            repo=repo,
+            use_parser=False,
+            verbose=False,
+        ).load_data(branch=branch)
+        return documents
+    else:
+        print("Couldn't find your GitHub Personal Access Token in the environment file. Make sure you enter your "
+              "GitHub Personal Access Token in the .env file.")
 
 
 def create_chat_engine(model_provider, model, temperature, max_tokens, custom_prompt, top_p,
