@@ -7,7 +7,8 @@ with various language models, customize model parameters, and upload context fil
 
 
 ## Features
-- **Multiple Model Providers**: Support for Ollama, HuggingFace, NVIDIA NIM, OpenAI, and Anthropic models. (**If you don't see all of these providers make sure you have all the environment variables set!**)
+- **Multiple Model Providers**: Support for Ollama, HuggingFace, NVIDIA NIM, OpenAI, and Anthropic models. 
+(**If you don't see all of these providers make sure you have all the environment variables set in the .env file!**)
 - **Wide Range of Language Models**: Choose from models like Codestral, Mistral-Nemo, LLaMA3.1, DeepSeek Coder v2, Gemma2, and CodeGemma.
 - **Dynamic Model Switching**: Seamlessly switch between different language models.
 - **Customizable Model Parameters**: Adjust temperature, max tokens, top-p, and context window size.
