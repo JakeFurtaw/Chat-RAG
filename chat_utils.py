@@ -9,7 +9,7 @@ dotenv.load_dotenv()
 DIRECTORY_PATH = "data"
 EMBED_MODEL = get_embedding_model()
 
-# TODO Add free parsing options for advanced docs
+# TODO Add free parsing options for advanced docs, Llama Parse only lets you parse 1000 free docs a day
 def load_docs():
     parser =LlamaParse(api_key=os.getenv("LLAMA_CLOUD_API_KEY"))
     all_files = glob.glob(os.path.join(DIRECTORY_PATH, "**", "*"), recursive=True)
@@ -19,22 +19,28 @@ def load_docs():
         if "LLAMA_CLOUD_API_KEY" in os.environ:
             if file.endswith(".pdf"):
                 file_extractor={".pdf": parser}
-                documents.extend(SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data(num_workers=10))
+                documents.extend(SimpleDirectoryReader(input_files=[file],
+                                                       file_extractor=file_extractor).load_data(num_workers=10))
             elif file.endswith(".docx"):
                 file_extractor = {".docx": parser}
-                documents.extend(SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data(num_workers=10))
+                documents.extend(SimpleDirectoryReader(input_files=[file],
+                                                       file_extractor=file_extractor).load_data(num_workers=10))
             elif file.endswith(".xlsx"):
                 file_extractor = {".xlsx": parser}
-                documents.extend(SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data(num_workers=10))
+                documents.extend(SimpleDirectoryReader(input_files=[file],
+                                                       file_extractor=file_extractor).load_data(num_workers=10))
             elif file.endswith(".csv"):
                 file_extractor = {".csv": parser}
-                documents.extend(SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data(num_workers=10))
+                documents.extend(SimpleDirectoryReader(input_files=[file],
+                                                       file_extractor=file_extractor).load_data(num_workers=10))
             elif file.endswith(".xml"):
                 file_extractor = {".xml": parser}
-                documents.extend(SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data(num_workers=10))
+                documents.extend(SimpleDirectoryReader(input_files=[file],
+                                                       file_extractor=file_extractor).load_data(num_workers=10))
             elif file.endswith(".html"):
                 file_extractor = {".html": parser}
-                documents.extend(SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data(num_workers=10))
+                documents.extend(SimpleDirectoryReader(input_files=[file],
+                                                       file_extractor=file_extractor).load_data(num_workers=10))
             else:
                 documents.extend(SimpleDirectoryReader(input_files=[file]).load_data(num_workers=10))
         else:

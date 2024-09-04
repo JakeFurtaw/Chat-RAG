@@ -1,6 +1,9 @@
+import os
 import gradio as gr
 from gradio_utils import GradioUtils
 from model_utils import ModelManager
+import dotenv
+dotenv.load_dotenv()
 
 gradioUtils = GradioUtils()
 modelUtils = ModelManager()
@@ -189,10 +192,18 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                            interactive=True,
                                            elem_id="button")
 
-
+            choices = ["Ollama"]
+            if "HUGGINGFACE_HUB_TOKEN" in os.environ:
+                choices.append("HuggingFace")
+            if "NVIDIA_API_KEY" in os.environ:
+                choices.append("NVIDIA NIM")
+            if "OPENAI_API_KEY" in os.environ:
+                choices.append("OpenAI")
+            if "ANTHROPIC_API_KEY" in os.environ:
+                choices.append("Anthropic")
             model_provider = gr.Radio(label="Select Model Provider",
                                       value="Ollama",
-                                      choices=["Ollama", "HuggingFace", "NVIDIA NIM", "OpenAI", "Anthropic"],
+                                      choices=choices,
                                       interactive=True,
                                       info="Choose your model provider.")
             selected_chat_model.render()
@@ -310,10 +321,8 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
         upload.click(lambda: gradioUtils.model_manager.reset_chat_engine())
         clear_db.click(gradioUtils.delete_db,
                        show_progress="full")
-        # TODO Add the rest of the functionality for repo ripper
-        # TODO Add a way to reset the info back to None and clear text boxes
         getRepo.click(gradioUtils.set_github_info, inputs=[repoOwnerUsername, repoName, repoBranch])
-        removeRepo.click(modelUtils.reset_github_info, outputs=[repoOwnerUsername, repoName, repoBranch]) # Fix this
+        removeRepo.click(modelUtils.reset_github_info, outputs=[repoOwnerUsername, repoName, repoBranch])
         # ---------Ollama Buttons-----------------
         selected_chat_model.change(gradioUtils.update_model,
                                    inputs=[selected_chat_model],
@@ -369,4 +378,4 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
         anth_max_tokens.release(gradioUtils.update_max_tokens,
                                 inputs=[anth_max_tokens])
 
-demo.launch(inbrowser=True)# , share=True
+demo.launch(inbrowser=True, share=True)

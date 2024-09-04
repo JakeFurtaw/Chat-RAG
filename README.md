@@ -7,7 +7,7 @@ with various language models, customize model parameters, and upload context fil
 
 
 ## Features
-- **Multiple Model Providers**: Support for Ollama, HuggingFace, NVIDIA NIM, OpenAI, and Anthropic models.
+- **Multiple Model Providers**: Support for Ollama, HuggingFace, NVIDIA NIM, OpenAI, and Anthropic models. (**If you don't see all of these providers make sure you have all the environment variables set!**)
 - **Wide Range of Language Models**: Choose from models like Codestral, Mistral-Nemo, LLaMA3.1, DeepSeek Coder v2, Gemma2, and CodeGemma.
 - **Dynamic Model Switching**: Seamlessly switch between different language models.
 - **Customizable Model Parameters**: Adjust temperature, max tokens, top-p, and context window size.
@@ -37,9 +37,13 @@ with various language models, customize model parameters, and upload context fil
    LLAMA_CLOUD_API_KEY="YOUR LLAMA_CLOUD_API_KEY"
    ```
 4. Run the application:
-    ```bash
-    gradio chatrag.py
+```bash
+gradio chatrag.py
    ```
+or 
+```commandline
+python app.py
+```
 5. The app will automatically open a new tab and launch in your browser.
 6. Select a Model Provider.
 7. Select a language model from the dropdown menu.
@@ -49,6 +53,7 @@ with various language models, customize model parameters, and upload context fil
 
 
 ## Project Structure
+- `app.py`: If you don't want to run it in gradio live reload, use this file.
 - `chatrag.py`: Main application file with Gradio UI setup.
 - `chat.py`: Utilities for document loading and chat engine creation.
 - `gr_utils.py`: Gradio-specific utility functions for UI interactions.

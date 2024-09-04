@@ -21,6 +21,8 @@ class GradioUtils:
 
     def clear_his_and_mem(self):
         self.clear_chat_history()
+        gr.Warning("This also resets the context of the model. You might need to re-upload your GitHub "
+                   "Repository if one was set!", duration=10)
         self.model_manager.reset_chat_engine()
 
     def delete_db(self):
