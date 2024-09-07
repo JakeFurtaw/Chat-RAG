@@ -56,22 +56,19 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
     gc.collect()
     documents = load_docs()
     if owner and repo and branch:
-        documents += load_github_repo(owner, repo, branch)
-    else:
-        documents = documents
+        documents.extend(load_github_repo(owner, repo, branch))
     embed_model = EMBED_MODEL
-    if model_provider == "Ollama":
-        llm = set_ollama_llm(model, temperature, max_tokens)
-    elif model_provider == "HuggingFace":
-        llm = set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, quantization)
-    elif model_provider == "NVIDIA NIM":
-        llm = set_nvidia_model(model, temperature, max_tokens, top_p)
-    elif model_provider == "OpenAI":
-        llm = set_openai_model(model, temperature, max_tokens, top_p)
-    elif model_provider == "Anthropic":
-        llm = set_anth_model(model, temperature, max_tokens)
-    else:
+    llm_setters = {
+        "Ollama": lambda: set_ollama_llm(model, temperature, max_tokens),
+        "HuggingFace": lambda: set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, quantization),
+        "NVIDIA NIM": lambda: set_nvidia_model(model, temperature, max_tokens, top_p),
+        "OpenAI": lambda: set_openai_model(model, temperature, max_tokens, top_p),
+        "Anthropic": lambda: set_anth_model(model, temperature, max_tokens)
+    }
+    try:
+        llm = llm_setters[model_provider]()
+    except KeyError:
         raise ValueError(f"Unsupported model provider: {model_provider}")
     memory = set_chat_memory(model)
-    return setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model, memory=memory,
-                                       custom_prompt=custom_prompt)
+    return setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model,
+                                       memory=memory, custom_prompt=custom_prompt)

@@ -79,13 +79,15 @@ class ModelManager:
         self.owner = owner
         self.repo = repo
         self.branch = branch
-        gr.Info(f"GitHub repository info set to Owners Username: {owner}, Repository Name: {repo}, and Branch Name: {branch}.")
+        if repo and owner and branch != "":
+            gr.Info(f"GitHub repository info set to Owners Username: {owner}, Repository Name: {repo}, and Branch Name: {branch}.")
         self.reset_chat_engine()
 
     def reset_github_info(self):
         self.owner = ""
         self.repo = ""
         self.branch = ""
+        self.set_github_info(self.owner, self.repo, self.branch)
         gr.Info(f"GitHub repository info cleared and repository files from the models context!")
         self.reset_chat_engine()
         return self.owner, self.repo, self.branch
