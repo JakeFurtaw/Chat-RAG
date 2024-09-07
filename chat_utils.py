@@ -15,20 +15,19 @@ def load_docs():
     all_files = glob.glob(os.path.join(DIRECTORY_PATH, "**", "*"), recursive=True)
     all_files = [f for f in all_files if os.path.isfile(f)]
     documents = []
-
     supported_extensions = [".pdf", ".docx", ".xlsx", ".csv", ".xml", ".html"]
-
-    for file in all_files:
-        file_extension = os.path.splitext(file)[1].lower()
-
-        if "LLAMA_CLOUD_API_KEY" in os.environ and file_extension in supported_extensions:
-            file_extractor = {file_extension: parser}
-        else:
-            file_extractor = None
-
-        documents.extend(
-            SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data(num_workers=10))
-
+    if len(all_files) > 1:
+        for file in all_files:
+            file_extension = os.path.splitext(file)[1].lower()
+            if "LLAMA_CLOUD_API_KEY" in os.environ and file_extension in supported_extensions:
+                file_extractor = {file_extension: parser}
+                documents.extend(
+                    SimpleDirectoryReader(input_files=[file], file_extractor=file_extractor).load_data(num_workers=len(all_files)))
+            else:
+                documents.extend(SimpleDirectoryReader(input_files=[file]).load_data(num_workers=len(all_files)))
+    else:
+        for file in all_files:
+            documents.extend(SimpleDirectoryReader(input_files=[file]).load_data())
     return documents
 
 def load_github_repo(owner, repo, branch):
