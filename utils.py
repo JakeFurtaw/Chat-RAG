@@ -116,7 +116,7 @@ def set_chat_memory(model):
         "deepseek-coder-v2:latest": 124000,
         "deepseek-ai/DeepSeek-Coder-V2-Instruct": 124000
     }
-    token_limit = memory_limits.get(model, 6000)
+    token_limit = memory_limits.get(model, 30000)
     return ChatMemoryBuffer.from_defaults(token_limit=token_limit)
 
 def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt):
