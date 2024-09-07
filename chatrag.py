@@ -316,7 +316,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
         clear_chat_mem.click(gradioUtils.clear_his_and_mem,
                              outputs=chatbot)
     # --------------------Buttons in Right Column--------------------------------
-        files.upload(gradioUtils.handle_doc_upload,
+        files.upload(gradioUtils.handle_doc_upload, inputs=files,
                      show_progress="full")
         upload.click(lambda: gradioUtils.model_manager.reset_chat_engine())
         clear_db.click(gradioUtils.delete_db,
@@ -378,4 +378,4 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
         anth_max_tokens.release(gradioUtils.update_max_tokens,
                                 inputs=[anth_max_tokens])
 
-demo.launch(inbrowser=True, share=True)
+demo.launch(inbrowser=True)
