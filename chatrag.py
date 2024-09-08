@@ -159,19 +159,47 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
         with gr.Column(scale=3): #
             with gr.Tab("Chat With Files"):
                 files = gr.Files(interactive=True,
-                                 label="Upload Files Here",
                                  file_count="multiple",
                                  file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c", ".jsx", ".xml",
                                              ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json", ".csv"])
                 with gr.Row():
-                    upload = gr.Button(value="Upload Data",
+                    upload = gr.Button(value="Upload Data to Knowledge Base",
                                        interactive=True,
                                        size="sm",
                                        elem_id="button")
-                    clear_db = gr.Button(value="Clear RAG Database",
+                    clear_db = gr.Button(value="Clear Knowledge Base",
                                          interactive=True,
                                          size="sm",
                                          elem_id="button")
+            # TODO Finish neo4j implementation
+            with gr.Tab("Chat With a Database"):
+                db_files = gr.Files(interactive=True,
+                                    file_count="multiple",
+                                    file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c", ".jsx", ".xml",
+                                                ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json", ".csv"])
+                with gr.Row():
+                    neo_un = gr.Textbox(label="Neo4j Database Name",
+                                        placeholder="Enter Database Name Here...",
+                                        interactive=True)
+                    neo_pw = gr.Textbox(label="Neo4j Database Password",
+                                        placeholder="Enter Database Password Here...",
+                                        interactive=True)
+                    neo_url = gr.Textbox(label="Neo4j Database Link",
+                                         placeholder="Enter Database Link Here...",
+                                         interactive=True)
+                with gr.Row():
+                    upload_db_files = gr.Button("Upload Data to Database",
+                                                interactive=True,
+                                                size="sm",
+                                                elem_id="button")
+                    create_db = gr.Button("Load Database to Model",
+                                          interactive=True,
+                                          size="sm",
+                                          elem_id="button")
+                    delete_db = gr.Button("Remove Database from Model",
+                                          interactive=True,
+                                          size="sm",
+                                          elem_id="button")
             with gr.Tab("Chat With a GitHub Repository"):
                 repoOwnerUsername = gr.Textbox(label="GitHub Repository Owners Username:",
                                                placeholder="Enter GitHub Repository Owners Username Here....",
@@ -187,7 +215,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                         size="sm",
                                         interactive=True,
                                         elem_id="button")
-                    removeRepo = gr.Button(value="Reset Info",
+                    removeRepo = gr.Button(value="Reset Info and Remove Repository from Model",
                                            size="sm",
                                            interactive=True,
                                            elem_id="button")

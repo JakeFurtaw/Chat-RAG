@@ -15,6 +15,9 @@ class ModelManager:
         self.branch = None
         self.repo = None
         self.owner = None
+        # TODO Finish neo4j implementation
+        self.neo4j = False
+        self.storage_context = None
         self.chat_engine = None
         self.provider = "Ollama"
         self.selected_model = "codestral:latest"

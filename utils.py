@@ -5,9 +5,10 @@ from llama_index.llms.ollama import Ollama
 from llama_index.llms.huggingface import HuggingFaceLLM
 from llama_index.llms.nvidia import NVIDIA
 from llama_index.llms.openai import OpenAI
-from llama_index.core import VectorStoreIndex
+from llama_index.core import VectorStoreIndex, StorageContext
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.llms import ChatMessage
+from llama_index.vector_stores.neo4jvector import Neo4jVectorStore
 from transformers import BitsAndBytesConfig
 import torch, dotenv, os, gc
 from huggingface_hub import login
@@ -104,7 +105,7 @@ def set_anth_model(model, temperature, max_tokens):
         api_key= os.getenv("ANTHROPIC_API_KEY"),
 
     )
-# TODO add the rest of the models to chat memory limit list
+
 def set_chat_memory(model):
     memory_limits = {
         "codestral:latest": 30000,
@@ -119,7 +120,21 @@ def set_chat_memory(model):
     token_limit = memory_limits.get(model, 30000)
     return ChatMemoryBuffer.from_defaults(token_limit=token_limit)
 
+# TODO Finish neo4j implementation
+def setup_vector_store(username, password, url):
+    username = username
+    password = password
+    url = url
+    embed_dim = 1536
+    neo4j_vector_store = Neo4jVectorStore(username, password, url, embed_dim)
+    storage_context = StorageContext.from_defaults(vector_store=neo4j_vector_store)
+    return storage_context
+
+# TODO Finish neo4j implementation
 def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt):
+    # if neo4j_index:
+    #     index = VectorStoreIndex.from_documents(docs, storage_context=storage_context)
+    # else:
     index = VectorStoreIndex.from_documents(docs, embed_model=embed_model)
     chat_prompt = (
         "You are an AI coding assistant, your primary function is to help users with coding-related questions \n"
