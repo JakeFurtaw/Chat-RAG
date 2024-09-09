@@ -47,7 +47,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                          size="sm",
                                          elem_id="button")
             # TODO Finish neo4j implementation
-            with gr.Tab("Chat With a Database"):
+            with gr.Tab("Chat With a Database(Coming Soon)"):
                 db_files = gr.Files(interactive=True,
                                     file_count="multiple",
                                     file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c", ".jsx", ".xml",

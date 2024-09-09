@@ -17,6 +17,7 @@ repositories for more accurate assistance.
 - **RAG-powered Responses**: Utilizes uploaded documents or enter a GitHub repository to provide context-aware answers. 
 - **Chat With Files**: Support for uploading additional context files. 
 - **Chat with a GitHub Repo:** Support for using a GitHub repositories files as context for the model.
+- **Chat With a Database:** Support of connecting a new or existing database. **(Coming Soon)**
 - **Custom Prompts**: Ability to set custom system prompts for the chat engine.
 - **Enhanced Memory Management**: Dynamically manage chat memory for different models.
 - **Streaming Responses**: Real-time response generation for a more interactive experience.
@@ -80,6 +81,7 @@ Contributions are welcome! Please feel free to submit a Pull Request or Fork the
 
 ### Coming in Future Updates
 - Video of the program in action.
+- Add the ability to load an existing Neo4j DB into the model
 - The ability to add models to the list for different model providers.
 
 
