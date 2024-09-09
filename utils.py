@@ -40,6 +40,8 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
     torch.cuda.empty_cache()
     gc.collect()
     if model == "":
+        torch.cuda.empty_cache()
+        gc.collect()
         pass
     else:
         if quantization == "2 Bit":
@@ -67,6 +69,8 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
 
         model_kwargs = {"quantization_config": quantization_config,
                         "trust_remote_code": True}
+        torch.cuda.empty_cache()
+        gc.collect()
         login(token=os.getenv("HUGGINGFACE_HUB_TOKEN"))
         return HuggingFaceLLM(
             model_name=model,
