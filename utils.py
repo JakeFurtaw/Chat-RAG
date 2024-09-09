@@ -39,45 +39,49 @@ def set_ollama_llm(model, temperature, max_tokens):
 def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, quantization):
     torch.cuda.empty_cache()
     gc.collect()
-    if quantization == "2 Bit":
-        quantization_config = BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_compute_dtype=torch.bfloat16,
-            bnb_4bit_quant_type="nf4",
-            bnb_4bit_use_double_quant=True
-        )
-    elif quantization == "4 Bit":
-        quantization_config = BitsAndBytesConfig(
-            load_in_4bit=True,
-            bnb_4bit_compute_dtype=torch.bfloat16,
-            bnb_4bit_quant_type="nf4"
-        )
-    elif quantization == "8 Bit":
-        quantization_config = BitsAndBytesConfig(
-            load_in_8bit=True,
-            bnb_8bit_compute_dtype=torch.bfloat16,
-        )
-    elif quantization == "No Quantization":
-        quantization_config = None
+    if model == "":
+        pass
     else:
-        quantization_config = None
+        if quantization == "2 Bit":
+            quantization_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_compute_dtype=torch.bfloat16,
+                bnb_4bit_quant_type="nf4",
+                bnb_4bit_use_double_quant=True
+            )
+        elif quantization == "4 Bit":
+            quantization_config = BitsAndBytesConfig(
+                load_in_4bit=True,
+                bnb_4bit_compute_dtype=torch.bfloat16,
+                bnb_4bit_quant_type="nf4"
+            )
+        elif quantization == "8 Bit":
+            quantization_config = BitsAndBytesConfig(
+                load_in_8bit=True,
+                bnb_8bit_compute_dtype=torch.bfloat16,
+            )
+        elif quantization == "No Quantization":
+            quantization_config = None
+        else:
+            quantization_config = None
 
-    model_kwargs = {"quantization_config": quantization_config}
-    login(token=os.getenv("HUGGINGFACE_HUB_TOKEN"))
-    return HuggingFaceLLM(
-        model_name=model,
-        tokenizer_name=model,
-        context_window=context_window,
-        max_new_tokens=max_tokens,
-        model_kwargs=model_kwargs,
-        is_chat_model= True,
-        device_map="cuda:0",
-        generate_kwargs={
-            "temperature": temperature,
-            "top_p": top_p,
-            "do_sample": True
-        },
-    )
+        model_kwargs = {"quantization_config": quantization_config,
+                        "trust_remote_code": True}
+        login(token=os.getenv("HUGGINGFACE_HUB_TOKEN"))
+        return HuggingFaceLLM(
+            model_name=model,
+            tokenizer_name=model,
+            context_window=context_window,
+            max_new_tokens=max_tokens,
+            model_kwargs=model_kwargs,
+            is_chat_model= True,
+            device_map="cuda:0",
+            generate_kwargs={
+                "temperature": temperature,
+                "top_p": top_p,
+                "do_sample": True,
+            },
+        )
 
 def set_nvidia_model(model, temperature, max_tokens, top_p):
     return NVIDIA(
@@ -115,7 +119,11 @@ def set_chat_memory(model):
         "llama3.1:latest": 124000,
         "meta-llama/Meta-Llama-3.1-8B-Instruct": 124000,
         "deepseek-coder-v2:latest": 124000,
-        "deepseek-ai/DeepSeek-Coder-V2-Instruct": 124000
+        "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct": 124000,
+        "gemma2:latest": 6000,
+        "google/gemma-2-9b-it":6000,
+        "codegemma:latest": 6000,
+        "google/codegemma-7b": 6000,
     }
     token_limit = memory_limits.get(model, 30000)
     return ChatMemoryBuffer.from_defaults(token_limit=token_limit)

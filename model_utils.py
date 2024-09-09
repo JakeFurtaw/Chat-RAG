@@ -3,11 +3,9 @@ import gradio as gr
 from chat_utils import create_chat_engine
 from config import HF_MODEL_LIST, OLLAMA_MODEL_LIST, NV_MODEL_LIST, OA_MODEL_LIST, ANTH_MODEL_LIST
 
-
 def reset_gpu_memory():
     torch.cuda.empty_cache()
     gc.collect()
-
 
 class ModelManager:
     def __init__(self):
@@ -15,17 +13,18 @@ class ModelManager:
         self.branch = None
         self.repo = None
         self.owner = None
-        # TODO Finish neo4j implementation
         self.neo4j = False
         self.storage_context = None
         self.chat_engine = None
         self.provider = "Ollama"
         self.selected_model = "codestral:latest"
-        self.ollama_model_display_names = OLLAMA_MODEL_LIST
-        self.hf_model_display_names = HF_MODEL_LIST
-        self.nv_model_display_names = NV_MODEL_LIST
-        self.openai_model_display_names = OA_MODEL_LIST
-        self.anth_model_display_names = ANTH_MODEL_LIST
+        self.model_display_names = {
+            "Ollama": OLLAMA_MODEL_LIST,
+            "HuggingFace": HF_MODEL_LIST,
+            "NVIDIA NIM": NV_MODEL_LIST,
+            "OpenAI": OA_MODEL_LIST,
+            "Anthropic": ANTH_MODEL_LIST
+        }
 
     def create_initial_chat_engine(self):
         return create_chat_engine(self.provider, self.selected_model,
@@ -39,69 +38,45 @@ class ModelManager:
 
     def process_input(self, message):
         if self.chat_engine is None:
-            self.chat_engine=self.create_initial_chat_engine()
+            self.chat_engine = self.create_initial_chat_engine()
         return self.chat_engine.stream_chat(message)
 
     def update_model_provider(self, provider):
         reset_gpu_memory()
         self.provider = provider
-        if provider == "Ollama":
-            self.selected_model = "codestral:latest"
-            gr.Info(f"Model provider updated to {provider}.", duration=10)
-        elif provider == "HuggingFace":
-            gr.Info(f"Model provider updated to {provider}.", duration=10)
-            gr.Warning("Model is loading, this could take some time depending on your hardware.", duration=30)
-            self.selected_model = "mistralai/Codestral-22B-v0.1"
-        elif provider == "NVIDIA NIM":
-            gr.Info(f"Model provider updated to {provider}.", duration=10)
-            self.selected_model = "mistralai/codestral-22b-instruct-v0.1"
-        elif provider == "OpenAI":
-            gr.Info(f"Model provider updated to {provider}.", duration=10)
-            self.selected_model = "gpt-4o"
-        elif provider == "Anthropic":
-            gr.Info(f"Model provider updated to {provider}.", duration=10)
-            self.selected_model = "claude-3-5-sonnet-20240620"
+        default_models = {
+            "Ollama": "codestral:latest",
+            "HuggingFace": "",
+            "NVIDIA NIM": "mistralai/codestral-22b-instruct-v0.1",
+            "OpenAI": "gpt-4o",
+            "Anthropic": "claude-3-5-sonnet-20240620"
+        }
+        self.selected_model = default_models.get(provider, "codestral:latest")
+        gr.Info(f"Model provider updated to {provider}.", duration=10)
         self.reset_chat_engine()
 
     def update_model(self, display_name):
-        if self.provider == "Ollama":
-            self.selected_model = self.ollama_model_display_names.get(display_name, "codestral:latest")
-        elif self.provider == "HuggingFace":
-            reset_gpu_memory()
-            self.selected_model = self.hf_model_display_names.get(display_name, "mistralai/Codestral-22B-v0.1")
-        elif self.provider == "NVIDIA NIM":
-            self.selected_model = self.nv_model_display_names.get(display_name, "mistralai/codestral-22b-instruct-v0.1")
-        elif self.provider == "OpenAI":
-            self.selected_model = self.openai_model_display_names.get(display_name, "gpt-4o")
-        elif self.provider == "Anthropic":
-            self.selected_model = self.openai_model_display_names.get(display_name, "claude-3-5-sonnet-20240620")
+        reset_gpu_memory()
+        self.selected_model = self.model_display_names[self.provider].get(display_name, self.selected_model)
         self.reset_chat_engine()
         gr.Info(f"Model updated to {display_name}.", duration=10)
 
     def set_github_info(self, owner, repo, branch):
-        self.owner = owner
-        self.repo = repo
-        self.branch = branch
-        if repo and owner and branch != "":
+        self.owner, self.repo, self.branch = owner, repo, branch
+        if all([owner, repo, branch]) != "":
             gr.Info(f"GitHub repository info set to Owners Username: {owner}, Repository Name: {repo}, and Branch Name: {branch}.")
         self.reset_chat_engine()
 
     def reset_github_info(self):
-        self.owner = ""
-        self.repo = ""
-        self.branch = ""
+        self.owner = self.repo = self.branch = ""
         self.set_github_info(self.owner, self.repo, self.branch)
-        gr.Info(f"GitHub repository info cleared and repository files from the models context!")
+        gr.Info("GitHub repository info cleared and repository files from the models context!")
         self.reset_chat_engine()
         return self.owner, self.repo, self.branch
 
-
     def reset_chat_engine(self):
         reset_gpu_memory()
-        self.chat_engine = create_chat_engine(self.provider, self.selected_model, self.model_param_updates.temperature,
-                                              self.model_param_updates.max_tokens, self.model_param_updates.custom_prompt,
-                                              self.model_param_updates.top_p, self.model_param_updates.context_window,
-                                              self.model_param_updates.quantization, self.owner, self.repo, self.branch)
+        self.chat_engine = self.create_initial_chat_engine()
 
 class ModelParamUpdates:
     def __init__(self, model_manager):

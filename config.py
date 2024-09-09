@@ -7,11 +7,12 @@ OLLAMA_MODEL_LIST = {
             "CodeGemma 7B": "codegemma:latest"
         }
 HF_MODEL_LIST = {
+            "Choose a Model": "",
             "Codestral 22B": "mistralai/Codestral-22B-v0.1",
             "Mistral-Nemo 12B-Instruct": "mistralai/Mistral-Nemo-Instruct-2407",
             "Llama3.1 8B-Instruct": "meta-llama/Meta-Llama-3.1-8B-Instruct",
-            "DeepSeek Coder V2 16B": "deepseek-ai/DeepSeek-Coder-V2-Instruct",
-            "Gemma2 9B": "mistralai/Mistral-Nemo-Instruct-2407",
+            "DeepSeek Coder V2 16B": "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct",
+            "Gemma2 9B": "google/gemma-2-9b-it",
             "CodeGemma 7B-Instruct": "google/codegemma-7b-it",
         }
 NV_MODEL_LIST = {

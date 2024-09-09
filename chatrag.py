@@ -94,7 +94,6 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                            size="sm",
                                            interactive=True,
                                            elem_id="button")
-
             choices = ["Ollama"]
             if "HUGGINGFACE_HUB_TOKEN" in os.environ:
                 choices.append("HuggingFace")
@@ -115,7 +114,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
             def render_provider_components(provider):
                 if provider == "Ollama":
                     # --------------Ollama Components------------------------
-                    selected_chat_model = gr.Dropdown(choices=list(modelUtils.ollama_model_display_names.keys()),
+                    selected_chat_model = gr.Dropdown(choices=list(modelUtils.model_display_names["Ollama"].keys()),
                                                       interactive=True,
                                                       label="Select a Chat Model",
                                                       value="Codestral 22B",
@@ -145,17 +144,17 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
 
                 elif provider == "HuggingFace":
                     # ------------------HuggingFace components-------------------------------
-                    hf_model = gr.Dropdown(choices=list(modelUtils.hf_model_display_names.keys()),
-                                           interactive=True,
-                                           label="Select a Chat Model",
-                                           value="Codestral 22B",
-                                           filterable=True,
-                                           info="Choose a Hugging Face model.")
-                    hf_quantization = gr.Dropdown(choices=["No Quantization", "2 Bit", "4 Bit", "8 Bit"],
+                    hf_quantization = gr.Dropdown(choices=["Choose a Quantization","No Quantization", "2 Bit", "4 Bit", "8 Bit"],
                                                   interactive=True,
                                                   label="Model Quantization",
-                                                  value="4 Bit",
+                                                  value="Choose a Quantization",
                                                   info="Choose Model Quantization.")
+                    hf_model = gr.Dropdown(choices=list(modelUtils.model_display_names["HuggingFace"].keys()),
+                                           interactive=True,
+                                           label="Select a Chat Model",
+                                           value="Choose a Model",
+                                           filterable=True,
+                                           info="Choose a Hugging Face model.")
                     hf_temperature = gr.Slider(minimum=0, maximum=1, value=.75, step=.05,
                                                label="Model Temperature",
                                                info="Select a Temperature between 0 and 1 for the model.",
@@ -194,7 +193,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
 
                 elif provider=="NVIDIA NIM":
                     # ----------------------------NVIDIA NIM components---------------------------
-                    nv_model = gr.Dropdown(choices=list(modelUtils.nv_model_display_names.keys()),
+                    nv_model = gr.Dropdown(choices=list(modelUtils.model_display_names["NVIDIA NIM"].keys()),
                                            interactive=True,
                                            label="Select a NVIDIA NIM",
                                            value="Codestral 22B",
@@ -225,7 +224,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
 
                 elif provider=="OpenAI":
                     # ----------------------------OPEN AI components---------------------------
-                    openai_model = gr.Dropdown(choices=list(modelUtils.openai_model_display_names.keys()),
+                    openai_model = gr.Dropdown(choices=list(modelUtils.model_display_names["OpenAI"].keys()),
                                                interactive=True,
                                                label="Select a OpenAI Model",
                                                value="GPT-4o",
@@ -255,7 +254,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                               inputs=[openai_max_tokens])
                 elif provider=="Anthropic":
                     # ----------------------------Anthropic components---------------------------
-                    anth_model = gr.Dropdown(choices=list(modelUtils.anth_model_display_names.keys()),
+                    anth_model = gr.Dropdown(choices=list(modelUtils.model_display_names["Anthropic"].keys()),
                                              interactive=True,
                                              label="Select a Anthropic Model",
                                              value="Claude 3.5 Sonnet",
