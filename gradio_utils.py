@@ -35,6 +35,8 @@ class GradioUtils:
     def update_model_provider(self, provider):
         self.clear_chat_history()
         self.model_manager.update_model_provider(provider)
+        if self.model_manager.provider == "HuggingFace":
+            gr.Warning("If this is your first time using HuggingFace the model may need to download. Please be patient.", duration=10)
 
     def update_model(self, display_name):
         self.clear_chat_history()

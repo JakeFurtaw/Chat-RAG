@@ -60,8 +60,6 @@ class ModelManager:
         self.selected_model = self.model_display_names[self.provider].get(display_name, self.selected_model)
         self.reset_chat_engine()
         gr.Info(f"Model updated to {display_name}.", duration=10)
-        if self.provider == "HuggingFace":
-            gr.Warning("Model is loading please give it some time...", duration=30)
 
     def set_github_info(self, owner, repo, branch):
         self.owner, self.repo, self.branch = owner, repo, branch
