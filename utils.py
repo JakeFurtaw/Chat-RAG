@@ -5,23 +5,25 @@ from llama_index.llms.ollama import Ollama
 from llama_index.llms.huggingface import HuggingFaceLLM
 from llama_index.llms.nvidia import NVIDIA
 from llama_index.llms.openai import OpenAI
-from llama_index.core import VectorStoreIndex, StorageContext
+from llama_index.core import VectorStoreIndex
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core.llms import ChatMessage
-from llama_index.vector_stores.neo4jvector import Neo4jVectorStore
 from transformers import BitsAndBytesConfig
 import torch, dotenv, os, gc
 from huggingface_hub import login
 
 dotenv.load_dotenv()
 
+
 def set_device(gpu: int = None) -> str:
     return f"cuda:{gpu}" if torch.cuda.is_available() and gpu is not None else "cpu"
+
 
 def get_embedding_model():
     embed_model = HuggingFaceEmbedding(model_name="/home/jake/Programming/Models/embedding/stella_en_400M_v5",
                                        device=set_device(0), trust_remote_code=True)
     return embed_model
+
 
 def set_ollama_llm(model, temperature, max_tokens):
     llm_models = {
@@ -35,6 +37,7 @@ def set_ollama_llm(model, temperature, max_tokens):
     llm_config = llm_models.get(model, llm_models["codestral:latest"])
     return Ollama(model=llm_config["model"], request_timeout=30.0, device=llm_config["device"],
                   temperature=temperature, additional_kwargs={"num_predict": max_tokens})
+
 
 def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, quantization):
     torch.cuda.empty_cache()
@@ -78,7 +81,7 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
             context_window=context_window,
             max_new_tokens=max_tokens,
             model_kwargs=model_kwargs,
-            is_chat_model= True,
+            is_chat_model=True,
             device_map="cuda:0",
             generate_kwargs={
                 "temperature": temperature,
@@ -87,14 +90,16 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
             },
         )
 
+
 def set_nvidia_model(model, temperature, max_tokens, top_p):
     return NVIDIA(
         model=model,
         max_tokens=max_tokens,
         temperature=temperature,
         top_p=top_p,
-        nvidia_api_key= os.getenv("NVIDIA_API_KEY")
+        nvidia_api_key=os.getenv("NVIDIA_API_KEY")
     )
+
 
 def set_openai_model(model, temperature, max_tokens, top_p):
     return OpenAI(
@@ -102,22 +107,24 @@ def set_openai_model(model, temperature, max_tokens, top_p):
         max_tokens=max_tokens,
         temperature=temperature,
         top_p=top_p,
-        api_key= os.getenv("OPENAI_API_KEY"),
+        api_key=os.getenv("OPENAI_API_KEY"),
     )
+
 
 def set_anth_model(model, temperature, max_tokens):
     return Anthropic(
         model=model,
         max_tokens=max_tokens,
         temperature=temperature,
-        api_key= os.getenv("ANTHROPIC_API_KEY"),
+        api_key=os.getenv("ANTHROPIC_API_KEY"),
 
     )
+
 
 def set_chat_memory(model):
     memory_limits = {
         "codestral:latest": 30000,
-        "mistralai/Codestral-22B-v0.1":30000,
+        "mistralai/Codestral-22B-v0.1": 30000,
         "mistral-nemo:latest": 124000,
         "mistralai/Mistral-Nemo-Instruct-2407": 124000,
         "llama3.1:latest": 124000,
@@ -125,29 +132,20 @@ def set_chat_memory(model):
         "deepseek-coder-v2:latest": 124000,
         "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct": 124000,
         "gemma2:latest": 6000,
-        "google/gemma-2-9b-it":6000,
+        "google/gemma-2-9b-it": 6000,
         "codegemma:latest": 6000,
         "google/codegemma-7b": 6000,
     }
     token_limit = memory_limits.get(model, 30000)
     return ChatMemoryBuffer.from_defaults(token_limit=token_limit)
 
-# TODO Finish neo4j implementation
-def setup_vector_store(username, password, url):
-    username = username
-    password = password
-    url = url
-    embed_dim = 1536
-    neo4j_vector_store = Neo4jVectorStore(username, password, url, embed_dim)
-    storage_context = StorageContext.from_defaults(vector_store=neo4j_vector_store)
-    return storage_context
 
 # TODO Finish neo4j implementation
-def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt):
-    # if neo4j_index:
-    #     index = VectorStoreIndex.from_documents(docs, storage_context=storage_context)
-    # else:
-    index = VectorStoreIndex.from_documents(docs, embed_model=embed_model)
+def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt, storage_context):
+    if storage_context:
+        index = VectorStoreIndex.from_documents(docs, storage_context=storage_context, embed_model=embed_model)
+    else:
+        index = VectorStoreIndex.from_documents(docs, embed_model=embed_model)
     chat_prompt = (
         "You are an AI coding assistant, your primary function is to help users with coding-related questions \n"
         "and tasks. You have access to a knowledge base of programming documentation and best practices. \n"

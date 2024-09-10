@@ -49,23 +49,15 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
             # TODO Finish Database Backend Implementation
             with gr.Tab("Chat With a Database(Coming Soon)"):
                 with gr.Column(variant="compact"):
-                    db_selector = gr.Radio(label="Database",choices=["ChromaDB", "Milvus", "Pinecone", "Neo4j"])
+                    db_selector = gr.Radio(label="Database",choices=["ChromaDB", "Milvus", "Neo4j"])
                     @gr.render(inputs=db_selector)
                     def render_db_components(provider):
                         if provider == "ChromaDB":
                             with gr.Row():
-                                cdb_collection_name = gr.Textbox(label="Chroma Collection Name",interactive=True,
-                                                                 placeholder="Enter Database Collection Name Here..")
+                                collection_name = gr.Textbox(label="Chroma Collection Name",interactive=True,
+                                                              placeholder="Enter Database Collection Name Here..")
                             with gr.Row():
-                                cdb_load = gr.Button("Load Database",
-                                                     interactive=True,
-                                                     size="sm",
-                                                     elem_id="button")
-                                cdb_create = gr.Button("Create Database",
-                                                       interactive=True,
-                                                       size="sm",
-                                                       elem_id="button")
-                            cdb_files = gr.Files(interactive=True,
+                                files = gr.Files(interactive=True,
                                                  file_count="multiple",
                                                  file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c", ".jsx",
                                                              ".xml",
@@ -76,87 +68,43 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                                             interactive=True,
                                                             size="sm",
                                                             elem_id="button")
-                                create_db = gr.Button("Load Database to Model",
+                                load_db = gr.Button("Load Database to Model",
                                                       interactive=True,
                                                       size="sm",
                                                       elem_id="button")
-                                delete_db = gr.Button("Remove Database from Model",
+                                remove_db = gr.Button("Remove Database from Model",
                                                       interactive=True,
                                                       size="sm",
                                                       elem_id="button")
                         elif provider == "Milvus":
                             with gr.Row():
-                                mdb_collection_name = gr.Textbox(label="Milvus Collection Name",interactive=True,
+                                collection_name = gr.Textbox(label="Milvus Collection Name",interactive=True,
                                                                  placeholder="Enter Database Collection Name Here..")
                             with gr.Row():
-                                mdb_load = gr.Button("Load Database",
-                                                     interactive=True,
-                                                     size="sm",
-                                                     elem_id="button")
-                                mdb_create = gr.Button("Create Database",
-                                                       interactive=True,
-                                                       size="sm",
-                                                       elem_id="button")
-                            mdb_files = gr.Files(interactive=True,
-                                                 file_count="multiple",
-                                                 file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c", ".jsx",
-                                                             ".xml",
-                                                             ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json",
-                                                             ".csv"])
+                                files = gr.Files(interactive=True,
+                                                     file_count="multiple",
+                                                     file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c", ".jsx",
+                                                                 ".xml",
+                                                                 ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json",
+                                                                 ".csv"])
                             with gr.Row():
                                 upload_db_files = gr.Button("Upload Data to Database",
                                                             interactive=True,
                                                             size="sm",
                                                             elem_id="button")
-                                create_db = gr.Button("Load Database to Model",
+                                load_db = gr.Button("Load Database to Model",
                                                       interactive=True,
                                                       size="sm",
                                                       elem_id="button")
-                                delete_db = gr.Button("Remove Database from Model",
-                                                      interactive=True,
-                                                      size="sm",
-                                                      elem_id="button")
-                        elif provider == "Pinecone":
-                            with gr.Row():
-                                pdb_collection_name = gr.Textbox(label="Pinecone Collection Name",interactive=True,
-                                                                 placeholder="Enter Database Collection Name Here..")
-                            with gr.Row():
-                                pdb_load = gr.Button("Load Database",
-                                                     interactive=True,
-                                                     size="sm",
-                                                     elem_id="button")
-                                pdb_create = gr.Button("Create Database",
-                                                       interactive=True,
-                                                       size="sm",
-                                                       elem_id="button")
-                            pdb_files = gr.Files(interactive=True,
-                                                 file_count="multiple",
-                                                 file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c", ".jsx",
-                                                             ".xml",
-                                                             ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json",
-                                                             ".csv"])
-                            with gr.Row():
-                                upload_db_files = gr.Button("Upload Data to Database",
-                                                            interactive=True,
-                                                            size="sm",
-                                                            elem_id="button")
-                                create_db = gr.Button("Load Database to Model",
-                                                      interactive=True,
-                                                      size="sm",
-                                                      elem_id="button")
-                                delete_db = gr.Button("Remove Database from Model",
+                                remove_db = gr.Button("Remove Database from Model",
                                                       interactive=True,
                                                       size="sm",
                                                       elem_id="button")
                         elif provider == "Neo4j":
                             with gr.Row():
-                                neodb_load = gr.Button("Load Database",
-                                                       interactive=True,
-                                                       size="sm",
-                                                       elem_id="button")
-                            neodb_files = gr.Files(interactive=True,
-                                                   file_count="multiple",
-                                                   file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c",
+                                files = gr.Files(interactive=True,
+                                                 file_count="multiple",
+                                                 file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c",
                                                                ".jsx",
                                                                ".xml",
                                                                ".css", ".cpp", ".html", ".docx", ".doc", ".js", ".json",
@@ -176,15 +124,17 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                                             interactive=True,
                                                             size="sm",
                                                             elem_id="button")
-                                create_db = gr.Button("Load Database to Model",
+                                load_db = gr.Button("Load Database to Model",
                                                       interactive=True,
                                                       size="sm",
                                                       elem_id="button")
-                                delete_db = gr.Button("Remove Database from Model",
+                                remove_db = gr.Button("Remove Database from Model",
                                                       interactive=True,
                                                       size="sm",
                                                       elem_id="button")
-
+                        load_db.click(modelUtils.setup_database,
+                                      inputs=[db_selector, neo_un, neo_pw, neo_url, collection_name])
+                        remove_db.click(modelUtils.remove_database, outputs=[neo_un, neo_pw, neo_url])
             with gr.Tab("Chat With a GitHub Repository"):
                 repoOwnerUsername = gr.Textbox(label="GitHub Repository Owners Username:",
                                                placeholder="Enter GitHub Repository Owners Username Here....",

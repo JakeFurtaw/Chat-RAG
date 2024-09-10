@@ -1,19 +1,27 @@
-from llama_index.core import SimpleDirectoryReader
+from llama_index.core import SimpleDirectoryReader, StorageContext
 from llama_parse import LlamaParse
+from llama_index.vector_stores.neo4jvector import Neo4jVectorStore
+from llama_index.vector_stores.chroma import ChromaVectorStore
+from llama_index.vector_stores.milvus import MilvusVectorStore
 from llama_index.readers.github import GithubClient, GithubRepositoryReader
+from tests.test_linear4bit import storage
+
 from utils import (setup_index_and_chat_engine, get_embedding_model, set_chat_memory,
                    set_ollama_llm, set_huggingface_llm, set_nvidia_model, set_openai_model, set_anth_model)
-import torch, os, glob, gc, dotenv
+import torch, os, glob, gc, dotenv, chromadb
 dotenv.load_dotenv()
 
 DIRECTORY_PATH = "data"
-GRAPH_DB_PATH = "neo4DB"
+Neo4j_DB_PATH = "Databases/Neo4j"
+Chroma_DB_PATH = "Databases/ChromaDB"
+Milvus_DB_PATH = "Databases/MilvusDB"
+Pinecone_DB_PATH = "Databases/PineconeDB"
 EMBED_MODEL = get_embedding_model()
 
 # TODO Add free parsing options for advanced docs, Llama Parse only lets you parse 1000 free docs a day
 # TODO Figure out why multiprocessing of docs causes program to reload in a loop
 # Local Document Loading Function
-def load_docs():
+def load_local_docs():
     parser = LlamaParse(api_key=os.getenv("LLAMA_CLOUD_API_KEY"))
     all_files = glob.glob(os.path.join(DIRECTORY_PATH, "**", "*"), recursive=True)
     all_files = [f for f in all_files if os.path.isfile(f)]
@@ -42,6 +50,8 @@ def load_github_repo(owner, repo, branch):
             repo=repo,
             use_parser=False,
             verbose=False,
+            filter_file_extensions=([".png", ".jpg", ".jpeg", ".gif", ".svg"],
+                                    GithubRepositoryReader.FilterType.EXCLUDE)
         ).load_data(branch=branch)
         return documents
     else:
@@ -49,15 +59,51 @@ def load_github_repo(owner, repo, branch):
               "GitHub Personal Access Token in the .env file.")
 
 
+# TODO Finish and Test Vector Store implementation
+def setup_vector_store(vector_store, username, password, url, collection_name):
+    if vector_store == "Neo4j":
+        username = username
+        password = password
+        url = url
+        embed_dim = 1536
+        neo4j_vector_store = Neo4jVectorStore(username, password, url, embed_dim)
+        storage_context = StorageContext.from_defaults(vector_store=neo4j_vector_store)
+        return storage_context
+    elif vector_store == "ChromaDB":
+        chroma_client = chromadb.EphemeralClient()
+        # Check to see if collection exists already
+        for c in chroma_client.list_collections():
+            if c == collection_name:
+                chroma_collection = chroma_client.get_collection(collection_name)
+            else:
+                chroma_collection = chroma_client.create_collection(collection_name)
+        chroma_vector_store = ChromaVectorStore(chroma_collection)
+        storage_context = StorageContext.from_defaults(vector_store=chroma_vector_store)
+        return storage_context
+    elif vector_store == "Milvus":
+        milvus_vector_store = MilvusVectorStore(collection_name=collection_name, dim=1536, overwrite=False)
+        storage_context = StorageContext.from_defaults(vector_store=milvus_vector_store)
+        return storage_context
+    else:
+        storage_context = None
+        return storage_context
+
+
 def create_chat_engine(model_provider, model, temperature, max_tokens, custom_prompt, top_p,
-                       context_window, quantization, owner, repo, branch):
+                       context_window, quantization, owner, repo, branch, vector_store, username, password, url,
+                       collection_name):
     # Clearing GPU Memory
     torch.cuda.empty_cache()
     gc.collect()
     # Loading Documents and GitHub Repos
-    documents = load_docs()
+    documents = load_local_docs()
     if owner and repo and branch:
         documents.extend(load_github_repo(owner, repo, branch))
+    # Loading Storage Context
+    if vector_store is not None:
+        storage_context = setup_vector_store(vector_store, username, password, url, collection_name)
+    else:
+        storage_context = None
     # Loading Embedding Model
     embed_model = EMBED_MODEL
     # Loading LLM
@@ -75,4 +121,4 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
     # Setting Memory
     memory = set_chat_memory(model)
     return setup_index_and_chat_engine(docs=documents, llm=llm, embed_model=embed_model,
-                                       memory=memory, custom_prompt=custom_prompt)
+                                       memory=memory, custom_prompt=custom_prompt, storage_context=storage_context)

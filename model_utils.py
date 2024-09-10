@@ -9,12 +9,15 @@ def reset_gpu_memory():
 
 class ModelManager:
     def __init__(self):
+        self.collection_name = None
+        self.url = None
+        self.password = None
+        self.username = None
+        self.vector_store = None
         self.model_param_updates = ModelParamUpdates(self)
         self.branch = None
         self.repo = None
         self.owner = None
-        self.neo4j = False
-        self.storage_context = None
         self.chat_engine = None
         self.provider = "Ollama"
         self.selected_model = "codestral:latest"
@@ -34,7 +37,8 @@ class ModelManager:
                                   self.model_param_updates.top_p,
                                   self.model_param_updates.context_window,
                                   self.model_param_updates.quantization,
-                                  self.owner, self.repo, self.branch)
+                                  self.owner, self.repo, self.branch, self.vector_store, self.username,
+                                  self.password, self.url, self.collection_name)
 
     def process_input(self, message):
         if self.chat_engine is None:
@@ -73,6 +77,18 @@ class ModelManager:
         gr.Info("GitHub repository info cleared and repository files from the models context!")
         self.reset_chat_engine()
         return self.owner, self.repo, self.branch
+
+    def setup_database(self, vector_store, username, password, url, collection_name):
+        self.vector_store, self.username, self.password, self.url, self.collection_name = vector_store, username, password, url, collection_name
+        self.reset_chat_engine()
+        gr.Info(f"Database connection established with {vector_store}.", duration=10)
+        return self.vector_store
+
+    def remove_database(self):
+        self.vector_store = self.username = self.password = self.url = self.collection_name = None
+        self.reset_chat_engine()
+        gr.Info("Database connection removed.", duration=10)
+        return self.username, self.password, self.url
 
     def reset_chat_engine(self):
         reset_gpu_memory()
