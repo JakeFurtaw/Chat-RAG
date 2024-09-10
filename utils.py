@@ -14,17 +14,17 @@ from huggingface_hub import login
 
 dotenv.load_dotenv()
 
-
+# Used to determine what devices are available and set different gpus to different purposes
 def set_device(gpu: int = None) -> str:
     return f"cuda:{gpu}" if torch.cuda.is_available() and gpu is not None else "cpu"
 
-
-def get_embedding_model():
+# Sets embedding model using a hugging face embedding model for local embeddings.
+def set_embedding_model():
     embed_model = HuggingFaceEmbedding(model_name="/home/jake/Programming/Models/embedding/stella_en_400M_v5",
                                        device=set_device(0), trust_remote_code=True)
     return embed_model
 
-
+# Function that configures Ollama models and sets some of the initial parameters
 def set_ollama_llm(model, temperature, max_tokens):
     llm_models = {
         "codestral:latest": {"model": "codestral:latest", "device": set_device(1)},
@@ -38,7 +38,7 @@ def set_ollama_llm(model, temperature, max_tokens):
     return Ollama(model=llm_config["model"], request_timeout=30.0, device=llm_config["device"],
                   temperature=temperature, additional_kwargs={"num_predict": max_tokens})
 
-
+# Sets huggingface model and quantization based off of users input
 def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, quantization):
     torch.cuda.empty_cache()
     gc.collect()
@@ -90,7 +90,7 @@ def set_huggingface_llm(model, temperature, max_tokens, top_p, context_window, q
             },
         )
 
-
+# Sets NVIDIA NIM model and parameters based off of users input
 def set_nvidia_model(model, temperature, max_tokens, top_p):
     return NVIDIA(
         model=model,
@@ -100,7 +100,7 @@ def set_nvidia_model(model, temperature, max_tokens, top_p):
         nvidia_api_key=os.getenv("NVIDIA_API_KEY")
     )
 
-
+# Sets OpenAI model and parameters based off of users input
 def set_openai_model(model, temperature, max_tokens, top_p):
     return OpenAI(
         model=model,
@@ -110,7 +110,7 @@ def set_openai_model(model, temperature, max_tokens, top_p):
         api_key=os.getenv("OPENAI_API_KEY"),
     )
 
-
+# Sets Anthropic model and parameters based off of users input
 def set_anth_model(model, temperature, max_tokens):
     return Anthropic(
         model=model,
@@ -120,7 +120,7 @@ def set_anth_model(model, temperature, max_tokens):
 
     )
 
-
+# Sets chat memory limits based off of models default context length to ensure users don't exceed models limits
 def set_chat_memory(model):
     memory_limits = {
         "codestral:latest": 30000,
@@ -141,6 +141,11 @@ def set_chat_memory(model):
 
 
 # TODO Finish neo4j implementation
+"""
+Sets up the initial chat engine. Loads documents, model, embedding model, memory, prompt or custom prompt,
+and storage context. This pulls from defaults set above and gets updated by create chat engine as users input new 
+parameters and data.
+"""
 def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt, storage_context):
     if storage_context:
         index = VectorStoreIndex.from_documents(docs, storage_context=storage_context, embed_model=embed_model)

@@ -3,9 +3,20 @@ import gradio as gr
 from chat_utils import create_chat_engine
 from config import HF_MODEL_LIST, OLLAMA_MODEL_LIST, NV_MODEL_LIST, OA_MODEL_LIST, ANTH_MODEL_LIST
 
+
+# TODO needs to be optimized doesnt fully do its job.
+# Clears gpu memory so a new model can be load.
 def reset_gpu_memory():
     torch.cuda.empty_cache()
     gc.collect()
+
+
+"""
+Main model class that deals with most of the functionality of the model and chat engine. This class handles the 
+setting and resetting of the chat engine, model and model provider switching, database loading and resetting, and github
+repository loading and reset/
+"""
+
 
 class ModelManager:
     def __init__(self):
@@ -29,6 +40,7 @@ class ModelManager:
             "Anthropic": ANTH_MODEL_LIST
         }
 
+    # Creates the initial chat engine
     def create_initial_chat_engine(self):
         return create_chat_engine(self.provider, self.selected_model,
                                   self.model_param_updates.temperature,
@@ -40,11 +52,13 @@ class ModelManager:
                                   self.owner, self.repo, self.branch, self.vector_store, self.username,
                                   self.password, self.url, self.collection_name)
 
+    # Processes the query from the user and sends it to the chat engine for processing
     def process_input(self, message):
         if self.chat_engine is None:
             self.chat_engine = self.create_initial_chat_engine()
         return self.chat_engine.stream_chat(message)
 
+    # Updates the model provider and sends it to the chat engine based off the selection of the user
     def update_model_provider(self, provider):
         reset_gpu_memory()
         self.provider = provider
@@ -59,18 +73,22 @@ class ModelManager:
         gr.Info(f"Model provider updated to {provider}.", duration=10)
         self.reset_chat_engine()
 
+    # Updates the model and sends it to the chat engine based off the selection of the user
     def update_model(self, display_name):
         reset_gpu_memory()
         self.selected_model = self.model_display_names[self.provider].get(display_name, self.selected_model)
         self.reset_chat_engine()
         gr.Info(f"Model updated to {display_name}.", duration=10)
 
+    # Sets GitHub info to add its data to the context of the model
     def set_github_info(self, owner, repo, branch):
         self.owner, self.repo, self.branch = owner, repo, branch
         if all([owner, repo, branch]) != "":
-            gr.Info(f"GitHub repository info set to Owners Username: {owner}, Repository Name: {repo}, and Branch Name: {branch}.")
+            gr.Info(
+                f"GitHub repository info set to Owners Username: {owner}, Repository Name: {repo}, and Branch Name: {branch}.")
         self.reset_chat_engine()
 
+    # Resets GitHub info to remove the data from the context of the model
     def reset_github_info(self):
         self.owner = self.repo = self.branch = ""
         self.set_github_info(self.owner, self.repo, self.branch)
@@ -78,21 +96,30 @@ class ModelManager:
         self.reset_chat_engine()
         return self.owner, self.repo, self.branch
 
+    # Sets database parameters and adds it to the models context
     def setup_database(self, vector_store, username, password, url, collection_name):
         self.vector_store, self.username, self.password, self.url, self.collection_name = vector_store, username, password, url, collection_name
         self.reset_chat_engine()
         gr.Info(f"Database connection established with {vector_store}.", duration=10)
         return self.vector_store
 
+    # Resets database parameters and removes it from the models context
     def remove_database(self):
         self.vector_store = self.username = self.password = self.url = self.collection_name = None
         self.reset_chat_engine()
         gr.Info("Database connection removed.", duration=10)
         return self.username, self.password, self.url
 
+    # Resets chat engine so the new parameters and new data can be loaded or removed into or from  the model
     def reset_chat_engine(self):
         reset_gpu_memory()
         self.chat_engine = self.create_initial_chat_engine()
+
+
+"""
+Secondary class that sets initial model and chat engine parameters as well as updates model and chat engine parameters.
+"""
+
 
 class ModelParamUpdates:
     def __init__(self, model_manager):
@@ -104,12 +131,14 @@ class ModelParamUpdates:
         self.quantization = "4 Bit"
         self.custom_prompt = None
 
+    # Updates model quantization and sends a message to the user about the change. Also reset the gpu memory.
     def update_quant(self, quantization):
         reset_gpu_memory()
         self.quantization = quantization
         gr.Info(f"Quantization updated to {quantization}.", duration=10)
         self.model_manager.reset_chat_engine()
 
+    # Updates model temperature parameter, send user a message about the change, and resets gpu memory.
     def update_model_temp(self, temperature):
         reset_gpu_memory()
         self.temperature = temperature
@@ -119,6 +148,7 @@ class ModelParamUpdates:
                    duration=10)
         self.model_manager.reset_chat_engine()
 
+    # Updates model top p parameter, send user a message about the change, and resets gpu memory.
     def update_top_p(self, top_p):
         reset_gpu_memory()
         self.top_p = top_p
@@ -128,6 +158,7 @@ class ModelParamUpdates:
                    duration=10)
         self.model_manager.reset_chat_engine()
 
+    # Updates model context window parameter, send user a message about the change, and resets gpu memory.
     def update_context_window(self, context_window):
         reset_gpu_memory()
         self.context_window = context_window
@@ -137,6 +168,7 @@ class ModelParamUpdates:
                    duration=10)
         self.model_manager.reset_chat_engine()
 
+    # Updates the max output tokens a model can respond with send user a message about the change, and resets gpu memory.
     def update_max_tokens(self, max_tokens):
         reset_gpu_memory()
         self.max_tokens = max_tokens
@@ -147,6 +179,7 @@ class ModelParamUpdates:
                    duration=10)
         self.model_manager.reset_chat_engine()
 
+    # Updates the chat engines system prompt, send user a message about the change, and resets gpu memory.
     def update_chat_prompt(self, custom_prompt):
         reset_gpu_memory()
         self.custom_prompt = custom_prompt

@@ -1,3 +1,7 @@
+"""
+Standard config file that stores repetitive variables and lists so they don't take up room in the main files.
+"""
+
 OLLAMA_MODEL_LIST = {
             "Codestral 22B": "codestral:latest",
             "Mistral-Nemo 12B": "mistral-nemo:latest",
