@@ -57,7 +57,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                 collection_name = gr.Textbox(label="Chroma Collection Name",interactive=True,
                                                               placeholder="Enter Database Collection Name Here..")
                             with gr.Row():
-                                files = gr.Files(interactive=True,
+                                dbfiles = gr.Files(interactive=True,
                                                  file_count="multiple",
                                                  file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c", ".jsx",
                                                              ".xml",
@@ -81,7 +81,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                 collection_name = gr.Textbox(label="Milvus Collection Name",interactive=True,
                                                                  placeholder="Enter Database Collection Name Here..")
                             with gr.Row():
-                                files = gr.Files(interactive=True,
+                                dbfiles = gr.Files(interactive=True,
                                                      file_count="multiple",
                                                      file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c", ".jsx",
                                                                  ".xml",
@@ -102,7 +102,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                                                       elem_id="button")
                         elif provider == "Neo4j":
                             with gr.Row():
-                                files = gr.Files(interactive=True,
+                                dbfiles = gr.Files(interactive=True,
                                                  file_count="multiple",
                                                  file_types=["text", ".pdf", ".xlsx", ".py", ".txt", ".dart", ".c",
                                                                ".jsx",
