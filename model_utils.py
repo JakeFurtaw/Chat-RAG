@@ -16,8 +16,6 @@ Main model class that deals with most of the functionality of the model and chat
 setting and resetting of the chat engine, model and model provider switching, database loading and resetting, and github
 repository loading and reset/
 """
-
-
 class ModelManager:
     def __init__(self):
         self.collection_name = None
@@ -118,9 +116,9 @@ class ModelManager:
 
 """
 Secondary class that sets initial model and chat engine parameters as well as updates model and chat engine parameters.
+It is also responsible for send gradio warning and info messages to the front end for the user to know their action was
+a success.
 """
-
-
 class ModelParamUpdates:
     def __init__(self, model_manager):
         self.model_manager = model_manager
