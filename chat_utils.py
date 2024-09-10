@@ -15,7 +15,6 @@ DIRECTORY_PATH = "data"
 Neo4j_DB_PATH = "Databases/Neo4j"
 Chroma_DB_PATH = "Databases/ChromaDB"
 Milvus_DB_PATH = "Databases/MilvusDB"
-Pinecone_DB_PATH = "Databases/PineconeDB"
 EMBED_MODEL = get_embedding_model()
 
 # TODO Add free parsing options for advanced docs, Llama Parse only lets you parse 1000 free docs a day
@@ -66,7 +65,7 @@ def setup_vector_store(vector_store, username, password, url, collection_name):
         password = password
         url = url
         embed_dim = 1536
-        neo4j_vector_store = Neo4jVectorStore(username, password, url, embed_dim)
+        neo4j_vector_store = Neo4jVectorStore(username, password, url, embed_dim, hybrid_search=True)
         storage_context = StorageContext.from_defaults(vector_store=neo4j_vector_store)
         return storage_context
     elif vector_store == "ChromaDB":
@@ -77,7 +76,7 @@ def setup_vector_store(vector_store, username, password, url, collection_name):
                 chroma_collection = chroma_client.get_collection(collection_name)
             else:
                 chroma_collection = chroma_client.create_collection(collection_name)
-        chroma_vector_store = ChromaVectorStore(chroma_collection)
+        chroma_vector_store = ChromaVectorStore(chroma_collection, persist_dir=Chroma_DB_PATH)
         storage_context = StorageContext.from_defaults(vector_store=chroma_vector_store)
         return storage_context
     elif vector_store == "Milvus":
