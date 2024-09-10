@@ -4,8 +4,6 @@ from llama_index.vector_stores.neo4jvector import Neo4jVectorStore
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.vector_stores.milvus import MilvusVectorStore
 from llama_index.readers.github import GithubClient, GithubRepositoryReader
-from tests.test_linear4bit import storage
-
 from utils import (setup_index_and_chat_engine, get_embedding_model, set_chat_memory,
                    set_ollama_llm, set_huggingface_llm, set_nvidia_model, set_openai_model, set_anth_model)
 import torch, os, glob, gc, dotenv, chromadb
@@ -99,7 +97,7 @@ def create_chat_engine(model_provider, model, temperature, max_tokens, custom_pr
     if owner and repo and branch:
         documents.extend(load_github_repo(owner, repo, branch))
     # Loading Storage Context
-    if vector_store is not None:
+    if vector_store is not None or "":
         storage_context = setup_vector_store(vector_store, username, password, url, collection_name)
     else:
         storage_context = None
