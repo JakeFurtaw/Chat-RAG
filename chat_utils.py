@@ -23,7 +23,7 @@ def load_local_docs():
     all_files = glob.glob(os.path.join(DIRECTORY_PATH, "**", "*"), recursive=True)
     all_files = [f for f in all_files if os.path.isfile(f)]
     documents = []
-    supported_extensions = [".pdf", ".docx", ".xlsx", ".csv", ".xml", ".html"]
+    supported_extensions = [".pdf", ".docx", ".xlsx", ".csv", ".xml", ".html", ".json"]
     for file in all_files:
         file_extension = os.path.splitext(file)[1].lower()
         if "LLAMA_CLOUD_API_KEY" in os.environ and file_extension in supported_extensions:
