@@ -4,9 +4,10 @@ WORKDIR /home/jake/Programming/Personal/Chat-RAG
 COPY . .
 RUN true
 RUN pip install --no-cache-dir -r requirements.txt
+EXPOSE 7860
 EXPOSE 5000
 
-RUN useradd app
-USER app
+RUN useradd Jake
+USER Jake
 
-CMD ["uvicorn", "app.demo.launch:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["python", "app.py", "--host", "0.0.0.0", "--port", "8080"]

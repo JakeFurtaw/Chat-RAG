@@ -323,7 +323,7 @@ with gr.Blocks(title="Chat RAG", fill_width=True, css=css) as demo:
                     anth_model = gr.Dropdown(choices=list(modelUtils.model_display_names["Anthropic"].keys()),
                                              interactive=True,
                                              label="Select a Anthropic Model",
-                                             value="Claude 3.5 Sonnet",
+                                             value="Claude 3.7 Sonnet",
                                              filterable=True,
                                              info="Choose a Anthropic model.")
                     anth_temperature = gr.Slider(minimum=0, maximum=1, value=.75, step=.05,

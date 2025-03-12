@@ -7,7 +7,7 @@ from llama_index.llms.nvidia import NVIDIA
 from llama_index.llms.openai import OpenAI
 from llama_index.core import VectorStoreIndex
 from llama_index.core.memory import ChatMemoryBuffer
-from llama_index.core.llms import ChatMessage
+from llama_index.core.llms import ChatMessage, MessageRole
 from transformers import BitsAndBytesConfig
 import torch, dotenv, os, gc
 from huggingface_hub import login
@@ -20,7 +20,7 @@ def set_device(gpu: int = None) -> str:
 
 # Sets embedding model using a hugging face embedding model for local embeddings.
 def set_embedding_model():
-    embed_model = HuggingFaceEmbedding(model_name="/home/jake/Programming/Models/embedding/stella_en_400M_v5",
+    embed_model = HuggingFaceEmbedding(model_name="/home/jake/Programming/Models/embedding/multilingual-e5-large-instruct",
                                        device=set_device(0), trust_remote_code=True)
     return embed_model
 
@@ -162,7 +162,7 @@ def setup_index_and_chat_engine(docs, embed_model, llm, memory, custom_prompt, s
         "approaches, outline the pros and cons of each. Always Remember to be friendly! \n"
         "Response:"
     )
-    system_message = ChatMessage(role="system", content=chat_prompt if custom_prompt is None else custom_prompt)
+    system_message = ChatMessage(role=MessageRole.SYSTEM, content=chat_prompt if custom_prompt is None else custom_prompt)
     chat_engine = index.as_chat_engine(
         chat_mode=ChatMode.CONTEXT,
         memory=memory,

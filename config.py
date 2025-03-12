@@ -1,5 +1,5 @@
 """
-Standard config file that stores repetitive variables and lists so they don't take up room in the main files.
+Standard config file that stores lists so they don't take up room in the main files.
 """
 
 OLLAMA_MODEL_LIST = {
@@ -26,14 +26,14 @@ NV_MODEL_LIST = {
             "Gemma2 9B": "google/gemma-2-9b-it",
             "CodeGemma 7B": "google/codegemma-7b"
         }
-OA_MODEL_LIST = {
-            "GPT-4o": "gpt-4o",
-            "GPT-4o mini": "gpt-4o-mini",
-            "GPT-4": "gpt-4",
+OA_MODEL_LIST = {"GPT-4o": "gpt-4o",
+                 "GPT-4o mini": "gpt-4o-mini",
+                 "GPT-4": "gpt-4",
         }
-ANTH_MODEL_LIST = {
-            "Claude 3.5 Sonnet": "claude-3-5-sonnet-20240620",
-            "Claude 3 Opus": "claude-3-opus-20240229",
-            "Claude 3 Sonnet": "claude-3-sonnet-20240229",
-            "Claude 3 Haiku": "claude-3-haiku-20240307"
+ANTH_MODEL_LIST = {"Claude 3.7 Sonnet": "claude-3-7-sonnet-20250219",
+                   "Claude 3.5 Sonnet": "claude-3-5-sonnet-20241022",
+                   "Claude 3.5 Haiku": "claude-3-5-haiku-20241022",
+                   "Claude 3 Opus": "claude-3-opus-20240229",
+                   "Claude 3 Sonnet": "claude-3-sonnet-20240229",
+
         }
