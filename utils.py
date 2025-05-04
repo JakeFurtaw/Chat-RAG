@@ -28,11 +28,13 @@ def set_embedding_model():
 def set_ollama_llm(model, temperature, max_tokens):
     llm_models = {
         "codestral:latest": {"model": "codestral:latest", "device": set_device(1)},
+        "qwen3:latest": {"model": "qwen3:latest", "device": set_device(1)},
+        "gemma3:12b": {"model": "gemma3:12b", "device": set_device(1)},
+        "codegemma:latest": {"model": "codegemma:latest", "device":set_device(1)},
         "mistral-nemo:latest": {"model": "mistral-nemo:latest", "device": set_device(1)},
         "llama3.1:latest": {"model": "llama3.1:latest", "device": set_device(1)},
         "deepseek-coder-v2:latest": {"model": "deepseek-coder-v2:latest", "device": set_device(1)},
-        "gemma2:latest": {"model": "gemma2:latest", "device": set_device(1)},
-        "codegemma:latest": {"model": "codegemma:latest", "device": set_device(1)}
+
     }
     llm_config = llm_models.get(model, llm_models["codestral:latest"])
     return Ollama(model=llm_config["model"], request_timeout=30.0, device=llm_config["device"],
@@ -125,14 +127,14 @@ def set_chat_memory(model):
     memory_limits = {
         "codestral:latest": 30000,
         "mistralai/Codestral-22B-v0.1": 30000,
+        "qwen3:latest":30000,
+        "gemma3:12b":30000,
         "mistral-nemo:latest": 124000,
         "mistralai/Mistral-Nemo-Instruct-2407": 124000,
         "llama3.1:latest": 124000,
         "meta-llama/Meta-Llama-3.1-8B-Instruct": 124000,
         "deepseek-coder-v2:latest": 124000,
         "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct": 124000,
-        "gemma2:latest": 6000,
-        "google/gemma-2-9b-it": 6000,
         "codegemma:latest": 6000,
         "google/codegemma-7b": 6000,
     }

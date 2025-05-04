@@ -4,9 +4,8 @@ Standard config file that stores lists so they don't take up room in the main fi
 
 OLLAMA_MODEL_LIST = {
             "Codestral 22B": "codestral:latest",
-            "Qwen 3":"qwen3:latest",
+            "Qwen 3": "qwen3:latest",
             "Gemma 3 12B": "gemma3:12b",
-            "Gemma 2 9B": "gemma2:latest",
             "CodeGemma 7B": "codegemma:latest",
             "Mistral-Nemo 12B": "mistral-nemo:latest",
             "Llama3.1 8B": "llama3.1:latest",
@@ -18,7 +17,6 @@ HF_MODEL_LIST = {
             "Mistral-Nemo 12B-Instruct": "mistralai/Mistral-Nemo-Instruct-2407",
             "Llama3.1 8B-Instruct": "meta-llama/Meta-Llama-3.1-8B-Instruct",
             "DeepSeek Coder V2 16B": "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct",
-            "Gemma 2 9B": "google/gemma-2-9b-it",
             "CodeGemma 7B-Instruct": "google/codegemma-7b-it",
         }
 NV_MODEL_LIST = {
@@ -37,5 +35,4 @@ ANTH_MODEL_LIST = {"Claude 3.7 Sonnet": "claude-3-7-sonnet-20250219",
                    "Claude 3.5 Haiku": "claude-3-5-haiku-20241022",
                    "Claude 3 Opus": "claude-3-opus-20240229",
                    "Claude 3 Sonnet": "claude-3-sonnet-20240229",
-
         }
