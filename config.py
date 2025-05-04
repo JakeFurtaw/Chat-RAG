@@ -4,11 +4,13 @@ Standard config file that stores lists so they don't take up room in the main fi
 
 OLLAMA_MODEL_LIST = {
             "Codestral 22B": "codestral:latest",
+            "Qwen 3":"qwen3:latest",
+            "Gemma 3 12B": "gemma3:12b",
+            "Gemma 2 9B": "gemma2:latest",
+            "CodeGemma 7B": "codegemma:latest",
             "Mistral-Nemo 12B": "mistral-nemo:latest",
             "Llama3.1 8B": "llama3.1:latest",
-            "DeepSeek Coder V2 16B": "deepseek-coder-v2:latest",
-            "Gemma2 9B": "gemma2:latest",
-            "CodeGemma 7B": "codegemma:latest"
+            "DeepSeek Coder V2 16B": "deepseek-coder-v2:latest"
         }
 HF_MODEL_LIST = {
             "Choose a Model": "",
@@ -16,14 +18,14 @@ HF_MODEL_LIST = {
             "Mistral-Nemo 12B-Instruct": "mistralai/Mistral-Nemo-Instruct-2407",
             "Llama3.1 8B-Instruct": "meta-llama/Meta-Llama-3.1-8B-Instruct",
             "DeepSeek Coder V2 16B": "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct",
-            "Gemma2 9B": "google/gemma-2-9b-it",
+            "Gemma 2 9B": "google/gemma-2-9b-it",
             "CodeGemma 7B-Instruct": "google/codegemma-7b-it",
         }
 NV_MODEL_LIST = {
             "Codestral 22B": "mistralai/codestral-22b-instruct-v0.1",
             "Mistral-Nemo 12B": "nv-mistralai/mistral-nemo-12b-instruct",
             "Llama 3.1 8B": "meta/llama-3.1-8b-instruct",
-            "Gemma2 9B": "google/gemma-2-9b-it",
+            "Gemma 2 9B": "google/gemma-2-9b-it",
             "CodeGemma 7B": "google/codegemma-7b"
         }
 OA_MODEL_LIST = {"GPT-4o": "gpt-4o",
