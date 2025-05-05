@@ -127,8 +127,8 @@ def set_chat_memory(model):
     memory_limits = {
         "codestral:latest": 30000,
         "mistralai/Codestral-22B-v0.1": 30000,
-        "qwen3:latest":30000,
-        "gemma3:12b":30000,
+        "qwen3:latest": 30000,
+        "gemma3:12b": 30000,
         "mistral-nemo:latest": 124000,
         "mistralai/Mistral-Nemo-Instruct-2407": 124000,
         "llama3.1:latest": 124000,
