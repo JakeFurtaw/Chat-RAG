@@ -33,6 +33,7 @@ def set_ollama_llm(model, temperature, max_tokens):
         "codegemma:latest": {"model": "codegemma:latest", "device":set_device(1)},
         "mistral-nemo:latest": {"model": "mistral-nemo:latest", "device": set_device(1)},
         "llama3.1:latest": {"model": "llama3.1:latest", "device": set_device(1)},
+        "deepseek-r1:14b": {"model": "deepseek-r1:14b", "device": set_device(1)},
         "deepseek-coder-v2:latest": {"model": "deepseek-coder-v2:latest", "device": set_device(1)},
 
     }
@@ -128,13 +129,16 @@ def set_chat_memory(model):
         "codestral:latest": 30000,
         "mistralai/Codestral-22B-v0.1": 30000,
         "qwen3:latest":30000,
-        "gemma3:12b":30000,
+        "Qwen/Qwen3-14B":30000,
+        "gemma3:12b":124000,
+        "google/gemma-3-12b-it":124000,
         "mistral-nemo:latest": 124000,
         "mistralai/Mistral-Nemo-Instruct-2407": 124000,
         "llama3.1:latest": 124000,
         "meta-llama/Meta-Llama-3.1-8B-Instruct": 124000,
         "deepseek-coder-v2:latest": 124000,
         "deepseek-ai/DeepSeek-Coder-V2-Lite-Instruct": 124000,
+        "deepseek-r1:14b":124000,
         "codegemma:latest": 6000,
         "google/codegemma-7b": 6000,
     }
