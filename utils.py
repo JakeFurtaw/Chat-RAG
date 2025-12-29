@@ -11,6 +11,7 @@ from llama_index.core.llms import ChatMessage, MessageRole
 from transformers import BitsAndBytesConfig
 import torch, dotenv, os, gc
 from huggingface_hub import login
+import os
 
 dotenv.load_dotenv()
 
@@ -20,8 +21,13 @@ def set_device(gpu: int = None) -> str:
 
 # Sets embedding model using a hugging face embedding model for local embeddings.
 def set_embedding_model():
-    embed_model = HuggingFaceEmbedding(model_name="/home/jake/Programming/Models/embedding/multilingual-e5-large-instruct",
-                                       device=set_device(0), trust_remote_code=True)
+    device = os.getenv("EMBEDDING_DEVICE", "cpu")
+
+    embed_model = HuggingFaceEmbedding(
+        model_name="intfloat/multilingual-e5-large-instruct",
+        device=device,
+        trust_remote_code=True
+    )
     return embed_model
 
 # Function that configures Ollama models and sets some of the initial parameters
